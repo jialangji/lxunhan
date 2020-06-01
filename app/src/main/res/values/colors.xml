@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="black">#000000</color>
+    <color name="bg_color">#F7F7F7</color>
+    <color name="color_fa">#FAFAFA</color>
+    <color name="blue_text">#15a5f4</color>
+    <color name="gray_text">#bfbfbf</color>
+    <color name="white">#ffffff</color>
+    <color name="white_10">#10ffffff</color>
+    <color name="black_tran">#B3000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="start_color">#FC5A8E</color>
+    <color name="end_color">#5489FF</color>
+    <color name="color_C8C8C8">#C8C8C8</color>
+    <color name="color_d7d7d7">#D7D7D7</color>
+    <color name="color_303133">#303133</color>
+    <color name="color_tran_16">#16000000</color>
+    <color name="color_bbbcbe">#BBBCBE</color>
+    <color name="color_b2">#B2B2B2</color>
+    <color name="color_fc5a8e">#FC5A8E</color>
+    <color name="color_FBD3E0">#FBD3E0</color>
+    <color name="color_75e9d5">#75E9D5</color>
+    <color name="color_fc">#FCFCFC</color>
+    <color name="color_8bdd3d">#8BDD3D</color>
+    <color name="color_2A6CFF">#2A6CFF</color>
+
+    <!-- 二维码-->
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#00000000</color>
+
+    <color name="color_161824">#161824</color>
+    <color name="color_78">#787878</color>
+    <color name="color_ec">#ECECEC</color>
+    <color name="color_f16e2a">#F16E2A</color>
+    <color name="color_f9a835">#F9A835</color>
+    <color name="color_ff8b02">#FF8B02</color>
+    <color name="color_49b114">#49B114</color>
+    <color name="color_f7">#f7f7f7</color>
+</resources>

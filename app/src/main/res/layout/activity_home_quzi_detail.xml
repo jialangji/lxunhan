@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.activity.HomeQuziDetailActivity">
+
+    <RelativeLayout
+        android:id="@+id/view_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/white"
+        android:padding="@dimen/dp_15">
+
+        <RelativeLayout
+            android:id="@+id/rl_finish"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_black_finish" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/quiz"
+            android:textColor="@color/color_161824"
+            android:textSize="@dimen/sp_16" />
+
+        <RelativeLayout
+            android:id="@+id/rl_more"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_three_point_black" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/view_title">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginEnd="@dimen/dp_15">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_iv"
+                        android:layout_width="@dimen/dp_46"
+                        android:layout_height="@dimen/dp_46"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:id="@+id/iv_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_my_select" />
+
+                        <ImageView
+                            android:id="@+id/iv_v"
+                            android:layout_width="@dimen/dp_8"
+                            android:layout_height="@dimen/dp_8"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:src="@drawable/ic_yellow_v" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp_8"
+                        android:layout_toEndOf="@id/rl_iv"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="张三"
+                            android:textColor="@color/color_303133"
+                            android:textSize="@dimen/sp_16" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:id="@+id/tv_signature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="上山打老虎"
+                            android:textColor="@color/color_b2"
+                            android:textSize="@dimen/sp_14" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_attention"
+                        android:layout_width="@dimen/dp_56"
+                        android:layout_height="@dimen/dp_28"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/shape_line"
+                        android:gravity="center"
+                        android:text="@string/add_attention"
+                        android:textColor="@color/color_fc5a8e"
+                        android:textSize="@dimen/sp_10" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/dp_15"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_white_bg"
+                    android:layout_height="wrap_content">
+
+                    <com.ay.lxunhan.widget.TagTextView
+                        android:id="@+id/tv_tag_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_16"
+                        android:textColor="@color/color_161824"
+                        />
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="2020-04-30 17:02:41"
+                        android:textColor="@color/color_b2"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_desc"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sp_16"
+                        android:textColor="@color/color_161824"
+                        tools:text="截止发帖，已经回落到9080，你认为5月份会涨到1000吗？"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:orientation="vertical"
+                    android:background="@drawable/shape_white_bg"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/dp_12"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_161824"
+                            android:textSize="@dimen/sp_16"
+                            android:text="@string/single_quiz"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_6"
+                            android:layout_gravity="center"
+                            android:textSize="@dimen/sp_12"
+                            android:textColor="@color/color_b2"
+                            android:text="(投票后结果可见)"/>
+
+                    </LinearLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_quiz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </android.support.v7.widget.RecyclerView>
+
+                    <TextView
+                        android:id="@+id/tv_quiz"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/sp_12"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:gravity="center"
+                        android:background="@drawable/shape_radius_pink"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_16"
+                        android:text="@string/quiz"
+                        android:layout_height="@dimen/dp_38"
+                        />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:background="@drawable/shape_white_bg">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+    <include
+        layout="@layout/layout_bottom_comment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".ui.public_ac.activity.ComplaintActivity">
+    <RelativeLayout
+        android:id="@+id/view_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/white"
+        android:padding="@dimen/dp_15">
+
+        <RelativeLayout
+            android:id="@+id/rl_finish"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_black_finish" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/complain"
+            android:textColor="@color/color_161824"
+            android:textSize="@dimen/sp_16" />
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_15"
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@drawable/shape_white_bg_10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_161824"
+                    android:textSize="@dimen/sp_16"
+                    android:text="@string/please_select_you_want_to_complaint_type"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_complaint_type"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_15"
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@drawable/shape_white_bg_10"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_161824"
+                    android:textSize="@dimen/sp_16"
+                    android:text="@string/please_explain_the_specific_reasons"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/shape_grayb2_line_4"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_250"
+                        android:paddingTop="@dimen/dp_10"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingEnd="@dimen/dp_10"
+                        android:background="@null"
+                        android:gravity="top"
+                        android:hint="@string/please_enter_content"
+                        android:textColorHint="@color/color_b2"
+                        android:textColor="@color/color_303133"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/tv_et_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/et_content"
+                        android:layout_alignParentEnd="true"
+                        android:paddingEnd="@dimen/dp_5"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:text="@string/word_count" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_submit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_38"
+                android:layout_marginStart="@dimen/dp_40"
+                android:layout_marginEnd="@dimen/dp_40"
+                android:gravity="center"
+                android:text="@string/submit"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/dp_100"
+                android:textSize="@dimen/sp_16"
+                android:background="@drawable/shape_radius_pink"
+                />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

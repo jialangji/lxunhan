@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ll_linear"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginStart="@dimen/dp_15"
+    android:layout_marginEnd="@dimen/dp_15"
+    android:layout_marginTop="@dimen/dp_10"
+    android:paddingStart="@dimen/dp_14"
+    android:background="@drawable/shape_radius_10"
+    android:paddingEnd="@dimen/dp_14"
+    android:paddingTop="@dimen/dp_20"
+    android:paddingBottom="@dimen/dp_18"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_38">
+        <RelativeLayout
+            android:id="@+id/rl_iv"
+            android:layout_width="@dimen/dp_36"
+            android:layout_centerVertical="true"
+            android:layout_height="@dimen/dp_36">
+            <ImageView
+                android:id="@+id/iv_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_my_select"
+                />
+            <ImageView
+                android:id="@+id/iv_v"
+                android:layout_width="@dimen/dp_8"
+                android:layout_height="@dimen/dp_8"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_yellow_v"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_toEndOf="@id/rl_iv"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_303133"
+                    android:text="张三"
+                    android:textSize="@dimen/sp_16"
+                    />
+                <ImageView
+                    android:id="@+id/iv_sex"
+                    android:layout_toEndOf="@id/tv_name"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_woman"
+                    android:layout_width="@dimen/dp_12"
+                    android:layout_height="@dimen/dp_12" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_signature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_12"
+                android:text="上山打老虎"
+                android:textColor="@color/color_b2"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_attention"
+            android:layout_width="@dimen/dp_56"
+            android:layout_height="@dimen/dp_28"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_line"
+            android:gravity="center"
+            android:text="@string/add_attention"
+            android:textSize="@dimen/sp_10"
+            android:textColor="@color/color_fc5a8e" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/color_303133"
+        android:text="Finally A Top Secret Way You Can Get Google Awards Pay Per Clicks Free"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/shape_type_gray"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_75e9d5"
+            android:text="@string/text"/>
+        <TextView
+            android:id="@+id/tv_type"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_b2"
+            android:textSize="@dimen/sp_12"
+            android:text="精选美食"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dp_14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_time"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_time"/>
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_toEndOf="@id/iv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_b2"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_centerVertical="true"
+            android:text="1分钟"
+            />
+        <LinearLayout
+            android:layout_toStartOf="@id/line1"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="@dimen/dp_26"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_like"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:src="@drawable/ic_unlike_hand"/>
+            <TextView
+                android:id="@+id/tv_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_b2"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="666"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/line1"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:src="@drawable/ic_uncomment_two"/>
+            <TextView
+                android:id="@+id/tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_b2"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="777"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

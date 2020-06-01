@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ParticleView">
+        <attr name="pv_count" format="integer" />
+        <attr name="pv_alpha" format="integer" />
+        <attr name="pv_min_size" format="integer" />
+        <attr name="pv_max_size" format="integer" />
+        <attr name="pv_color" format="color" />
+        <attr name="pv_background" format="reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="AZSideBarView">
+        <!-- slide bar 有效内容背景 -->
+        <attr name="backgroundColor" />
+        <!-- slide bar　描边 -->
+        <attr name="strokeColor" />
+        <!-- slide bar 文字颜色 -->
+        <attr name="textColor" />
+        <!-- slide bar　文字大小 -->
+        <attr name="textSize" />
+        <!-- slide bar 选中文字颜色 -->
+        <attr name="selectTextColor" />
+        <!-- slide bar 选中文字大小 -->
+        <attr name="selectTextSize" />
+        <!-- slide bar　选中时候提示文字颜色 -->
+        <attr name="hintTextColor" />
+        <!-- slide bar　选中时候提示文字大小 -->
+        <attr name="hintTextSize" />
+        <!-- slide bar　选中时候提示圆形半径 -->
+        <attr name="hintCircleRadius" />
+        <attr name="hintShape" />
+        <!-- slide bar　选中时候提示圆形颜色 -->
+        <attr name="hintCircleColor" />
+        <!-- slide bar　里面文字上＋下padding -->
+        <attr name="contentPadding" />
+        <!-- slide bar　上+下+右padding -->
+        <attr name="barPadding" />
+        <!-- slide bar　宽度 -->
+        <attr name="barWidth" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewfinderView">
+        <attr name="corner_color" format="color"/>
+        <attr name="laser_color" format="color"/>
+        <attr name="frame_color" format="color" />
+        <attr name="mask_color" format="color" />
+        <attr name="result_point_color" format="color"/>
+        <attr name="result_color" format="color" />
+        <attr name="label_text_color" format="color"/>
+        <attr name="label_text" format="string"/>
+        <attr name="label_text_size" format="float"/>
+    </declare-styleable>
+
+</resources>

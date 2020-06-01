@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_marginTop="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingStart="@dimen/dp_15"
+    android:paddingEnd="@dimen/dp_15"
+    android:background="@drawable/shape_radius_10"
+    android:layout_height="@dimen/dp_75">
+    <RelativeLayout
+        android:layout_width="@dimen/dp_46"
+        android:layout_height="@dimen/dp_46">
+        <ImageView
+            android:id="@+id/iv_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_my_select"
+            />
+        <ImageView
+            android:id="@+id/iv_v"
+            android:layout_width="@dimen/dp_14"
+            android:layout_height="@dimen/dp_14"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:layout_marginBottom="@dimen/dp_2"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_yellow_v"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_303133"
+                android:text="张三"
+                android:textSize="@dimen/sp_16"
+                />
+            <ImageView
+                android:id="@+id/iv_sex"
+                android:layout_toEndOf="@id/tv_name"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_woman"
+                android:layout_width="@dimen/dp_12"
+                android:layout_height="@dimen/dp_12" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="15:06"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_intro"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_b2"
+                android:text="Finally A Top Secret Way You Ca…" />
+            <TextView
+                android:id="@+id/tv_message_count"
+                android:layout_width="@dimen/dp_20"
+                android:background="@drawable/shape_radius_pink"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_14"
+                android:gravity="center"
+                android:text="99"
+                android:layout_height="@dimen/dp_20" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

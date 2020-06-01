@@ -1,0 +1,106 @@
+package com.ay.lxunhan.utils;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.ay.lxunhan.base.AppContext;
+
+public class UserInfo {
+    private static volatile UserInfo userInfo;
+    private SharedPreferences userSp;
+    private SharedPreferences.Editor editor;
+    private boolean isLogin;//是否已经登录
+    private boolean isFirstOpen;//是否第一次安装app
+    private boolean isHavePass;
+    private String userId;
+    private String avatar;
+
+    private UserInfo(Context context) {
+        userSp = context.getSharedPreferences(Contacts.USERINFO, Context.MODE_PRIVATE);
+        editor = userSp.edit();
+    }
+
+
+    public static UserInfo getInstance() {
+        if (userInfo == null) {
+            synchronized (UserInfo.class) {
+                if (userInfo == null) {
+                    userInfo = new UserInfo(AppContext.context());
+                }
+            }
+        }
+        return userInfo;
+    }
+
+    public String getAvatar() {
+        return userSp.getString(Contacts.AVATAR,"");
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+        editor.putString(Contacts.AVATAR,avatar);
+        editor.commit();
+    }
+
+    public boolean isHavePass() {
+        return userSp.getBoolean(Contacts.ISHAVEPASS,isHavePass);
+    }
+
+    public void setHavePass(boolean isHavePass) {
+        this.isHavePass = isHavePass;
+        editor.putBoolean(Contacts.ISHAVEPASS, isHavePass);
+        editor.commit();
+    }
+
+    public boolean isFirstOpen() {
+        return isFirstOpen;
+    }
+
+    public void setFirstOpen(boolean isFirstOpen) {
+        this.isFirstOpen = isFirstOpen;
+        editor.putBoolean(Contacts.ISFIRSTOPEN, isFirstOpen);
+        editor.commit();
+    }
+
+    public boolean isLogin() {
+        return userSp.getBoolean(Contacts.ISLOGIN,isLogin);
+    }
+
+    public void setLogin(boolean isLogin) {
+        this.isLogin = isLogin;
+        editor.putBoolean(Contacts.ISLOGIN, isLogin);
+        editor.commit();
+    }
+
+
+    public String getUserId() {
+        return userSp.getString(Contacts.USERID,userId);
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+        editor.putString(Contacts.USERID, userId);
+        editor.commit();
+    }
+
+
+
+
+    public void clearAccess() {
+        //清空用户信息但是不清空语言和单位信息
+        editor.clear();
+        editor.commit();
+        //设置语言配置
+        getAccess();
+    }
+
+
+    public void getAccess() {
+        isFirstOpen = userSp.getBoolean(Contacts.ISFIRSTOPEN, true);
+        isLogin = userSp.getBoolean(Contacts.ISLOGIN, false);
+        isHavePass = userSp.getBoolean(Contacts.ISHAVEPASS, false);
+        editor.commit();
+    }
+
+
+}
