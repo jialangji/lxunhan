@@ -1,9 +1,11 @@
 package com.ay.lxunhan.http;
 
 
+import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.ChannelBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
+import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.LoginBean;
@@ -13,6 +15,7 @@ import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
 import com.ay.lxunhan.bean.VideoBean;
+import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.http.config.UrlConfig;
 
 import java.util.List;
@@ -23,6 +26,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface HttpApi {
@@ -236,6 +240,42 @@ public interface HttpApi {
      */
     @GET(UrlConfig.VIDEO_TYPE_LIST)
     Flowable<HttpResult<List<VideoBean>>> videoTypeList(@Query("uqid") String uqid,@Query("plate_id") String plate_id,@Query("page") int page);
+
+    /**
+     * 好友列表
+     */
+    @GET(UrlConfig.FRIEND_LIST)
+    Flowable<HttpResult<List<FriendBean>>> friendsList(@Query("uqid") String uqid);
+
+    /**
+     * 小视频观看记录
+     */
+    @POST(UrlConfig.SMALL_VIDEO_WATCH)
+    Flowable<HttpResult<Object>> smallVideoWatch(@Body RequestBody body);
+
+    /**
+     * 添加好友
+     */
+    @GET(UrlConfig.ADD_FRIEND)
+    Flowable<HttpResult<AddFriendBean>> addFriends(@Query("uqid") String uqid,@Query("keys") String keys);
+
+    /**
+     * 关注
+     */
+    @PUT(UrlConfig.ATTENTION)
+    Flowable<HttpResult<Object>> attention(@Body RequestBody body);
+
+    /**
+     * 关注多人
+     */
+    @PUT(UrlConfig.MORE_ATTENTION)
+    Flowable<HttpResult<Object>> moreAttention(@Body RequestBody body);
+
+    /**
+     * 视频详情
+     */
+    @GET(UrlConfig.VIDEO_DETAIL)
+    Flowable<HttpResult<VideoDetailBean>> videoDetail(@Query("uqid") String uqid, @Query("id") String id);
 
 
 }

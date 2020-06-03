@@ -131,4 +131,15 @@ public class HomeDetailPresenter extends BasePresenter<HomeDetailContract.HomeDe
             }
         }));
     }
+
+    @Override
+    public void attention(String uid) {
+        addDisposable(HttpMethods.getInstance().attention(uid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().attentionFinish();
+            }
+        }));
+    }
 }

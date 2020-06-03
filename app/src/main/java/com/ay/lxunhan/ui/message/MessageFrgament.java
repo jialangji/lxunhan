@@ -10,6 +10,7 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.bean.ChatListBean;
+import com.ay.lxunhan.ui.message.activity.FriendActivity;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -87,6 +88,7 @@ public class MessageFrgament extends BaseFragment {
             case R.id.rl_friend_add:
                 break;
             case R.id.rl_friend_list:
+                FriendActivity.startFriendActivity(getActivity());
                 break;
             case R.id.rl_friend_pyq:
                 break;

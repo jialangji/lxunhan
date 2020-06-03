@@ -2,17 +2,18 @@ package com.ay.lxunhan.ui.video.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
-import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.bean.VideoBean;
+import com.ay.lxunhan.contract.SmallVideoListContract;
 import com.ay.lxunhan.observer.OnViewPagerListener;
+import com.ay.lxunhan.presenter.SmallVideoListPresenter;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.JZVideoPlayerStandardLoopVideo;
@@ -26,9 +27,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
-public class SmallVideoActivity extends BaseActivity {
+public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.SmallVideoListView, SmallVideoListPresenter> implements SmallVideoListContract.SmallVideoListView {
 
     @BindView(R.id.rv_video)
     RecyclerView rvVideo;
@@ -39,8 +41,8 @@ public class SmallVideoActivity extends BaseActivity {
     private BaseQuickAdapter videoAdapter;
 
     @Override
-    public BasePresenter initPresenter() {
-        return null;
+    public SmallVideoListPresenter initPresenter() {
+        return new SmallVideoListPresenter(this);
     }
 
     @Override
@@ -61,6 +63,9 @@ public class SmallVideoActivity extends BaseActivity {
                 jzvideo.progressBar.setVisibility(View.GONE);//底部进度条
                 jzvideo.currentTimeTextView.setVisibility(View.GONE);//观看进度
                 jzvideo.totalTimeTextView.setVisibility(View.GONE);//视频总进度
+                //设置全屏播放
+                Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
+                Jzvd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
                 GlideUtil.loadImg(SmallVideoActivity.this, jzvideo.thumbImageView, item.getCover());
                 jzvideo.setUp(item.getVideo(), "", JzvdStd.SCREEN_WINDOW_NORMAL);
                 jzvideo.startVideo();
@@ -91,11 +96,14 @@ public class SmallVideoActivity extends BaseActivity {
             @Override
             public void onInitComplete(View view) {
                 playVideo(0, view);
+                presenter.getSmallWatch(videoBeanList.get(0).getId());
+
             }
 
             @Override
             public void onPageSelected(int position, boolean isBottom, View view) {
                 playVideo(position, view);
+                presenter.getSmallWatch(videoBeanList.get(position).getId());
 
             }
 
@@ -171,4 +179,8 @@ public class SmallVideoActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    @Override
+    public void getSmallWatchFinish() {
+
+    }
 }

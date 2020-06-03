@@ -30,67 +30,93 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".ui.public_ac.activity.ComplaintActivity"
+        <activity android:name=".ui.video.activity.VideoDetailActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.message.activity.AddFriendActivity" />
+        <activity android:name=".ui.message.activity.FriendActivity" />
+        <activity
+            android:name=".ui.public_ac.activity.ComplaintActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.public_ac.activity.TwoCommentActivity"
+        <activity
+            android:name=".ui.public_ac.activity.TwoCommentActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.home.activity.ChannelManageActivity"
+        <activity
+            android:name=".ui.home.activity.ChannelManageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.home.activity.HomeQuziDetailActivity"
+        <activity
+            android:name=".ui.home.activity.HomeQuziDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.home.activity.HomeAskDetailActivity"
+        <activity
+            android:name=".ui.home.activity.HomeAskDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.home.activity.HomeDetailActivity"
+        <activity
+            android:name=".ui.home.activity.HomeDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.video.activity.SmallVideoActivity"
+        <activity
+            android:name=".ui.video.activity.SmallVideoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.public_ac.activity.IssueActivity"
+        <activity
+            android:name=".ui.public_ac.activity.IssueActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.SettingActivity"
+        <activity
+            android:name=".ui.my.activity.SettingActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.public_ac.activity.MyQrcodeActivity"
+        <activity
+            android:name=".ui.public_ac.activity.MyQrcodeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name="com.google.zxing.activity.CaptureActivity"
+        <activity
+            android:name="com.google.zxing.activity.CaptureActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.BillActivity"
+        <activity
+            android:name=".ui.my.activity.BillActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.WithDrawActivity"
+        <activity
+            android:name=".ui.my.activity.WithDrawActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.ExChangeActivity"
+        <activity
+            android:name=".ui.my.activity.ExChangeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.LCoinDetailActivity"
+        <activity
+            android:name=".ui.my.activity.LCoinDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.SingInActivity"
+        <activity
+            android:name=".ui.my.activity.SingInActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.CollectActivity"
+        <activity
+            android:name=".ui.my.activity.CollectActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.HistoryActivity"
+        <activity
+            android:name=".ui.my.activity.HistoryActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.FansActivity"
+        <activity
+            android:name=".ui.my.activity.FansActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.LCoinActivity"
+        <activity
+            android:name=".ui.my.activity.LCoinActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.public_ac.activity.AboutMyActivity"
+        <activity
+            android:name=".ui.public_ac.activity.AboutMyActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.login.CompleteInfoActivity" />
@@ -130,7 +156,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 

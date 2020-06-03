@@ -2,6 +2,9 @@ package com.ay.lxunhan;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,6 +33,8 @@ import com.gyf.immersionbar.ImmersionBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
 
 import static android.provider.UserDictionary.Words.APP_ID;
 
@@ -73,6 +78,9 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     private int currentPosition = -1, prePosition;
     private static final String TAB_SELECT_POS = "tab_select_position";
 
+    private SensorManager sensorManager;
+    private Jzvd.JZAutoFullscreenListener jzAutoFullscreenListener;
+
     @Override
     public MainPresenter initPresenter() {
         return new MainPresenter(this);
@@ -97,6 +105,12 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     protected void initView() {
         super.initView();
         ImmersionBar.with(this).init();
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        jzAutoFullscreenListener = new Jzvd.JZAutoFullscreenListener();
+        //设置全屏播放
+        JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
+        JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
+
         tabs[0] = layoutTab1;
         tabs[1] = layoutTab2;
         tabs[2] = layoutTab3;
@@ -285,6 +299,25 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
             AppManager.getAppManager().AppExit();
         }
     }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(jzAutoFullscreenListener);
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //播放器重力感应
+        Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
 
     public static void startMainActivity(Context context){
         Intent intent=new Intent(context,MainActivity.class);

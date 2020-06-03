@@ -161,14 +161,29 @@ public class UrlConfig {
      */
     public static final String VIDEO_TYPE="api/videos/video_sect_list";
 
-    /***
-     * 视频类型添加
+    /**
+     * 好友列表
      */
-    public static final String VIDEO_CHANNEL_ADD="api/videos/video_sect_add";
+    public static final String FRIEND_LIST="api/messages/buddy_list";
 
-    /***
-     * 视频类型删除
+    /**
+     * 小视频观看记录
      */
-    public static final String VIDEO_CHANNEL_DELETE="api/videos/video_sect_add";
+    public static final String SMALL_VIDEO_WATCH="api/videos/short_video_records";
+
+    /**
+     * 添加好友
+     */
+    public static final String ADD_FRIEND="api/messages/follow_fiends_list";
+
+    /**
+     * 关注
+     */
+    public static final String ATTENTION="api/messages/attention";
+
+    /**
+     * 关注多人
+     */
+    public static final String MORE_ATTENTION="api/messages/fol_mul_people";
 
 }

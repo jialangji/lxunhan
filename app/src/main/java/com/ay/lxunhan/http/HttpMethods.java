@@ -2,9 +2,11 @@ package com.ay.lxunhan.http;
 
 
 
+import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.ChannelBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
+import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.LoginBean;
@@ -14,11 +16,15 @@ import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
 import com.ay.lxunhan.bean.VideoBean;
+import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.bean.model.AcceptModel;
+import com.ay.lxunhan.bean.model.AttentionModel;
+import com.ay.lxunhan.bean.model.AttentionsModel;
 import com.ay.lxunhan.bean.model.ComplaintModel;
 import com.ay.lxunhan.bean.model.CompleteInfoModel;
 import com.ay.lxunhan.bean.model.PublicModel;
 import com.ay.lxunhan.bean.model.SendCommentModel;
+import com.ay.lxunhan.bean.model.SmallVideoWatchModel;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.GsonUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -41,7 +47,7 @@ import static com.ay.lxunhan.utils.Contacts.NETWORK_INTERCEPTOR_TYPE_LOG;
 
 public class HttpMethods {
     public static final int HTTP_SUCCESS = 0;
-
+    public static final int HTTP_NOT_LOGIN = 4011;
     private HttpApi httpService;
     private OkHttpClient okhttpclient;
 
@@ -365,6 +371,58 @@ public class HttpMethods {
      */
     public Flowable<List<PeopleBean>> videoRecord(){
         Flowable<HttpResult<List<PeopleBean>>> flowable=httpService.videoRecords(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 好友列表
+     */
+    public Flowable<List<FriendBean>> friendList(){
+        Flowable<HttpResult<List<FriendBean>>> flowable=httpService.friendsList(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+
+    /**
+     * 小视频观看
+     */
+    public Flowable<Object> smallVideoWatch(int id){
+        SmallVideoWatchModel smallVideoWatchModel=new SmallVideoWatchModel(id);
+        Flowable<HttpResult<Object>> flowable=httpService.smallVideoWatch(modeBody(smallVideoWatchModel));
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 添加好友
+     */
+    public Flowable<AddFriendBean> addFriendBean(String user){
+        Flowable<HttpResult<AddFriendBean>> flowable=httpService.addFriends(UserInfo.getInstance().getUserId(),user);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 关注
+     */
+    public Flowable<Object> attention(String uid){
+        AttentionModel attentionModel=new AttentionModel(uid);
+        Flowable<HttpResult<Object>> flowable=httpService.attention(modeBody(attentionModel));
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 关注
+     */
+    public Flowable<Object> attentions(List<String> uid){
+        AttentionsModel attentionModel=new AttentionsModel(uid);
+        Flowable<HttpResult<Object>> flowable=httpService.moreAttention(modeBody(attentionModel));
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 视频详情
+     */
+    public Flowable<VideoDetailBean> videoDetail(String id){
+        Flowable<HttpResult<VideoDetailBean>> flowable=httpService.videoDetail(UserInfo.getInstance().getUserId(),id);
         return compositeThread(flowable);
     }
 

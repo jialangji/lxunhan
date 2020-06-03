@@ -61,6 +61,18 @@ public class HomePresenter extends BasePresenter<HomeContract.HomeView> implemen
     }
 
     @Override
+    public void attention(String uid) {
+
+        addDisposable(HttpMethods.getInstance().attention(uid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().attentionFinish();
+            }
+        }));
+    }
+
+    @Override
     public void getHomeType() {
        addDisposable(HttpMethods.getInstance().getHomeType().subscribeWith(new BaseSubscriber<List<TypeBean>>(){
            @Override

@@ -2,8 +2,7 @@ package com.ay.lxunhan.widget.azlist;
 
 import android.text.TextUtils;
 
-
-import com.ay.lxunhan.bean.Country;
+import com.ay.lxunhan.bean.FriendBean;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,13 +10,13 @@ import java.util.List;
 import java.util.Set;
 
 public class DataUtils {
-    public static List<AZItemEntity<Country>> fillData(List<Country> list) {
-        List<AZItemEntity<Country>> sortList = new ArrayList<>();
-        for (Country aDate : list) {
-            AZItemEntity<Country> item = new AZItemEntity<>();
+    public static List<AZItemEntity<FriendBean>> fillData(List<FriendBean> list) {
+        List<AZItemEntity<FriendBean>> sortList = new ArrayList<>();
+        for (FriendBean aDate : list) {
+            AZItemEntity<FriendBean> item = new AZItemEntity<>();
             item.setValue(aDate);
             //汉字转换成拼音
-            String pinyin =  PinyinUtils.getPingYin(aDate.getCnName());
+            String pinyin =  PinyinUtils.getPingYin(aDate.getNickname());
             if (!TextUtils.isEmpty(pinyin) && pinyin.length() > 0) {
                 //取第一个首字母
                 String letters = pinyin.substring(0, 1).toUpperCase();
@@ -34,11 +33,11 @@ public class DataUtils {
 
     }
 
-    public static List<String> getLetters(List<AZItemEntity<Country>> list) {
+    public static List<String> getLetters(List<AZItemEntity<FriendBean>> list) {
         List<String> sortList = new ArrayList<>();
-        for (AZItemEntity<Country> aDate : list) {
+        for (AZItemEntity<FriendBean> aDate : list) {
             //汉字转换成拼音
-            String pinyin = PinyinUtils.getPingYin(aDate.getValue().getCnName());
+            String pinyin = PinyinUtils.getPingYin(aDate.getValue().getNickname());
             //取第一个首字母
             String letters = pinyin.substring(0, 1).toUpperCase();
             sortList.add(letters);

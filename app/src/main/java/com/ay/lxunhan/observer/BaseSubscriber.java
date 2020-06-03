@@ -8,10 +8,14 @@ import com.ay.lxunhan.BuildConfig;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.http.ApiException;
 import com.ay.lxunhan.http.HttpMethods;
+import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.blankj.utilcode.util.NetworkUtils;
 
 import io.reactivex.subscribers.DisposableSubscriber;
+
+import static com.ay.lxunhan.http.HttpMethods.HTTP_NOT_LOGIN;
+import static com.ay.lxunhan.http.HttpMethods.HTTP_SUCCESS;
 
 
 /**
@@ -40,9 +44,13 @@ public class BaseSubscriber<T> extends DisposableSubscriber<T> {
     public void onError(Throwable t) {
         if (t instanceof ApiException) {
             ApiException apiException = (ApiException) t;
-            if (apiException.getErrCode() != HttpMethods.HTTP_SUCCESS) {
+            if (apiException.getErrCode() != HTTP_SUCCESS) {
                 if (null != AppContext.instance) {
-                    ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
+                    if (apiException.getErrCode()==HTTP_NOT_LOGIN){
+                        LoginActivity.startLoginActivity(AppContext.instance);
+                    }else {
+                        ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
+                    }
                 }
             }
         }else{

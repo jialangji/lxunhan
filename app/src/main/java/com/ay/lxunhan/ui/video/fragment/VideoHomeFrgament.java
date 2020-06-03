@@ -1,5 +1,7 @@
 package com.ay.lxunhan.ui.video.fragment;
 
+import android.content.Context;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import com.ay.lxunhan.contract.VideoHomeContract;
 import com.ay.lxunhan.presenter.VideoHomePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
+import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -28,7 +31,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
+
+import static android.content.Context.SENSOR_SERVICE;
 
 public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeView, VideoHomePresenter> implements VideoHomeContract.VideoHomeView {
 
@@ -93,6 +99,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
                 }
             }
         });
+        showDialog();
     }
 
     @Override
@@ -145,16 +152,16 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
                         }
                         SmallVideoActivity.startSmallVideoActivity(getActivity(),videoBeans,postion);
                     }else {
-
+                        VideoDetailActivity.startVideoDetailActivity(getActivity(), String.valueOf(videoBeanList.get(position).getId()));
                     }
                     break;
                 case R.id.tv_attention:
-                    break;
-                case R.id.jzvdStd:
+                    mPosition=position;
+                    presenter.attention(videoBeanList.get(position).getUid());
                     break;
                 case R.id.rl_more:
                     mPosition=position;
-                    showDialog();
+                    shareDialog.show();
                     break;
             }
         });
@@ -164,7 +171,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
         if (shareDialog == null) {
             shareDialog = new ShareDialog(getActivity(), R.style.selectPicDialogstyle);
         }
-        shareDialog.show();
+
         shareDialog.setItemClickListener(new ShareDialog.ItemClickListener() {
             @Override
             public void shareFriends() {
@@ -264,8 +271,6 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
         }
         videoBeanList.addAll(list);
         videoAdapter.setNewData(videoBeanList);
-
-
     }
 
     @Override
@@ -273,5 +278,16 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
         peopleBeans.clear();
         peopleBeans.addAll(peopleBeans);
         peopleAdapter.setNewData(peopleBeans);
+    }
+
+    @Override
+    public void attentionFinish() {
+        if (videoBeanList.get(mPosition).getIs_fol()==1){
+            videoBeanList.get(mPosition).setIs_fol(0);
+        }else {
+            videoBeanList.get(mPosition).setIs_fol(1);
+        }
+        videoAdapter.notifyDataSetChanged();
+
     }
 }

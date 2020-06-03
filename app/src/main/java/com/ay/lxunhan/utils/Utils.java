@@ -64,16 +64,6 @@ public class Utils {
     }
 
 
-    public static String setTwoCommentColor(Context context,String name,int count){
-        String str=name+"等人共"+count+"条回复>";
-        SpannableString span=new SpannableString(str);
-        span.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.color_2A6CFF)),0,name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        span.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.color_2A6CFF)),name.length()+4,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        span.setSpan( new ForegroundColorSpan(context.getResources().getColor(R.color.color_b2)),name.length(),name.length()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return str;
-    }
-
-
     public static boolean isChinaPhoneLegal(String str)
             throws PatternSyntaxException {
         String regExp = "^((13[0-9])|(15[^4])|(18[0-9])|(17[0-8])|(147,145))\\d{8}$";

@@ -11,11 +11,13 @@ public interface HomeContract {
         void getHomeListAsk(int page);
         void getHomeListQuiz(int page);
         void getHomeListArticle(int page,String id);
+        void attention(String uid);
         void getHomeType();
     }
     interface HomeView{
         void getHomeListFinish(List<MultiItemBaseBean> homeListBeans);
         void getHomeTypeFinish(List<TypeBean> typeBeans);
+        void attentionFinish();
         void showProgress();
         void hideProgress();
     }

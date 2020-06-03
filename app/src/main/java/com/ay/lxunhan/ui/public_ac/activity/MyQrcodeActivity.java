@@ -14,6 +14,7 @@ import com.ay.lxunhan.utils.DisplayUtil;
 import com.ay.lxunhan.utils.FileUtils;
 import com.ay.lxunhan.utils.QRCodeUtil;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 
 import java.io.File;
 
@@ -41,7 +42,7 @@ public class MyQrcodeActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        bitmap = QRCodeUtil.createQRCodeBitmap("99999", DisplayUtil.dip2px(this,460), DisplayUtil.dip2px(this,460));
+        bitmap = QRCodeUtil.createQRCodeBitmap(UserInfo.getInstance().getUserId(), DisplayUtil.dip2px(this,460), DisplayUtil.dip2px(this,460));
         ivQrcode.setImageBitmap(bitmap);
     }
 

@@ -28,4 +28,15 @@ public class VideoTypePresenter extends BasePresenter<VideoTypeContract.VideoTyp
             }
         }));
     }
+
+    @Override
+    public void attention(String uid) {
+        addDisposable(HttpMethods.getInstance().attention(uid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().attentionFinish();
+            }
+        }));
+    }
 }

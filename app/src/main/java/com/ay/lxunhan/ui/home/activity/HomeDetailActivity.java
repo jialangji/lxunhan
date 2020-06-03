@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -35,12 +38,15 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDetailView, HomeDetailPresenter> implements HomeDetailContract.HomeDetailView {
 
@@ -103,7 +109,12 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                 helper.setText(R.id.tv_comment_count, item.getTwo_arr().getCount() + "");
                 helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
                 helper.setGone(R.id.tv_reply, item.getIs_two());
-                helper.setText(R.id.tv_reply, Utils.setTwoCommentColor(HomeDetailActivity.this, item.getTwo_arr().getName(), item.getTwo_arr().getCount()));
+                TextView tvReplay=helper.getView(R.id.tv_reply);
+                String str=item.getTwo_arr().getName()+"等人共"+item.getTwo_arr().getCount()+"条回复>";
+                SpannableString span=new SpannableString(str);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), 0, item.getTwo_arr().getName().length() , SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)),item.getTwo_arr().getName().length()+2,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvReplay.setText(span);
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.ll_comment);
             }
@@ -201,14 +212,19 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_wechat})
+    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_wechat,R.id.tv_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_attention:
+                if (homeDetailBean.getIs_fow() != 2) {
+                    presenter.attention(homeDetailBean.getUid());
+                }
+
+                break;
             case R.id.rl_finish:
                 finish();
                 break;
             case R.id.rl_more:
-
                 showDialog();
                 break;
             case R.id.ll_moreLike:
@@ -368,6 +384,17 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
     @Override
     public void acceptFinish() {
+
+    }
+
+    @Override
+    public void attentionFinish() {
+        if (homeDetailBean.getIs_fow()==1){
+            homeDetailBean.setIs_fow(0);
+        }else{
+            homeDetailBean.setIs_fow(1);
+        }
+        tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
 
     }
 

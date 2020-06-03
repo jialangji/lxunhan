@@ -12,8 +12,10 @@ import java.util.List;
 public interface VideoTypeContract {
     interface VideoTypePresenter{
         void getVideoType(String plate_id,int page);
+        void attention(String uid);
     }
     interface VideoTypeView{
         void getVideoTypeFinish(List<VideoBean> list);
+        void attentionFinish();
     }
 }

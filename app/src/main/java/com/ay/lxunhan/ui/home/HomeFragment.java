@@ -50,6 +50,7 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     private int page = 1;
     private boolean isRefresh;
     private int typeId = 1;
+    private int mPosition;
 
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -134,6 +135,8 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                     }
                     break;
                 case R.id.tv_attention:
+                    mPosition=position;
+                    presenter.attention(homeList.get(mPosition).getUid());
                     break;
                 case R.id.tv_quiz://投票
                     break;
@@ -233,7 +236,6 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                 break;
             case EventModel.ARTICLELIKE:
             case EventModel.SENDCOMMENT:
-
                 setRefresh();
                 break;
 
@@ -265,6 +267,21 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
         }
         typeBeanList.add(typeBeans.get(4));
         typeAdapter.setNewData(typeBeanList);
+    }
+
+    @Override
+    public void attentionFinish() {
+        if (homeList.get(mPosition).getIs_fol()==1){
+            if (typeId==1){
+                setRefresh();
+                return;
+            }else {
+                homeList.get(mPosition).setIs_fol(0);
+            }
+        }else {
+            homeList.get(mPosition).setIs_fol(1);
+        }
+        homeAdapter.notifyDataSetChanged();
     }
 
     @Override

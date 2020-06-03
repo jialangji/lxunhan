@@ -1,6 +1,7 @@
 package com.ay.lxunhan.adapter;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -200,20 +201,22 @@ public class PublicAdapterUtil {
                     case 2:
                         JzvdStd jzvdStd = helper.getView(R.id.jzvdStd);
                         jzvdStd.titleTextView.setTextColor(context.getResources().getColor(R.color.white));
-                        jzvdStd.titleTextView.setTextSize(DisplayUtil.px2dip(context,28));
+                        jzvdStd.titleTextView.setTextSize(DisplayUtil.px2dip(context,46));
                         jzvdStd.backButton.setVisibility(View.GONE);//返回按钮
                         jzvdStd.batteryTimeLayout.setVisibility(View.GONE);//时间和电量
                         JzvdStd.SAVE_PROGRESS=false;
                         JzvdStd.setVideoImageDisplayType(JzvdStd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_PARENT);
+                        //设置全屏播放
+                        JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
+                        JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
                         GlideUtil.loadRoundTop(context,jzvdStd.thumbImageView,item.getCover());
                         jzvdStd.setUp(item.getVideo(), item.getTitle(), JzvdStd.SCREEN_WINDOW_NORMAL);
                         helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
                         helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.addOnClickListener(R.id.tv_attention);
-                        helper.addOnClickListener(R.id.jzvdStd);
                         if (item.getIs_fol() == 2) {
-                            helper.setGone(R.id.tv_attention, false);
+                            helper.setGone(R.id.tv_attention,false );
                         } else {
                             helper.setGone(R.id.tv_attention, true);
                             helper.setTextColor(R.id.tv_attention, context.getResources().getColor(item.getIs_fol() != 2 && item.getIs_fol() == 1 ? R.color.color_b2 : R.color.color_fc5a8e));

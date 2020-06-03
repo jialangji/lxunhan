@@ -18,6 +18,7 @@ public interface HomeDetailContract {
         void  commentLike(SendCommentModel model);
         void  quiz(SendCommentModel model);
         void  accept(AcceptModel model);
+        void  attention(String uid);
     }
 
     interface HomeDetailView{
@@ -29,6 +30,7 @@ public interface HomeDetailContract {
         void commentLikeFinish();
         void quziFinish();
         void acceptFinish();
+        void attentionFinish();
         void showProgress();
         void hideProgress();
     }

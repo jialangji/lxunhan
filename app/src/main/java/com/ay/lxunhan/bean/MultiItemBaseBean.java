@@ -32,7 +32,7 @@ public class MultiItemBaseBean implements MultiItemEntity {
 
     private String bounty_gold;
     private int id;
-    private int uid;
+    private String uid;
     private String nickname;
     private String avatar;
     private String into;
@@ -98,11 +98,11 @@ public class MultiItemBaseBean implements MultiItemEntity {
         this.id = id;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 

@@ -1,6 +1,5 @@
 package com.ay.lxunhan.contract;
 
-import com.ay.lxunhan.bean.Country;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.UserInfoBean;
 

@@ -10,7 +10,10 @@ import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.contract.VideoTypeContract;
 import com.ay.lxunhan.presenter.VideoTypePresenter;
+import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.widget.RecyclerItemDecoration;
+import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -35,6 +38,8 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
     private boolean isRefresh=true;
     private List<VideoBean> videoBeanList = new ArrayList<>();
     private BaseQuickAdapter videoAdapter;
+    private int mPosition;
+    private ShareDialog shareDialog;
     private String id;
     public static VideoTypeFragment newInstance(String id) {
         Bundle args = new Bundle();
@@ -43,6 +48,7 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public VideoTypePresenter initPresenter() {
@@ -63,6 +69,7 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         rvVideo.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvVideo.addItemDecoration(new RecyclerItemDecoration(10,1));
         rvVideo.setAdapter(videoAdapter);
+        showDialog();
     }
 
     @Override
@@ -102,6 +109,85 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
                 presenter.getVideoType(id,page);
             }
         });
+        videoAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            switch (view.getId()) {
+                case R.id.ll_line:
+                    VideoDetailActivity.startVideoDetailActivity(getActivity(), String.valueOf(videoBeanList.get(position).getId()));
+
+                    break;
+                case R.id.tv_attention:
+                    mPosition=position;
+                    presenter.attention(videoBeanList.get(position).getUid());
+                    break;
+                case R.id.rl_more:
+                    mPosition=position;
+                    shareDialog.show();
+                    break;
+            }
+        });
+    }
+    public void showDialog() {
+        if (shareDialog == null) {
+            shareDialog = new ShareDialog(getActivity(), R.style.selectPicDialogstyle);
+        }
+
+        shareDialog.setItemClickListener(new ShareDialog.ItemClickListener() {
+            @Override
+            public void shareFriends() {
+
+            }
+
+            @Override
+            public void shareQQ() {
+
+            }
+
+            @Override
+            public void shareQQRoom() {
+
+            }
+
+            @Override
+            public void shareWx() {
+
+            }
+
+            @Override
+            public void shareWxPyq() {
+
+            }
+
+            @Override
+            public void shareWb() {
+
+            }
+
+            @Override
+            public void shareImg() {
+
+            }
+
+            @Override
+            public void copyUrl() {
+
+            }
+
+            @Override
+            public void complaint() {
+                ComplaintActivity.startComplaintActivity(getActivity(), String.valueOf(videoBeanList.get(mPosition).getId()), 2);
+
+            }
+
+            @Override
+            public void collect() {
+
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        });
     }
 
     @Override
@@ -124,5 +210,15 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         }
         videoBeanList.addAll(list);
         videoAdapter.setNewData(videoBeanList);
+    }
+
+    @Override
+    public void attentionFinish() {
+        if (videoBeanList.get(mPosition).getIs_fol()==1){
+            videoBeanList.get(mPosition).setIs_fol(0);
+        }else {
+            videoBeanList.get(mPosition).setIs_fol(1);
+        }
+        videoAdapter.notifyDataSetChanged();
     }
 }

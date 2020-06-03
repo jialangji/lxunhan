@@ -1,14 +1,18 @@
-package com.ay.lxunhan.ui.home.activity;
+package com.ay.lxunhan.ui.video.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,14 +20,13 @@ import android.widget.TextView;
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.CommentBean;
-import com.ay.lxunhan.bean.HomeDetailBean;
-import com.ay.lxunhan.bean.HomeQuizDetailBean;
-import com.ay.lxunhan.bean.model.AcceptModel;
+import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
-import com.ay.lxunhan.contract.HomeDetailContract;
+import com.ay.lxunhan.contract.VideoDetailContract;
 import com.ay.lxunhan.observer.EventModel;
-import com.ay.lxunhan.presenter.HomeDetailPresenter;
+import com.ay.lxunhan.presenter.VideoDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
@@ -41,15 +44,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
 
-public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeDetailView, HomeDetailPresenter> implements HomeDetailContract.HomeDetailView {
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
-    @BindView(R.id.tv_time)
-    TextView tvTime;
+public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoDetailView, VideoDetailPresenter> implements VideoDetailContract.VideoDetailView {
+
+    @BindView(R.id.jzvdStd)
+    JzvdStd jzvdStd;
     @BindView(R.id.iv_header)
     ImageView ivHeader;
+    @BindView(R.id.iv_v)
+    ImageView ivV;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.iv_sex)
@@ -58,8 +65,12 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     TextView tvSignature;
     @BindView(R.id.tv_attention)
     TextView tvAttention;
-    @BindView(R.id.webview)
-    WebView webview;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+    @BindView(R.id.tv_type)
+    TextView tvType;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
     @BindView(R.id.rv_comment)
     RecyclerView rvComment;
     @BindView(R.id.swipe_refresh)
@@ -70,72 +81,80 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     ImageView ivLike;
     @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
+    @BindView(R.id.tv_wechat)
+    TextView tvWechat;
+    private SensorManager sensorManager;
+    private Jzvd.JZAutoFullscreenListener jzAutoFullscreenListener;
+    private ShareDialog shareDialog;
+    private String id;
+    private VideoDetailBean videoDetailBean;
+    private List<CommentBean> commentBeans = new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
     private int page = 1;
-    private int type;
-    private int id;
+    private int type=2;
     private boolean isRefresh = true;
-    private List<CommentBean> commentBeans = new ArrayList<>();
-    private HomeDetailBean homeDetailBean;
     private int commentPostion;
-    private ShareDialog shareDialog;
-
     @Override
-    public HomeDetailPresenter initPresenter() {
-        return new HomeDetailPresenter(this);
+    public VideoDetailPresenter initPresenter() {
+        return new VideoDetailPresenter(this);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        type = getIntent().getIntExtra("type", 0);
-        id = getIntent().getIntExtra("id", 0);
-        etComment.setHint(getResources().getString(R.string.iam_answer));
-        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment_ask, commentBeans) {
+        id=getIntent().getStringExtra("id");
+        jzvdStd.backButton.setVisibility(View.GONE);
+        jzvdStd.batteryLevel.setVisibility(View.GONE);
+        jzvdStd.backButton.setVisibility(View.GONE);//返回按钮
+        jzvdStd.batteryTimeLayout.setVisibility(View.GONE);//时间和电量
+        //用于实现重力感应下切换横竖屏
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        jzAutoFullscreenListener = new Jzvd.JZAutoFullscreenListener();
+        JzvdStd.SAVE_PROGRESS=false;
+        JzvdStd.setVideoImageDisplayType(JzvdStd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_PARENT);
+        //设置全屏播放
+        Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
+        Jzvd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向\
+        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
             @Override
             protected void convert(BaseViewHolder helper, CommentBean item) {
-                GlideUtil.loadCircleImgForHead(HomeAskDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
+                GlideUtil.loadCircleImgForHead(VideoDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
-                helper.setText(R.id.tv_signature, item.getContent());
+                helper.setText(R.id.tv_comment, item.getContent());
                 helper.setGone(R.id.iv_v, item.getIs_media());
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.setText(R.id.tv_like_count, item.getLike_count() + "");
+                helper.setText(R.id.tv_comment_count, item.getTwo_arr().getCount() + "");
                 helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
-                TextView tvAccept = helper.getView(R.id.tv_accept);
-                if (!homeDetailBean.getIs_solve()) {
-                    if (homeDetailBean.getIs_fow() == 2) {
-                        tvAccept.setVisibility(View.VISIBLE);
-                    } else {
-                        tvAccept.setVisibility(View.GONE);
-                    }
-                } else {
-                    if (item.getIs_adoption()) {
-                        tvAccept.setVisibility(View.VISIBLE);
-                        tvAccept.setText("已采纳");
-                    } else {
-                        tvAccept.setVisibility(View.GONE);
-                    }
-
-                }
+                helper.setGone(R.id.tv_reply, item.getIs_two());
+                TextView tvReplay=helper.getView(R.id.tv_reply);
+                String str=item.getTwo_arr().getName()+"等人共"+item.getTwo_arr().getCount()+"条回复>";
+                SpannableString span=new SpannableString(str);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), 0, item.getTwo_arr().getName().length() , SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)),item.getTwo_arr().getName().length()+2,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                tvReplay.setText(span);
                 helper.addOnClickListener(R.id.ll_like);
-                helper.addOnClickListener(R.id.tv_accept);
+                helper.addOnClickListener(R.id.ll_comment);
             }
         };
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setAdapter(commentAdapter);
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_home_ask_detail;
+    public String setTwoCommentColor(String name,int count){
+        String str=name+"等人共"+count+"条回复>";
+        SpannableString span=new SpannableString(str);
+        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_ff8b02)), 1, name.length() + 1, SPAN_EXCLUSIVE_EXCLUSIVE);
+        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)),name.length()+4,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return str;
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-        presenter.getHomeDetail(type, id);
-        presenter.getOneComment(String.valueOf(id), type, page);
+    protected int getLayoutId() {
+        return R.layout.activity_video_detail;
     }
+
+
 
     @Override
     public boolean isUserEvent() {
@@ -149,10 +168,17 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         switch (model.getMessageType()) {
             case EventModel.TWOCOMMENTLIKE:
                 page = 1;
-                presenter.getOneComment(String.valueOf(id), type, page);
+                presenter.getOneComment(id, type, page);
                 break;
 
         }
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        presenter.getVideoDetail( id);
+        presenter.getOneComment(id, type, page);
     }
 
     @Override
@@ -165,11 +191,8 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                     SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
                     presenter.commentLike(sendCommentModel);
                     break;
-                case R.id.tv_accept:
-                    if (!homeDetailBean.getIs_solve()) {
-                        AcceptModel acceptModel = new AcceptModel(homeDetailBean.getId(),commentBeans.get(position).getId());
-                        presenter.accept(acceptModel);
-                    }
+                case R.id.ll_comment:
+                    TwoCommentActivity.startTwoCommentActivity(this, String.valueOf(commentBeans.get(position).getId()));
                     break;
             }
         });
@@ -190,11 +213,10 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                 presenter.getOneComment(String.valueOf(id), type, page);
             }
         });
-
         etComment.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
-                    SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeDetailBean.getId()), homeDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
+                    SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(videoDetailBean.getId()), videoDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
                     presenter.sendOneComment(sendCommentModel);
                 }
             }
@@ -202,10 +224,6 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         });
     }
 
-    @Override
-    public boolean isKeyboardEnable() {
-        return true;
-    }
 
     @Override
     protected int getBarColor() {
@@ -214,10 +232,10 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
     @Override
     protected boolean barTextIsDark() {
-        return true;
+        return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.ll_moreLike, R.id.tv_wechat, R.id.rl_more,R.id.tv_attention})
+    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike,R.id.tv_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
@@ -227,18 +245,21 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                 showDialog();
                 break;
             case R.id.ll_moreLike:
-                SendCommentModel sendCommentModel=new SendCommentModel(homeDetailBean.getId()+"",type);
+                SendCommentModel sendCommentModel = new SendCommentModel(videoDetailBean.getId() + "", type);
                 presenter.addLike(sendCommentModel);
                 break;
-            case R.id.tv_wechat:
-                break;
             case R.id.tv_attention:
-                if (homeDetailBean.getIs_fow() != 2) {
-                    presenter.attention(homeDetailBean.getUid());
+                if (videoDetailBean.getIs_fol() != 2) {
+                    presenter.attention(videoDetailBean.getUid());
                 }
-
                 break;
         }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(jzAutoFullscreenListener);
+        Jzvd.releaseAllVideos();
     }
 
     public void showDialog() {
@@ -289,7 +310,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void complaint() {
-                ComplaintActivity.startComplaintActivity(HomeAskDetailActivity.this, String.valueOf(homeDetailBean.getId()), type);
+                ComplaintActivity.startComplaintActivity(VideoDetailActivity.this, id, type);
 
             }
 
@@ -305,27 +326,41 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         });
     }
 
+
     @Override
-    public void getHomeDetailFinish(HomeDetailBean homeDetailBean) {
-        this.homeDetailBean = homeDetailBean;
-        tvTitle.setText(homeDetailBean.getTitle());
-        GlideUtil.loadCircleImgForHead(this, ivHeader, homeDetailBean.getAvatar());
-        tvName.setText(homeDetailBean.getNickname());
-        tvSignature.setText(homeDetailBean.getInto());
-        ivSex.setImageDrawable(homeDetailBean.getSex() ? getResources().getDrawable(R.drawable.ic_man) : getResources().getDrawable(R.drawable.ic_woman));
-        if (homeDetailBean.getIs_fow() == 2) {
-            tvAttention.setVisibility(View.GONE);
-        } else {
-            tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
-        }
-        tvTime.setText(homeDetailBean.getTimeText());
-        webview.loadDataWithBaseURL(null, Utils.getHtmlData(homeDetailBean.getContent()), "text/html", "uft-8", null);
-        tvLikeCount.setText(homeDetailBean.getLike_count() + "");
-        ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
+    protected void onResume() {
+        super.onResume();
+        //播放器重力感应
+        Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        JzvdStd.goOnPlayOnResume();
+    }
+
+    public static void startVideoDetailActivity(Context context,String id){
+        Intent intent=new Intent(context,VideoDetailActivity.class);
+        intent.putExtra("id",id);
+        context.startActivity(intent);
     }
 
     @Override
-    public void getHomeDetailQuizFinish(HomeQuizDetailBean homeQuizDetailBean) {
+    public void getVideoDetailFinish(VideoDetailBean videoDetailBean) {
+        this.videoDetailBean=videoDetailBean;
+        jzvdStd.setUp(videoDetailBean.getVideo(),"", JzvdStd.SCREEN_WINDOW_NORMAL);
+        GlideUtil.loadCircleImgForHead(this, ivHeader, videoDetailBean.getAvatar());
+        GlideUtil.loadImg(this,jzvdStd.thumbImageView,videoDetailBean.getCover());
+        tvName.setText(videoDetailBean.getNickname());
+        tvSignature.setText(videoDetailBean.getInto());
+        ivSex.setImageDrawable(videoDetailBean.getSex() ? getResources().getDrawable(R.drawable.ic_man) : getResources().getDrawable(R.drawable.ic_woman));
+        if (videoDetailBean.getIs_fol() == 2) {
+            tvAttention.setVisibility(View.GONE);
+        } else {
+            tvAttention.setText(videoDetailBean.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
+        }
+        tvType.setText(videoDetailBean.getPlate_name());
+        tvTime.setText(videoDetailBean.getTimeText());
+        tvContent.setText(videoDetailBean.getTitle());
+        tvLikeCount.setText(videoDetailBean.getLike_count() + "");
+        ivLike.setImageDrawable(videoDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
 
     }
 
@@ -353,16 +388,16 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
     @Override
     public void addLikeFinish() {
-        if (homeDetailBean.getIs_like()) {
-            homeDetailBean.setIs_like(0);
-            homeDetailBean.setLike_count(homeDetailBean.getLike_count() - 1);
+        if (videoDetailBean.getIs_like()) {
+            videoDetailBean.setIs_like(0);
+            videoDetailBean.setLike_count(videoDetailBean.getLike_count() - 1);
         } else {
-            homeDetailBean.setIs_like(1);
-            homeDetailBean.setLike_count(homeDetailBean.getLike_count() + 1);
+            videoDetailBean.setIs_like(1);
+            videoDetailBean.setLike_count(videoDetailBean.getLike_count() + 1);
         }
         EventBus.getDefault().postSticky(new EventModel<>(EventModel.ARTICLELIKE));
-        tvLikeCount.setText(homeDetailBean.getLike_count() + "");
-        ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
+        tvLikeCount.setText(videoDetailBean.getLike_count() + "");
+        ivLike.setImageDrawable(videoDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
     }
 
     @Override
@@ -378,26 +413,13 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     }
 
     @Override
-    public void quziFinish() {
-
-    }
-
-    @Override
-    public void acceptFinish() {
-        presenter.getHomeDetail(type, id);
-        page = 1;
-        presenter.getOneComment(String.valueOf(id), type, page);
-    }
-
-    @Override
     public void attentionFinish() {
-        if (homeDetailBean.getIs_fow()==1){
-            homeDetailBean.setIs_fow(0);
+        if (videoDetailBean.getIs_fol()==1){
+            videoDetailBean.setIs_fol(0);
         }else{
-            homeDetailBean.setIs_fow(1);
+            videoDetailBean.setIs_fol(1);
         }
-        tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
-
+        tvAttention.setText(videoDetailBean.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
     }
 
     @Override
@@ -408,28 +430,5 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     @Override
     public void hideProgress() {
         hudLoader.dismiss();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (webview != null) {
-            webview.clearHistory();
-            webview.clearSslPreferences();
-            webview.clearFormData();
-            webview.clearCache(true);
-            webview.clearView();
-            ((ViewGroup) webview.getParent()).removeView(webview);
-            webview.destroy();
-            webview = null;
-        }
-        super.onDestroy();
-    }
-
-
-    public static void startHomeAskDetailActivity(Context context, int type, int id) {
-        Intent intent = new Intent(context, HomeAskDetailActivity.class);
-        intent.putExtra("type", type);
-        intent.putExtra("id", id);
-        context.startActivity(intent);
     }
 }
