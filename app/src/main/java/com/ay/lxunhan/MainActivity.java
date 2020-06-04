@@ -19,8 +19,10 @@ import android.widget.TextView;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.UserInfoBean;
 import com.ay.lxunhan.contract.MainContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.MainPresenter;
 import com.ay.lxunhan.ui.home.HomeFragment;
+import com.ay.lxunhan.ui.login.BootPageActivity;
 import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.ui.message.MessageFrgament;
 import com.ay.lxunhan.ui.my.MyFragment;
@@ -110,7 +112,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
         //设置全屏播放
         JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
         JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
-
+        currentPosition=getIntent().getIntExtra("pox",-1);
         tabs[0] = layoutTab1;
         tabs[1] = layoutTab2;
         tabs[2] = layoutTab3;
@@ -265,7 +267,6 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
                 }else {
                     LoginActivity.startLoginActivity(this);
                 }
-
                 break;
             case R.id.layout_tab4:
                 if (UserInfo.getInstance().isLogin()){
@@ -278,6 +279,22 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
                 }else {
                     LoginActivity.startLoginActivity(this);
                 }
+                break;
+        }
+    }
+
+    @Override
+    public boolean isUserEvent() {
+        return true;
+    }
+
+    @Override
+    protected void getStickyEvent(Object eventModel) {
+        super.getStickyEvent(eventModel);
+        EventModel eventModel1= (EventModel) eventModel;
+        switch (eventModel1.getMessageType()) {
+            case EventModel.LOGIN_OUT:
+                BootPageActivity.startBootPageActivity(this);
                 break;
         }
     }
@@ -321,6 +338,12 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
 
     public static void startMainActivity(Context context){
         Intent intent=new Intent(context,MainActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void startMainActivity(Context context,int currentPosition){
+        Intent intent=new Intent(context,MainActivity.class);
+        intent.putExtra("pox",currentPosition);
         context.startActivity(intent);
     }
 

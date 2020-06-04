@@ -108,9 +108,6 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!UserInfo.getInstance().isLogin()){
-            LoginActivity.startLoginActivity(getActivity());
-        }
     }
 
     @OnClick({R.id.iv_header,R.id.iv_scan, R.id.ll_like, R.id.ll_fans, R.id.ll_attention, R.id.iv_setting, R.id.iv_time_change, R.id.iv_language, R.id.ll_sing, R.id.ll_invite, R.id.rl_lb, R.id.rl_wallet, R.id.rl_notification, R.id.rl_history, R.id.rl_collect})

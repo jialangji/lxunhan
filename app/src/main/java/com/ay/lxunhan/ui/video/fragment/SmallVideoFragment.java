@@ -11,6 +11,9 @@ import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.contract.SmallVideoContract;
 import com.ay.lxunhan.presenter.SmallVideoPresenter;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
+import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
+import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -89,9 +92,15 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                isRefresh=false;
-                page=page+1;
-                presenter.getSmallVideo(page);
+                if (page * Contacts.LIMIT == videoBeanList.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getSmallVideo(page);
+
+                }else {
+                    swipeRefresh.finishLoadmore();
+                    ToastUtil.makeShortText(getActivity(),"暂无更多数据");
+                }
             }
         });
 

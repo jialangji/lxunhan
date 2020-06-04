@@ -10,8 +10,12 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.base.BasePresenter;
+import com.ay.lxunhan.observer.EventModel;
+import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideCacheUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -78,7 +82,8 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.tv_login_out:
                 UserInfo.getInstance().clearAccess();
-                MainActivity.startMainActivity(this);
+                EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
+                MainActivity.startMainActivity(this,0);
                 break;
         }
     }

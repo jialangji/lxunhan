@@ -30,9 +30,16 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".ui.video.activity.VideoDetailActivity"
-            android:configChanges="keyboardHidden|screenSize|orientation"
+        <activity android:name=".ui.public_ac.activity.PyqActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.public_ac.imageviewbig.ImagePreviewActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.video.activity.VideoDetailActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.message.activity.AddFriendActivity" />
         <activity android:name=".ui.message.activity.FriendActivity" />
         <activity

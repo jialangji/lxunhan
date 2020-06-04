@@ -1,6 +1,7 @@
 package com.ay.lxunhan.ui.public_ac.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,8 +9,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,6 +24,7 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.UserInfoBean;
+import com.ay.lxunhan.bean.model.CompleteInfoModel;
 import com.ay.lxunhan.contract.UserInfoContract;
 import com.ay.lxunhan.presenter.UserInfoPresenter;
 import com.ay.lxunhan.utils.FileProvider7;
@@ -25,6 +32,10 @@ import com.ay.lxunhan.utils.ImageUtil;
 import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
+import com.ay.lxunhan.utils.Utils;
+import com.ay.lxunhan.utils.datepicker.DateTimePickerListener;
+import com.ay.lxunhan.utils.datepicker.DateTimePickerUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.InputDialog;
 import com.ay.lxunhan.widget.SelectImageDialog;
@@ -41,12 +52,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 
 import static com.ay.lxunhan.widget.InputDialog.INPUTDIALOG_BTNTYPE_EDITUSERNAME;
 
-public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoView, UserInfoPresenter> implements UserInfoContract.UserInfoView {
+public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoView, UserInfoPresenter> implements DateTimePickerListener,UserInfoContract.UserInfoView {
 
 
     public static final int INTENT_REQUEST_CODE_PICK = 0; // 相册选择标记
@@ -74,18 +86,28 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     EditText etContent;
     @BindView(R.id.tv_num)
     TextView tvNum;
-    private int province_id;
-    private int city_id;
+    private String province_id;
+    private String city_id;
     private int sex_id;
+    private String name;
+    private String intro;
     private File file;
+    private String date;
     private Uri uritempFile;
     private SelectImageDialog selectImageDialog;
     private InputDialog inputDialog;
     private InputDialog.InputDialogBuilder builder;
+    private com.ay.lxunhan.utils.datepicker.OptionsPickerView pvBirthday;
 
     @Override
     public UserInfoPresenter initPresenter() {
         return new UserInfoPresenter(this);
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        loadBirthdatTime();
     }
 
     @Override
@@ -111,7 +133,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     }
 
     @OnClick({R.id.rl_finish, R.id.rl_header, R.id.rl_qrcode, R.id.tv_submit
-    ,R.id.rl_address,R.id.rl_sex,R.id.rl_name})
+    ,R.id.rl_address,R.id.rl_sex,R.id.rl_name,R.id.rl_age})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
@@ -124,6 +146,9 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
                 if (countryBeans.size()>0){
                     showPickerView();
                 }
+                break;
+            case R.id.rl_age:
+                pvBirthday.show();
                 break;
             case R.id.rl_name:
                 showInputDialog();
@@ -148,7 +173,11 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
                 MyQrcodeActivity.startMyQrcodeActivity(this);
                 break;
             case R.id.tv_submit://提交个人信息
-                finish();
+                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etContent))){
+                    intro=StringUtil.getFromEdit(etContent);
+                }
+                CompleteInfoModel completeInfoModel=new CompleteInfoModel(name,date,String.valueOf(sex_id),city_id,intro,province_id);
+                presenter.completeInfo(completeInfoModel);
                 break;
         }
     }
@@ -160,12 +189,20 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     @Override
     public void getUserInfoFinish(UserInfoBean userInfoBean) {
         GlideUtil.loadCircleImgForHead(this,ivHeader,userInfoBean.getAvatar());
+        UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
         tvName.setText(userInfoBean.getNickname());
         if (userInfoBean.getSex()){
             tvSex.setText("男");
+            sex_id=1;
         }else{
             tvSex.setText("女");
+            sex_id=2;
         }
+        province_id=userInfoBean.getProvince_id();
+        city_id=userInfoBean.getCity_id();
+        name=userInfoBean.getNickname();
+        intro=userInfoBean.getAutograph();
+        date=userInfoBean.getDate_birth();
         tvAppId.setText(userInfoBean.getSignal());
         tvAge.setText(userInfoBean.getAge());
         tvAddress.setText(userInfoBean.getAddress());
@@ -180,6 +217,11 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
         }
     }
 
+    @Override
+    public void updateUserInfoFinish() {
+        presenter.getUserInfo();
+    }
+
     private void showPickerView() {// 弹出选择器
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, (options1, options2, options3, v) -> {
             //返回的分别是三个级别的选中位置
@@ -188,13 +230,38 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
             String opt2tx = countryBeans2.size() > 0
                     && countryBeans2.get(options1).size() > 0 ?
                     countryBeans2.get(options1).get(options2).getPickerViewText(): "";
-            province_id=countryBeans.get(options1).getRegion_id();
-            city_id=countryBeans2.get(options1).get(options2).getRegion_id();
+            province_id= String.valueOf(countryBeans.get(options1).getRegion_id());
+            city_id= String.valueOf(countryBeans2.get(options1).get(options2).getRegion_id());
             tvAddress.setText(opt1tx+" "+opt2tx);
         })
                 .build();
         pvOptions.setPicker(countryBeans, countryBeans2);//三级选择器
         pvOptions.show();
+    }
+
+    /**
+     * 选择日期
+     */
+    public void loadBirthdatTime() {
+        pvBirthday = DateTimePickerUtil.getAllDatePicker(this, 0, this);
+        Dialog mDialog = pvBirthday.getDialog();
+        if (mDialog != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    Gravity.BOTTOM);
+
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            pvBirthday.getDialogContainerLayout().setLayoutParams(params);
+            Window dialogWindow = mDialog.getWindow();
+            if (dialogWindow != null) {
+                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
+            }
+        }
+
+
     }
 
     // 弹出选择图片弹窗
@@ -237,7 +304,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
             builder = new InputDialog.InputDialogBuilder(mContext).setBtnType(INPUTDIALOG_BTNTYPE_EDITUSERNAME).setCancel(true).setShowEt1(true).setLeftText(getString(R.string.cancel)).setRightText(getString(R.string.sure))
                     .setTitle(getString(R.string.update_nick_name)).setHinit1(getString(R.string.please_enter_name2)).setNegativeButtonListener(v -> inputDialog.dismiss()
                     ).setPositiveButtonListener(v -> {
-                        String name = StringUtil.getFromEdit(builder.viewHolder.etDialogContent);
+                        name = StringUtil.getFromEdit(builder.viewHolder.etDialogContent);
                         if (StringUtils.isEmpty(name)) {
                             ToastUtil.makeShortText(mContext, getString(R.string.please_enter_name2));
                             return;
@@ -246,6 +313,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
                             return;
                         }
                         tvName.setText(name);
+                        inputDialog.dismiss();
                     });
             inputDialog = builder.create();
         }
@@ -283,56 +351,23 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
                 GlideUtil.loadCircleImgForHead(this, ivHeader, bitmap);
-                upLoadFile(bitmap);
+                upload(bitmap);
             } catch (FileNotFoundException e) {
                 ToastUtils.showShort("未找到裁剪图片");
             }
         }
 
     }
-    private void upLoadFile(Bitmap bitmap) {
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        MultipartBody.Builder builder = new MultipartBody.Builder();
+    public void upload(Bitmap bitmap){
         try {
-            file = ImageUtil.saveBitmap(this, bitmap, IMAGE_FILE_NAME);
-           /* if (file != null && file.exists()) {
-                if (UserInfo.getInstance().isLogin()) {
-                    RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    RequestBody requestBody = builder.setType(MultipartBody.FORM)
-                            .addFormDataPart("uqid", UserInfo.getInstance().getUserId())
-                            .addFormDataPart("avatar", file.getName(), body)
-                            .build();
-                    Request request = new Request.Builder()
-                            .url(UrlConfig.BASE_URL + "/api/user/user_info_edit")
-                            .post(requestBody)
-                            .build();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-                            Log.i("tag", "==========" + e.getMessage());
-                        }
-
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                            String string = "";
-                            if (response.body() != null) {
-                                string = response.body().string();
-                            }
-                            final String finalString = string;
-                            runOnUiThread(() -> {
-                                HttpResult editUserInfoBean = new Gson().fromJson(finalString, HttpResult.class);
-                                if (editUserInfoBean.error == 0) {
-                                    Toast.makeText(UserInfoActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
-                }
-            }*/
+            file = ImageUtil.saveBitmap(this, bitmap,IMAGE_FILE_NAME);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("avatar", file.getName(), requestBody);
+            presenter.completeInfoImg(part);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -368,5 +403,11 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     @Override
     public void hideProgress() {
         hudLoader.dismiss();
+    }
+
+    @Override
+    public void dateTimeResult(boolean dateOrTime, int type, String result, String result1) {
+        date=result1;
+        tvAge.setText(Utils.getAgeFromBirthTime(Utils.getDate(date))+"");
     }
 }

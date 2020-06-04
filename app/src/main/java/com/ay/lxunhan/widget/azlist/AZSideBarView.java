@@ -83,13 +83,13 @@ public class AZSideBarView extends View {
         mHintCircleRadius = typeArray.getDimensionPixelOffset(R.styleable.AZSideBarView_hintCircleRadius,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24,
                         getResources().getDisplayMetrics()));
-        mHintCircleColor = typeArray.getColor(R.styleable.AZSideBarView_hintCircleColor, ResourceUtil.getColor(getContext(), R.color.blue_text));
+        mHintCircleColor = typeArray.getColor(R.styleable.AZSideBarView_hintCircleColor, ResourceUtil.getColor(getContext(), R.color.color_fc5a8e));
         mHintShape = typeArray.getInteger(R.styleable.AZSideBarView_hintShape, 0);
         mContentPadding = typeArray.getDimensionPixelOffset(R.styleable.AZSideBarView_contentPadding,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
                         getResources().getDisplayMetrics()));
         mBarPadding = typeArray.getDimensionPixelOffset(R.styleable.AZSideBarView_barPadding,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                         getResources().getDisplayMetrics()));
         mBarWidth = typeArray.getDimensionPixelOffset(R.styleable.AZSideBarView_barWidth,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0,
@@ -246,21 +246,18 @@ public class AZSideBarView extends View {
         }
         mRatioAnimator.cancel();
         mRatioAnimator.setFloatValues(value);
-        mRatioAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator value) {
-                mAnimationRatio = (float) value.getAnimatedValue();
-                //球弹到位的时候，并且点击的位置变了，即点击的时候显示当前选择位置
-                if (mAnimationRatio == 1f && mPreSelect != mNewSelect) {
-                    if (mNewSelect >= 0 && mNewSelect < mLetters.size()) {
-                        mSelect = mNewSelect;
-                        if (mListener != null) {
-                            mListener.onLetterChange(mLetters.get(mNewSelect));
-                        }
+        mRatioAnimator.addUpdateListener(value1 -> {
+            mAnimationRatio = (float) value1.getAnimatedValue();
+            //球弹到位的时候，并且点击的位置变了，即点击的时候显示当前选择位置
+            if (mAnimationRatio == 1f && mPreSelect != mNewSelect) {
+                if (mNewSelect >= 0 && mNewSelect < mLetters.size()) {
+                    mSelect = mNewSelect;
+                    if (mListener != null) {
+                        mListener.onLetterChange(mLetters.get(mNewSelect));
                     }
                 }
-                invalidate();
             }
+            invalidate();
         });
         mRatioAnimator.start();
     }

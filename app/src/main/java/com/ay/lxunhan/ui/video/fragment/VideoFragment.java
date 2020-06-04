@@ -1,5 +1,6 @@
 package com.ay.lxunhan.ui.video.fragment;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -17,6 +18,8 @@ import com.ay.lxunhan.contract.VideoMainContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoMainPresenter;
 import com.ay.lxunhan.ui.home.activity.ChannelManageActivity;
+import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
+import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.NoScrollViewPager;
@@ -169,6 +172,20 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
             case R.id.rl_search:
                 break;
             case R.id.iv_edit:
+                PermissionsUtils.getInstance().chekPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        new PermissionsUtils.IPermissionsResult() {
+                            @Override
+                            public void passPermissons() {
+                                IssueActivity.startIssueActivity(getActivity());
+                            }
+
+                            @Override
+                            public void forbitPermissons() {
+
+                            }
+                        });
                 break;
             case R.id.iv_more:
                 ChannelManageActivity.stratChannelManageActivity(getActivity(),true);

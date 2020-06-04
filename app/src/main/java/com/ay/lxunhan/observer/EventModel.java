@@ -5,6 +5,7 @@ public class EventModel<T> {
     public static final int ARTICLELIKE=2;
     public static final int TWOCOMMENTLIKE=3;
     public static final int SENDCOMMENT=4;
+    public static final int LOGIN_OUT=10000;
     private int messageType;
     private int data2;
     private T data;

@@ -47,7 +47,7 @@ public class BaseSubscriber<T> extends DisposableSubscriber<T> {
             if (apiException.getErrCode() != HTTP_SUCCESS) {
                 if (null != AppContext.instance) {
                     if (apiException.getErrCode()==HTTP_NOT_LOGIN){
-                        LoginActivity.startLoginActivity(AppContext.instance);
+
                     }else {
                         ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
                     }

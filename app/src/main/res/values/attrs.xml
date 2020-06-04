@@ -11,6 +11,7 @@
     </declare-styleable>
 
 
+
     <declare-styleable name="AZSideBarView">
         <!-- slide bar 有效内容背景 -->
         <attr name="backgroundColor" />

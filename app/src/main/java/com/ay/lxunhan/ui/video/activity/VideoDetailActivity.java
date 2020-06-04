@@ -26,8 +26,11 @@ import com.ay.lxunhan.contract.VideoDetailContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.public_ac.activity.PyqActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -141,20 +144,10 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         rvComment.setAdapter(commentAdapter);
     }
 
-    public String setTwoCommentColor(String name,int count){
-        String str=name+"等人共"+count+"条回复>";
-        SpannableString span=new SpannableString(str);
-        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_ff8b02)), 1, name.length() + 1, SPAN_EXCLUSIVE_EXCLUSIVE);
-        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)),name.length()+4,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return str;
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_video_detail;
     }
-
-
 
     @Override
     public boolean isUserEvent() {
@@ -208,9 +201,15 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                isRefresh = true;
-                page = page + 1;
-                presenter.getOneComment(String.valueOf(id), type, page);
+                if (page * Contacts.LIMIT == commentBeans.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getOneComment(String.valueOf(id), type, page);
+
+                }else {
+                    swipeRefresh.finishLoadmore();
+                    ToastUtil.makeShortText(VideoDetailActivity.this,"暂无更多数据");
+                }
             }
         });
         etComment.setOnEditorActionListener((v, actionId, event) -> {

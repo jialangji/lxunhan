@@ -21,12 +21,16 @@ import com.ay.lxunhan.contract.CompleteInfoContract;
 import com.ay.lxunhan.presenter.CompleteInfoPresenter;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.StringUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.datepicker.DateTimePickerListener;
 import com.ay.lxunhan.utils.datepicker.DateTimePickerUtil;
 import com.ay.lxunhan.utils.datepicker.OptionsPickerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.CompleteInfoView, CompleteInfoPresenter> implements DateTimePickerListener, CompleteInfoContract.CompleteInfoView {
 
@@ -141,6 +145,7 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
     @Override
     public void completeInfoFinish() {
         MainActivity.startMainActivity(this);
+        UserInfo.getInstance().setLogin(true);
         AppManager.getAppManager().finishActivity(BootPageActivity.class);
         finish();
     }

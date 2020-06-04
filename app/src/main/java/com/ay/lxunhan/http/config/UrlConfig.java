@@ -186,4 +186,53 @@ public class UrlConfig {
      */
     public static final String MORE_ATTENTION="api/messages/fol_mul_people";
 
+    /**
+     * 发布朋友圈
+     */
+    public static final String PYQ_ISSUE="api/messages/circle_add";
+
+    /**
+     * 朋友圈列表
+     */
+    public static final String PYQ_LIST="api/messages/circles_list";
+
+    /**
+     * 朋友圈详情
+     */
+    public static final String PYQ_DETAIL="api/messages/circles_show";
+
+    /**
+     * 朋友圈删除
+     */
+    public static final String PYQ_DELETE="api/messages/circles_del";
+
+    /**
+     * 朋友圈评论
+     */
+    public static final String PYQ_COMMENT="api/messages/circles_comment_list";
+
+    /**
+     * 自媒体人详情
+     */
+    public static final String MEIDA_USER_INFO="api/mine/info";
+
+    /**
+     * 自媒体人资料
+     */
+    public static final String MEIDA_USER_DATA="api/mine/info_data";
+
+    /**
+     * 自媒体人发布
+     */
+    public static final String MEIDA_LIST="api/mine/info_for_type";
+
+    /**
+     * 聊天列表
+     */
+    public static final String CHAT_LIST="api/messages/message_list";
+
+    /**
+     * 我的信息
+     */
+    public static final String MY_INFO="api/mine/my_info";
 }

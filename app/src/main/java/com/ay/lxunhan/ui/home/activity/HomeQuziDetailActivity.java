@@ -27,7 +27,9 @@ import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -113,7 +115,6 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
                 helper.setGone(R.id.iv_v, item.getIs_media());
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.setText(R.id.tv_like_count, item.getLike_count() + "");
-
                 helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
                 helper.setGone(R.id.tv_reply, item.getIs_two());
                 TextView tvReplay=helper.getView(R.id.tv_reply);
@@ -177,9 +178,14 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                isRefresh = true;
-                page = page + 1;
-                presenter.getOneComment(String.valueOf(id), type, page);
+                if (page * Contacts.LIMIT == commentBeans.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getOneComment(String.valueOf(id), type, page);
+                }else {
+                    swipeRefresh.finishLoadmore();
+                    ToastUtil.makeShortText(HomeQuziDetailActivity.this,"暂无更多数据");
+                }
             }
         });
         etComment.setOnEditorActionListener((v, actionId, event) -> {
@@ -216,7 +222,13 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
                 break;
             case R.id.tv_quiz:
                 if (!homeQuizDetailBean.getIs_pate()) {
-                    SendCommentModel quizModel = new SendCommentModel(homeQuizDetailBean.getId(), Integer.parseInt(homeQuizDetailBean.getUid()));
+                    int oid = -1;
+                    for (HomeQuizDetailBean.OptionListBean optionListBean : homeQuizDetailBean.getOption_list()) {
+                        if (optionListBean.isUserIsSelect()){
+                            oid=optionListBean.getId();
+                        }
+                    }
+                    SendCommentModel quizModel = new SendCommentModel(homeQuizDetailBean.getId(),oid );
                     presenter.quiz(quizModel);
                 }
                 break;

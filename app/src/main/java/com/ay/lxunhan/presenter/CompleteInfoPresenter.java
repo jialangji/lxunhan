@@ -6,6 +6,8 @@ import com.ay.lxunhan.contract.CompleteInfoContract;
 import com.ay.lxunhan.http.HttpMethods;
 import com.ay.lxunhan.observer.BaseSubscriber;
 
+import okhttp3.MultipartBody;
+
 public class CompleteInfoPresenter extends BasePresenter<CompleteInfoContract.CompleteInfoView> implements CompleteInfoContract.CompleteInfoPresenter {
     public CompleteInfoPresenter(CompleteInfoContract.CompleteInfoView view) {
         super(view);

@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_color"
     android:layout_height="match_parent"
     tools:context=".ui.public_ac.activity.IssueActivity">
+    <RelativeLayout
+        android:id="@+id/view_title"
+        android:layout_width="match_parent"
+        android:paddingStart="@dimen/dp_15"
+        android:paddingEnd="@dimen/dp_15"
+        android:layout_height="@dimen/dp_50">
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:textColor="@color/color_303133"
+            android:textSize="@dimen/sp_16"
+            android:text="@string/cancel"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_15"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/color_303133"
+            android:text="@string/issue_pyq"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_issue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_7"
+                android:paddingBottom="@dimen/dp_7"
+                android:paddingStart="@dimen/dp_18"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:paddingEnd="@dimen/dp_18"
+                android:background="@drawable/shape_radius_pink"
+                android:layout_centerVertical="true"
+                android:text="@string/issue"
+                android:textSize="@dimen/sp_10"
+                />
 
-</android.support.constraint.ConstraintLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_15"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="@string/shape_my_app_pyq"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_et_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/et_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:paddingBottom="@dimen/dp_5"
+            android:text="@string/word_count" />
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

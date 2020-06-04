@@ -1,5 +1,7 @@
 package com.ay.lxunhan.ui.login;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 import com.ay.lxunhan.MainActivity;
@@ -55,5 +57,10 @@ public class BootPageActivity extends BaseActivity {
                 LoginActivity.startLoginActivity(this);
                 break;
         }
+    }
+
+    public static void startBootPageActivity(Context context){
+        Intent intent=new Intent(context,BootPageActivity.class);
+        context.startActivity(intent);
     }
 }

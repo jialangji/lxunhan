@@ -160,4 +160,10 @@
     <string name="ask_two">聊两句</string>
     <string name="attention_friend">关注好友</string>
     <string name="phone_or_nickname">手机号或昵称</string>
+    <string name="for_you">为你推荐</string>
+    <string name="hot_people">热门人物</string>
+    <string name="attention_all">+ 关注以上全部</string>
+    <string name="issue_pyq">发表动态</string>
+    <string name="issue">发表</string>
+    <string name="shape_my_app_pyq">分享我的韩乐讯动态</string>
 </resources>

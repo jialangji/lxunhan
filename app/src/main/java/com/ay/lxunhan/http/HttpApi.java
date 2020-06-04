@@ -3,6 +3,7 @@ package com.ay.lxunhan.http;
 
 import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.ChannelBean;
+import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
@@ -11,6 +12,7 @@ import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.PeopleBean;
+import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
@@ -21,12 +23,15 @@ import com.ay.lxunhan.http.config.UrlConfig;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface HttpApi {
@@ -53,6 +58,12 @@ public interface HttpApi {
      */
     @POST(UrlConfig.COMPLETE_INFO)
     Flowable<HttpResult<Object>> completeInfo(@Body RequestBody body);
+    /**
+     *完善信息
+     */
+    @Multipart
+    @POST(UrlConfig.COMPLETE_INFO)
+    Flowable<HttpResult<Object>> completeInfoImg(@Query("uqid") String uqid,@Part MultipartBody.Part part);
 
     /**
      * 个人信息
@@ -257,7 +268,8 @@ public interface HttpApi {
      * 添加好友
      */
     @GET(UrlConfig.ADD_FRIEND)
-    Flowable<HttpResult<AddFriendBean>> addFriends(@Query("uqid") String uqid,@Query("keys") String keys);
+    Flowable<HttpResult<AddFriendBean>> addFriends(@Query("uqid") String uqid,@Query("keys") String keys,
+    @Query("page") int page);
 
     /**
      * 关注
@@ -277,7 +289,30 @@ public interface HttpApi {
     @GET(UrlConfig.VIDEO_DETAIL)
     Flowable<HttpResult<VideoDetailBean>> videoDetail(@Query("uqid") String uqid, @Query("id") String id);
 
+    /**
+     * 发布
+     */
+    @Multipart
+    @POST(UrlConfig.PYQ_ISSUE)
+    Flowable<HttpResult<Object>> issue(@Query("uqid") String uqid, @Query("title") String title,
+                                          @Part List<MultipartBody.Part> cover_img);
+    /**
+     * 发布
+     */
+    @POST(UrlConfig.PYQ_ISSUE)
+    Flowable<HttpResult<Object>> issue(@Query("uqid") String uqid,@Query("title") String title);
 
+    /**
+     * 朋友圈列表
+     */
+    @GET(UrlConfig.PYQ_LIST)
+    Flowable<HttpResult<List<PyqBean>>> pyqList(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     * 聊天列表
+     */
+    @GET(UrlConfig.CHAT_LIST)
+    Flowable<HttpResult<List<ChatListBean>>> chatList(@Query("uqid") String uqid,@Query("page") int page);
 }
 
 

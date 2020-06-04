@@ -121,6 +121,7 @@
             android:text="1分钟"
             />
         <LinearLayout
+            android:id="@+id/ll_like"
             android:layout_toStartOf="@id/line1"
             android:layout_width="wrap_content"
             android:orientation="horizontal"

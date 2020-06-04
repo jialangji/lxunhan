@@ -3,6 +3,7 @@ package com.ay.lxunhan.adapter;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
+import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.VideoBean;
+import com.ay.lxunhan.ui.public_ac.imageviewbig.ImagePreviewActivity;
 import com.ay.lxunhan.utils.DisplayUtil;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.Utils;
@@ -38,10 +41,8 @@ public class PublicAdapterUtil {
 
     public static BaseQuickAdapter getAdapter(List<MultiItemBaseBean> datas, Context context) {
         return new MultipleItemQuickAdapter<MultiItemBaseBean>(datas) {
-
             private BaseQuickAdapter imgAdapter;
             private BaseQuickAdapter baseQuickAdapter;
-
             @Override
             protected void addItemTypes() {
                 super.addItemTypes();
@@ -73,6 +74,7 @@ public class PublicAdapterUtil {
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.addOnClickListener(R.id.tv_attention);
                 helper.addOnClickListener(R.id.ll_linear);
+                helper.addOnClickListener(R.id.ll_like);
                 switch (item.getItemType()) {
                     case 0:
                         helper.setText(R.id.tv_content, item.getTitle());
@@ -179,7 +181,6 @@ public class PublicAdapterUtil {
         };
     }
 
-
     public static BaseQuickAdapter getVideoAdapter(List<VideoBean> videoBeans, Context context) {
         return new MultipleItemQuickAdapter<VideoBean>(videoBeans) {
             @Override
@@ -225,6 +226,55 @@ public class PublicAdapterUtil {
                         break;
                     case 5:
                         GlideUtil.loadRoundTop(context, helper.getView(R.id.iv_video_cover), item.getCover());
+                        break;
+                }
+            }
+        };
+    }
+
+    public static BaseQuickAdapter getPyqAdpater(List<PyqBean> pyqBeans,Context context){
+        return new MultipleItemQuickAdapter<PyqBean>(pyqBeans){
+
+            private BaseQuickAdapter imgAdapter;
+
+            @Override
+            protected void addItemTypes() {
+                super.addItemTypes();
+                addItemType(0, R.layout.item_pyq_no_img);
+                addItemType(1, R.layout.item_pyq_one_img);
+                addItemType(2, R.layout.item_pyq_more_img);
+            }
+
+            @Override
+            protected void convert(BaseViewHolder helper, PyqBean item) {
+                super.convert(helper, item);
+                GlideUtil.loadCircleImgForHead(context,helper.getView(R.id.iv_header),item.getAvatar());
+                helper.setText(R.id.tv_name, item.getNickname());
+                helper.setText(R.id.tv_signature, item.getAutograph());
+                helper.setImageResource(R.id.iv_sex, item.getSex() ? R.drawable.ic_man : R.drawable.ic_woman);
+                helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
+                helper.setImageResource(R.id.iv_comment, R.drawable.ic_comment_normal);
+                helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
+                helper.setText(R.id.tv_like_count, item.getLike_count() + "");
+                helper.setText(R.id.tv_time, item.getTimeText());
+                helper.addOnClickListener(R.id.ll_line);
+                switch (helper.getItemViewType()) {
+                    case 1:
+                        GlideUtil.loadRoundImg(context,helper.getView(R.id.iv_cover),item.getImage_arr().get(0),10);
+                        helper.getView(R.id.iv_cover).setOnClickListener(v -> ImagePreviewActivity.startImageviewnActivity(context,item.getImage_arr(),0));
+                        break;
+                    case 2:
+                        RecyclerView rvImg = helper.getView(R.id.rv_img);
+                        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getImage_arr()) {
+                            @Override
+                            protected void convert(BaseViewHolder helper, String itemchild) {
+                                GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild);
+                            }
+                        };
+                        rvImg.addItemDecoration(new GridDividerDecoration(context, 10, GridLayoutManager.VERTICAL));
+                        rvImg.setLayoutManager(new GridLayoutManager(context, 3));
+                        rvImg.setAdapter(imgAdapter);
+                        imgAdapter.setOnItemClickListener((adapter, view, position) -> ImagePreviewActivity.startImageviewnActivity(context,item.getImage_arr(),position));
                         break;
                 }
             }

@@ -38,8 +38,8 @@ public class ComplaintActivity extends BaseActivity<ComplaintContract.ComplaintV
     @BindView(R.id.tv_et_num)
     TextView tvEtNum;
     private BaseQuickAdapter baseQuickAdapter;
-    private List<ComplaintBean> complaintBeans=new ArrayList<>();
-    private String[] str=new String[]{"涉黄信息","不实信息","人身攻击","有害信息","抄袭","违法违规"};
+    private List<ComplaintBean> complaintBeans = new ArrayList<>();
+    private String[] str = new String[]{"涉黄信息", "不实信息", "人身攻击", "有害信息", "抄袭", "违法违规"};
     private String aid;
     private int type;
 
@@ -51,27 +51,27 @@ public class ComplaintActivity extends BaseActivity<ComplaintContract.ComplaintV
     @Override
     protected void initView() {
         super.initView();
-        aid=getIntent().getStringExtra("aid");
-        type=getIntent().getIntExtra("type",-1);
+        aid = getIntent().getStringExtra("aid");
+        type = getIntent().getIntExtra("type", -1);
         for (int i = 0; i < str.length; i++) {
-            complaintBeans.add(new ComplaintBean(str[i],i+1));
+            complaintBeans.add(new ComplaintBean(str[i], i + 1));
         }
-        baseQuickAdapter = new BaseQuickAdapter<ComplaintBean,BaseViewHolder>(R.layout.item_complaint,complaintBeans) {
+        baseQuickAdapter = new BaseQuickAdapter<ComplaintBean, BaseViewHolder>(R.layout.item_complaint, complaintBeans) {
             @Override
             protected void convert(BaseViewHolder helper, ComplaintBean item) {
-                TextView tvName=helper.getView(R.id.tv_name);
+                TextView tvName = helper.getView(R.id.tv_name);
                 tvName.setText(item.getName());
-                if (item.isSelect()){
+                if (item.isSelect()) {
                     tvName.setBackground(getResources().getDrawable(R.drawable.shape_radius_pink_10));
                     tvName.setTextColor(getResources().getColor(R.color.white));
-                }else {
+                } else {
                     tvName.setBackground(getResources().getDrawable(R.drawable.shape_grayb2_line));
                     tvName.setTextColor(getResources().getColor(R.color.color_b2));
                 }
             }
         };
-        rvComplaintType.setLayoutManager(new GridLayoutManager(this,3));
-        rvComplaintType.addItemDecoration(new GridDividerDecoration(this,15,GridLayoutManager.VERTICAL));
+        rvComplaintType.setLayoutManager(new GridLayoutManager(this, 3));
+        rvComplaintType.addItemDecoration(new GridDividerDecoration(this, 15, GridLayoutManager.VERTICAL));
 
         rvComplaintType.setAdapter(baseQuickAdapter);
     }
@@ -130,39 +130,39 @@ public class ComplaintActivity extends BaseActivity<ComplaintContract.ComplaintV
                 finish();
                 break;
             case R.id.tv_submit:
-                boolean isSelect=false;
-                int cp_type=0;
+                boolean isSelect = false;
+                int cp_type = 0;
                 for (ComplaintBean complaintBean : complaintBeans) {
-                    if (complaintBean.isSelect()){
-                        isSelect=true;
-                        cp_type=complaintBean.getType();
+                    if (complaintBean.isSelect()) {
+                        isSelect = true;
+                        cp_type = complaintBean.getType();
                     }
                 }
-                if (!isSelect){
-                    ToastUtil.makeShortText(this,"请选择投诉原因");
+                if (!isSelect) {
+                    ToastUtil.makeShortText(this, "请选择投诉原因");
                     return;
                 }
                 ComplaintModel complaintModel;
-                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etContent))){
-                     complaintModel=new ComplaintModel(aid,type,cp_type,StringUtil.getFromEdit(etContent));
-                }else {
-                     complaintModel=new ComplaintModel(aid,type,cp_type);
+                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etContent))) {
+                    complaintModel = new ComplaintModel(aid, type, cp_type, StringUtil.getFromEdit(etContent));
+                } else {
+                    complaintModel = new ComplaintModel(aid, type, cp_type);
                 }
                 presenter.complaint(complaintModel);
                 break;
         }
     }
 
-    public static void startComplaintActivity(Context context,String aid,int type){
-        Intent intent=new Intent(context,ComplaintActivity.class);
-        intent.putExtra("aid",aid);
-        intent.putExtra("type",type);
+    public static void startComplaintActivity(Context context, String aid, int type) {
+        Intent intent = new Intent(context, ComplaintActivity.class);
+        intent.putExtra("aid", aid);
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 
     @Override
     public void complaintFinish() {
-        ToastUtil.makeShortText(this,"投诉成功");
+        ToastUtil.makeShortText(this, "投诉成功");
         finish();
     }
 

@@ -18,6 +18,8 @@ import com.ay.lxunhan.presenter.VideoHomePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
+import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -50,7 +52,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
     private List<PeopleBean> peopleBeans = new ArrayList<>();
     private BaseQuickAdapter peopleAdapter;
     private int page = 1;
-    private boolean isRefresh=true;
+    private boolean isRefresh = true;
     private List<VideoBean> videoBeanList = new ArrayList<>();
     private BaseQuickAdapter videoAdapter;
     private ShareDialog shareDialog;
@@ -86,7 +88,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
         rvPeople.setAdapter(peopleAdapter);
         videoAdapter = PublicAdapterUtil.getVideoAdapter(videoBeanList, getActivity());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        rvVideo.addItemDecoration(new GridSpacingItemDecoration(2,10,false));
+        rvVideo.addItemDecoration(new GridSpacingItemDecoration(2, 10, false));
         rvVideo.setLayoutManager(gridLayoutManager);
         rvVideo.setAdapter(videoAdapter);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -121,46 +123,51 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
-                isRefresh=true;
-                page=1;
+                isRefresh = true;
+                page = 1;
                 presenter.getVideoHomeList("", page);
             }
 
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                isRefresh=false;
-                page=page+1;
-                presenter.getVideoHomeList("", page);
+                if (page * Contacts.LIMIT == videoBeanList.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getVideoHomeList("", page);
+                } else {
+                    swipeRefresh.finishLoadmore();
+                    ToastUtil.makeShortText(getActivity(), "暂无更多数据");
+                }
             }
         });
         videoAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
                 case R.id.ll_line:
-                    if (videoBeanList.get(position).getItemType()==5){
-                        List<VideoBean> videoBeans=new ArrayList<>();
+                    if (videoBeanList.get(position).getItemType() == 5) {
+                        List<VideoBean> videoBeans = new ArrayList<>();
                         for (VideoBean videoBean : videoBeanList) {
-                            if (videoBean.getItemType()==5){
+                            if (videoBean.getItemType() == 5) {
                                 videoBeans.add(videoBean);
                             }
                         }
-                        int postion=-1;
+                        int postion = -1;
                         for (int i = 0; i < videoBeans.size(); i++) {
-                            if (videoBeanList.get(i).getId()==videoBeans.get(i).getId()){
-                                postion=i;
+                            if (videoBeanList.get(i).getId() == videoBeans.get(i).getId()) {
+                                postion = i;
                             }
                         }
-                        SmallVideoActivity.startSmallVideoActivity(getActivity(),videoBeans,postion);
-                    }else {
+                        SmallVideoActivity.startSmallVideoActivity(getActivity(), videoBeans, postion);
+                    } else {
                         VideoDetailActivity.startVideoDetailActivity(getActivity(), String.valueOf(videoBeanList.get(position).getId()));
                     }
                     break;
                 case R.id.tv_attention:
-                    mPosition=position;
+                    mPosition = position;
                     presenter.attention(videoBeanList.get(position).getUid());
                     break;
                 case R.id.rl_more:
-                    mPosition=position;
+                    mPosition = position;
                     shareDialog.show();
                     break;
             }
@@ -263,10 +270,10 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
     @Override
     public void getVideoHomeListFinish(List<VideoBean> list) {
-        if (isRefresh){
+        if (isRefresh) {
             swipeRefresh.finishRefreshing();
             videoBeanList.clear();
-        }else{
+        } else {
             swipeRefresh.finishLoadmore();
         }
         videoBeanList.addAll(list);
@@ -282,9 +289,9 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
     @Override
     public void attentionFinish() {
-        if (videoBeanList.get(mPosition).getIs_fol()==1){
+        if (videoBeanList.get(mPosition).getIs_fol() == 1) {
             videoBeanList.get(mPosition).setIs_fol(0);
-        }else {
+        } else {
             videoBeanList.get(mPosition).setIs_fol(1);
         }
         videoAdapter.notifyDataSetChanged();

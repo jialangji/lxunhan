@@ -90,7 +90,7 @@ public class AZTitleDecoration extends RecyclerView.ItemDecoration {
 			}
 		}
 //		mBackgroundPaint.setColor(mTitleAttributes.mBackgroundColor);
-		mBackgroundPaint.setColor(ResourceUtil.getColor(mTitleAttributes.mContext,R.color.gray_text));
+		mBackgroundPaint.setColor(ResourceUtil.getColor(mTitleAttributes.mContext,R.color.transparent));
 		c.drawRect(parent.getPaddingLeft(), parent.getPaddingTop(), parent.getRight() - parent.getPaddingRight(),
 				   parent.getPaddingTop() + mTitleAttributes.mItemHeight, mBackgroundPaint);
 		mTitleTextPaint.setTextSize(mTitleAttributes.mTextSize);
@@ -119,7 +119,7 @@ public class AZTitleDecoration extends RecyclerView.ItemDecoration {
 	 */
 	private void drawTitleItem(Canvas c, RecyclerView parent, View child, String letters) {
 		final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-		mBackgroundPaint.setColor(ResourceUtil.getColor(mTitleAttributes.mContext,R.color.gray_text));
+		mBackgroundPaint.setColor(ResourceUtil.getColor(mTitleAttributes.mContext,R.color.transparent));
 		//绘制背景
 		c.drawRect(parent.getPaddingLeft(), child.getTop() - params.bottomMargin - mTitleAttributes.mItemHeight,
 				   parent.getWidth() - parent.getPaddingRight(), child.getTop() - params.bottomMargin, mBackgroundPaint);

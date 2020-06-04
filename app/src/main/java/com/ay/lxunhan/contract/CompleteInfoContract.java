@@ -2,6 +2,8 @@ package com.ay.lxunhan.contract;
 
 import com.ay.lxunhan.bean.model.CompleteInfoModel;
 
+import okhttp3.MultipartBody;
+
 public interface CompleteInfoContract {
 
     interface CompleteInfoPresenter{

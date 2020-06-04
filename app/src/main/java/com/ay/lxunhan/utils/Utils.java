@@ -18,7 +18,10 @@ import com.ay.lxunhan.base.AppContext;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +33,51 @@ public class Utils {
     private static final int MIN_CLICK_DELAY_TIME = 2000;
     private static long lastClickTime;
 
+    // 根据年月日计算年龄,birthTimeString:"1994-11-14"
+    public static int getAgeFromBirthTime(Date date) {
+        // 得到当前时间的年、月、日
+        if (date != null) {
+            Calendar cal = Calendar.getInstance();
+            int yearNow = cal.get(Calendar.YEAR);
+            int monthNow = cal.get(Calendar.MONTH) + 1;
+            int dayNow = cal.get(Calendar.DATE);
+            //得到输入时间的年，月，日
+            cal.setTime(date);
+            int selectYear = cal.get(Calendar.YEAR);
+            int selectMonth = cal.get(Calendar.MONTH) + 1;
+            int selectDay = cal.get(Calendar.DATE);
+            // 用当前年月日减去生日年月日
+            int yearMinus = yearNow - selectYear;
+            int monthMinus = monthNow - selectMonth;
+            int dayMinus = dayNow - selectDay;
+            int age = yearMinus;// 先大致赋值
+            if (yearMinus <= 0) {
+                age = 0;
+            }
+            if (monthMinus < 0) {
+                age = age - 1;
+            } else if (monthMinus == 0) {
+                if (dayMinus < 0) {
+                    age = age - 1;
+                }
+            }
+            return age;
+        }
+        return 0;
+    }
+
+    public static Date getDate(String str) {
+        Date date;
+        try {
+            java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            date = formatter.parse(str);
+            return date;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
     public static boolean isFastClick() {
         boolean flag = false;
         long curClickTime = System.currentTimeMillis();
@@ -40,16 +88,16 @@ public class Utils {
         return flag;
     }
 
-    public static String num(long number){
+    public static String num(long number) {
         String num;
-        if (number<10000){
-            num= String.valueOf(number);
+        if (number < 10000) {
+            num = String.valueOf(number);
             return num;
-        }else {
-            if (number%10000>1000){
-                num=number/10000+"."+number%10000/1000+"万";
-            }else {
-                num=number/10000+"万";
+        } else {
+            if (number % 10000 > 1000) {
+                num = number / 10000 + "." + number % 10000 / 1000 + "万";
+            } else {
+                num = number / 10000 + "万";
             }
             return num;
         }
@@ -162,7 +210,7 @@ public class Utils {
         });
     }
 
-    public static void limitCountInput(EditText et, CharSequence textChange,int pointSize) {
+    public static void limitCountInput(EditText et, CharSequence textChange, int pointSize) {
         try {
             String text = textChange.toString();
             int pointIndex = text.indexOf(".");
@@ -275,7 +323,7 @@ public class Utils {
         });
     }
 
-    public static InputFilter notEnterEmoji(){
+    public static InputFilter notEnterEmoji() {
         return new InputFilter() {
             Pattern emoji = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
                     Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);

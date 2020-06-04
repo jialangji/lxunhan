@@ -24,7 +24,9 @@ import com.ay.lxunhan.contract.HomeDetailContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -185,9 +187,15 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                isRefresh = true;
-                page = page + 1;
-                presenter.getOneComment(String.valueOf(id), type, page);
+                if (page * Contacts.LIMIT == commentBeans.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getOneComment(String.valueOf(id), type, page);
+                }else {
+                    swipeRefresh.finishLoadmore();
+                    ToastUtil.makeShortText(HomeAskDetailActivity.this,"暂无更多数据");
+                }
+
             }
         });
 

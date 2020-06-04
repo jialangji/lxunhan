@@ -133,7 +133,6 @@ public class RegisterActivity extends BaseActivity<RegisterContract.RegisterView
     public void registerFinish(LoginBean loginBean) {
         if (type==1){
             UserInfo.getInstance().setUserId(loginBean.getUqid());
-            UserInfo.getInstance().setLogin(true);
             CompleteInfoActivity.startCompleteInfoActivity(this);
         }else {
             LoginActivity.startLoginActivity(this);

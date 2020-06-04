@@ -53,8 +53,8 @@ public class AddFriendBean {
             this.uid = uid;
         }
 
-        public int getIs_media() {
-            return is_media;
+        public boolean getIs_media() {
+            return is_media==1;
         }
 
         public void setIs_media(int is_media) {
@@ -111,7 +111,17 @@ public class AddFriendBean {
         private String nickname;
         private String avatar;
         private String autograph;
+        private int is_media;
         private int is_fol;
+
+        public boolean getIs_media() {
+            return is_media==1;
+        }
+
+        public void setIs_media(int is_media) {
+            this.is_media = is_media;
+        }
+
 
         public int getId() {
             return id;
@@ -121,8 +131,8 @@ public class AddFriendBean {
             this.id = id;
         }
 
-        public int getSex() {
-            return sex;
+        public boolean getSex() {
+            return sex==1;
         }
 
         public void setSex(int sex) {

@@ -12,6 +12,8 @@ import com.ay.lxunhan.contract.VideoTypeContract;
 import com.ay.lxunhan.presenter.VideoTypePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
+import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.widget.RecyclerItemDecoration;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -104,9 +106,15 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                isRefresh=false;
-                page=page+1;
-                presenter.getVideoType(id,page);
+                if (page * Contacts.LIMIT == videoBeanList.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getVideoType(id,page);
+
+                }else {
+                    swipeRefresh.finishLoadmore();
+                    ToastUtil.makeShortText(getActivity(),"暂无更多数据");
+                }
             }
         });
         videoAdapter.setOnItemChildClickListener((adapter, view, position) -> {

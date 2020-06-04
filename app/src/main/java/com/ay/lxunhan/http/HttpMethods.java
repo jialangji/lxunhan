@@ -4,6 +4,7 @@ package com.ay.lxunhan.http;
 
 import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.ChannelBean;
+import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
@@ -12,6 +13,7 @@ import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.PeopleBean;
+import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
@@ -29,12 +31,15 @@ import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.GsonUtil;
 import com.ay.lxunhan.utils.UserInfo;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Retrofit;
@@ -138,6 +143,14 @@ public class HttpMethods {
      */
     public Flowable<Object> completeInfo(CompleteInfoModel completeInfoModel){
         Flowable<HttpResult<Object>> flowable=httpService.completeInfo(modeBody(completeInfoModel));
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 完善信息
+     */
+    public Flowable<Object> completeInfo(MultipartBody.Part part){
+        Flowable<HttpResult<Object>> flowable=httpService.completeInfoImg(UserInfo.getInstance().getUserId(),part);
         return compositeThread(flowable);
     }
 
@@ -395,8 +408,8 @@ public class HttpMethods {
     /**
      * 添加好友
      */
-    public Flowable<AddFriendBean> addFriendBean(String user){
-        Flowable<HttpResult<AddFriendBean>> flowable=httpService.addFriends(UserInfo.getInstance().getUserId(),user);
+    public Flowable<AddFriendBean> addFriendBean(String user,int page){
+        Flowable<HttpResult<AddFriendBean>> flowable=httpService.addFriends(UserInfo.getInstance().getUserId(),user,page);
         return compositeThread(flowable);
     }
 
@@ -425,6 +438,58 @@ public class HttpMethods {
         Flowable<HttpResult<VideoDetailBean>> flowable=httpService.videoDetail(UserInfo.getInstance().getUserId(),id);
         return compositeThread(flowable);
     }
+
+    /***
+     * 提问
+     */
+    public Flowable<Object> issue(String title, List<MultipartBody.Part> partList) {
+        Flowable<HttpResult<Object>> flowable;
+        if (partList != null) {
+            flowable = httpService.issue(UserInfo.getInstance().getUserId(), title, partList);
+        } else {
+            flowable = httpService.issue(UserInfo.getInstance().getUserId(), title);
+        }
+
+        return compositeThread(flowable);
+    }
+
+    /**
+     *朋友圈列表
+     */
+    public Flowable<List<PyqBean>> pyqList(int page){
+        Flowable<HttpResult<List<PyqBean>>> flowable=httpService.pyqList(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 聊天列表
+     */
+    public Flowable<List<ChatListBean>> chatList(int page){
+        Flowable<HttpResult<List<ChatListBean>>> flowable=httpService.chatList(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+
+
+    /**
+     * 批量上传文件
+     *
+     * @param pathList 文件集合
+     */
+    public List<MultipartBody.Part> batchUploadFiles(List<String> pathList) {
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                //表单类型 
+                .setType(MultipartBody.FORM);
+        //多张图片  
+        for (int i = 0; i < pathList.size(); i++) {
+            File file = new File(pathList.get(i));//filePath 图片地址  
+            RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), file);
+            builder.addFormDataPart("image["+i+"]", file.getName(), imageBody);//"imgfile"+i 后台接收图片流的参数名  
+        }
+        return builder.build().parts();
+    }
+
+
 
     private static RequestBody modeBody(Object model) {
         String route = GsonUtil.gsonString(model);
