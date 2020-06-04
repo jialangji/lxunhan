@@ -99,7 +99,6 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
 
                 }else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(getActivity(),"暂无更多数据");
                 }
             }
         });

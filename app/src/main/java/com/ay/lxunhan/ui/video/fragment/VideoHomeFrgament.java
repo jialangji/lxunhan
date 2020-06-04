@@ -137,7 +137,6 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
                     presenter.getVideoHomeList("", page);
                 } else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(getActivity(), "暂无更多数据");
                 }
             }
         });

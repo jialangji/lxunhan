@@ -141,6 +141,10 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
             case EventModel.CHANGECHANNEL:
                 presenter.getVideoType();
                 break;
+            case EventModel.LOGIN:
+            case EventModel.LOGIN_OUT:
+                presenter.getVideoType();
+                break;
         }
     }
 

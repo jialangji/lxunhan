@@ -113,7 +113,6 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
                 }else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(getActivity(),"暂无更多数据");
                 }
             }
         });

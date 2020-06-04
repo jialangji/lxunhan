@@ -14,6 +14,7 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.model.PublicModel;
 import com.ay.lxunhan.contract.LoginContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.LoginPresenter;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.RxHelper;
@@ -21,6 +22,8 @@ import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -160,6 +163,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         UserInfo.getInstance().setLogin(true);
         if (loginBean.getIs_perfect()){
             MainActivity.startMainActivity(this);
+            EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN));
             AppManager.getAppManager().finishActivity(BootPageActivity.class);
             finish();
         }else {

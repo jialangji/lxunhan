@@ -18,6 +18,7 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.model.CompleteInfoModel;
 import com.ay.lxunhan.contract.CompleteInfoContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.CompleteInfoPresenter;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.StringUtil;
@@ -25,6 +26,8 @@ import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.datepicker.DateTimePickerListener;
 import com.ay.lxunhan.utils.datepicker.DateTimePickerUtil;
 import com.ay.lxunhan.utils.datepicker.OptionsPickerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -146,6 +149,7 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
     public void completeInfoFinish() {
         MainActivity.startMainActivity(this);
         UserInfo.getInstance().setLogin(true);
+        EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN));
         AppManager.getAppManager().finishActivity(BootPageActivity.class);
         finish();
     }

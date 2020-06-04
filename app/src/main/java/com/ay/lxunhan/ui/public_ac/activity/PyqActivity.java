@@ -49,6 +49,12 @@ public class PyqActivity extends BaseActivity<PyqContract.PyqView, PyqPresenter>
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        presenter.getPyqList(page);
+    }
+
+    @Override
     protected void initListener() {
         super.initListener();
         swipeRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
@@ -68,7 +74,6 @@ public class PyqActivity extends BaseActivity<PyqContract.PyqView, PyqPresenter>
                     presenter.getPyqList(page);
                 }else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(PyqActivity.this,"暂无更多数据");
                 }
             }
         });

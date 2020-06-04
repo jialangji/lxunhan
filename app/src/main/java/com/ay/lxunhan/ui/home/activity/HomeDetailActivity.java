@@ -184,7 +184,6 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                     presenter.getOneComment(String.valueOf(id), type, page);
                 }else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(HomeDetailActivity.this,"暂无更多数据");
                 }
             }
         });

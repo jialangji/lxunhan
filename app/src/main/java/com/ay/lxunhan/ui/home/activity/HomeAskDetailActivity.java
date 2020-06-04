@@ -193,7 +193,6 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                     presenter.getOneComment(String.valueOf(id), type, page);
                 }else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(HomeAskDetailActivity.this,"暂无更多数据");
                 }
 
             }

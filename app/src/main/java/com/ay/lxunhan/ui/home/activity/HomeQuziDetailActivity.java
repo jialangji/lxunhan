@@ -184,7 +184,6 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
                     presenter.getOneComment(String.valueOf(id), type, page);
                 }else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(HomeQuziDetailActivity.this,"暂无更多数据");
                 }
             }
         });

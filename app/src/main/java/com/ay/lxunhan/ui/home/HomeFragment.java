@@ -85,6 +85,7 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
         homeAdapter = PublicAdapterUtil.getAdapter(homeList, getActivity());
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.setAdapter(homeAdapter);
+
     }
 
     @Override
@@ -102,7 +103,7 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                 return;
             }
             if (typeBeanList.get(position).getId() == 5) {
-                ChannelManageActivity.stratChannelManageActivity(getActivity(),false);
+                ChannelManageActivity.stratChannelManageActivity(getActivity(), false);
                 return;
             }
             typeId = typeBeanList.get(position).getId();
@@ -121,9 +122,8 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                 super.onLoadMore(refreshLayout);
                 if (page * Contacts.LIMIT == homeList.size()) {
                     loadMore();
-                }else {
+                } else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(getActivity(),"暂无更多数据");
                 }
             }
         });
@@ -143,19 +143,19 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                     }
                     break;
                 case R.id.tv_attention:
-                    mPosition=position;
+                    mPosition = position;
                     presenter.attention(homeList.get(mPosition).getUid());
                     break;
                 case R.id.tv_quiz://投票
-                    if (!homeList.get(position).getIs_pate()){
-                        mPosition=position;
+                    if (!homeList.get(position).getIs_pate()) {
+                        mPosition = position;
                         int oid = -1;
                         for (MultiItemBaseBean.OptionListBean optionListBean : homeList.get(position).getOption_list()) {
-                            if (optionListBean.isUserIsSelect()){
-                                oid=optionListBean.getId();
+                            if (optionListBean.isUserIsSelect()) {
+                                oid = optionListBean.getId();
                             }
                         }
-                        SendCommentModel quizModel = new SendCommentModel(homeList.get(position).getId(),oid);
+                        SendCommentModel quizModel = new SendCommentModel(homeList.get(position).getId(), oid);
                         presenter.quiz(quizModel);
                     }
 
@@ -273,6 +273,12 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
             case EventModel.SENDCOMMENT:
                 setRefresh();
                 break;
+            case EventModel.LOGIN:
+            case EventModel.LOGIN_OUT:
+                presenter.getHomeType();
+                setRefresh();
+                break;
+
 
         }
     }
@@ -306,14 +312,14 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
 
     @Override
     public void attentionFinish() {
-        if (homeList.get(mPosition).getIs_fol()==1){
-            if (typeId==1){
+        if (homeList.get(mPosition).getIs_fol() == 1) {
+            if (typeId == 1) {
                 setRefresh();
                 return;
-            }else {
+            } else {
                 homeList.get(mPosition).setIs_fol(0);
             }
-        }else {
+        } else {
             homeList.get(mPosition).setIs_fol(1);
         }
         homeAdapter.notifyDataSetChanged();
@@ -321,7 +327,7 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
 
     @Override
     public void quziFinish() {
-       setRefresh();
+        setRefresh();
     }
 
     @Override
