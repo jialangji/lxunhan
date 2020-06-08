@@ -83,6 +83,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 helper.addOnClickListener(R.id.tv_attention);
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.ll_comment);
+                helper.addOnClickListener(R.id.iv_header);
                 helper.addOnClickListener(R.id.ll_share);
                 helper.addOnClickListener(R.id.ll_wx_share);
 

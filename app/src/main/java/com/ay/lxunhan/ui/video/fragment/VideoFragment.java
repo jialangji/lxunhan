@@ -18,6 +18,7 @@ import com.ay.lxunhan.contract.VideoMainContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoMainPresenter;
 import com.ay.lxunhan.ui.home.activity.ChannelManageActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
 import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.UserInfo;
@@ -41,7 +42,7 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
     @BindView(R.id.view_page)
     NoScrollViewPager viewPage;
 
-    private List<TypeBean> arr=new ArrayList<>();
+    private List<TypeBean> arr = new ArrayList<>();
     private FragmentPagerAdapter vpAdapter;
 
 
@@ -55,21 +56,20 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
     @Override
     protected void initView() {
         super.initView();
-        GlideUtil.loadCircleImgForHead(getActivity(),ivHeader, UserInfo.getInstance().getAvatar());
         loadVp();
     }
 
-    public void loadVp(){
+    public void loadVp() {
         vpAdapter = new FragmentPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if (arr.get(position).getId()==1){
+                if (arr.get(position).getId() == 1) {
                     return VideoHomeFrgament.newInstance();
-                }else if (arr.get(position).getId()==2){
+                } else if (arr.get(position).getId() == 2) {
                     return SmallVideoFragment.newInstance();
-                }else if (arr.get(position).getId()==3){
-                    return  VideoTypeFragment.newInstance("");
-                }else  {
+                } else if (arr.get(position).getId() == 3) {
+                    return VideoTypeFragment.newInstance("");
+                } else {
                     return VideoTypeFragment.newInstance(String.valueOf(arr.get(position).getId()));
                 }
             }
@@ -136,7 +136,7 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
     @Override
     protected void getStickyEvent(Object eventModel) {
         super.getStickyEvent(eventModel);
-        EventModel eventModel1= (EventModel) eventModel;
+        EventModel eventModel1 = (EventModel) eventModel;
         switch (eventModel1.getMessageType()) {
             case EventModel.CHANGECHANNEL:
                 presenter.getVideoType();
@@ -168,10 +168,13 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
         return false;
     }
 
-    @OnClick({R.id.iv_header, R.id.rl_search, R.id.iv_edit,R.id.iv_more})
+    @OnClick({R.id.iv_header, R.id.rl_search, R.id.iv_edit, R.id.iv_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_header:
+                if (isLogin()){
+                    FriendDetailActivity.startUserDetailActivity(getActivity(),"");
+                }
                 break;
             case R.id.rl_search:
                 break;
@@ -192,9 +195,18 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
                         });
                 break;
             case R.id.iv_more:
-                ChannelManageActivity.stratChannelManageActivity(getActivity(),true);
+                if (isLogin()){
+                    ChannelManageActivity.stratChannelManageActivity(getActivity(), true);
+                }
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
+
     }
 
     @Override

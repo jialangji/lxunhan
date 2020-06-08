@@ -90,6 +90,7 @@ public class TwoCommentActivity extends BaseActivity<TwoCommentConytract.TwoComm
                 helper.setText(R.id.tv_time,item.getTimeText());
                 helper.setGone(R.id.iv_v,item.getIs_media());
                 helper.addOnClickListener(R.id.ll_like);
+                helper.addOnClickListener(R.id.iv_header);
             }
         };
         rvComment.setLayoutManager(new LinearLayoutManager(this));
@@ -117,8 +118,10 @@ public class TwoCommentActivity extends BaseActivity<TwoCommentConytract.TwoComm
         super.initListener();
         twoCommentAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(this,commentListBeans.get(position).getUid());
+                    break;
                 case R.id.ll_like:
-
                     mPostion=position;
                     SendCommentModel sendCommentModel = new SendCommentModel(commentListBeans.get(mPostion).getId()+"");
                     presenter.commentLike(sendCommentModel, true);

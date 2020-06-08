@@ -26,6 +26,7 @@ import com.ay.lxunhan.contract.HomeDetailContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
@@ -126,6 +127,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
                 helper.setText(R.id.tv_comment_count,  item.getTwo_arr().getCount() + "");
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.ll_comment);
+                helper.addOnClickListener(R.id.iv_header);
             }
         };
         rvComment.setLayoutManager(new LinearLayoutManager(this));
@@ -155,11 +157,16 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
         super.initListener();
         commentAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(this,commentBeans.get(position).getUid());
+                    break;
                 case R.id.ll_like:
+                    if (isLogin()){
+                        commentPostion = position;
+                        SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
+                        presenter.commentLike(sendCommentModel);
+                    }
 
-                    commentPostion = position;
-                    SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
-                    presenter.commentLike(sendCommentModel);
                     break;
                 case R.id.ll_comment:
                     TwoCommentActivity.startTwoCommentActivity(this, String.valueOf(commentBeans.get(position).getId()));
@@ -189,10 +196,13 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
         });
         etComment.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
-                    SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeQuizDetailBean.getId()), homeQuizDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
-                    presenter.sendOneComment(sendCommentModel);
+                if (isLogin()){
+                    if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
+                        SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeQuizDetailBean.getId()), homeQuizDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
+                        presenter.sendOneComment(sendCommentModel);
+                    }
                 }
+
             }
             return true;
         });
@@ -211,29 +221,36 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
                 if (homeQuizDetailBean.getIs_fow() != 2) {
                     presenter.attention(homeQuizDetailBean.getUid());
                 }
-
                 break;
             case R.id.rl_finish:
                 finish();
                 break;
             case R.id.rl_more:
-                showDialog();
+                if (isLogin()){
+                    showDialog();
+                }
+
                 break;
             case R.id.tv_quiz:
-                if (!homeQuizDetailBean.getIs_pate()) {
-                    int oid = -1;
-                    for (HomeQuizDetailBean.OptionListBean optionListBean : homeQuizDetailBean.getOption_list()) {
-                        if (optionListBean.isUserIsSelect()){
-                            oid=optionListBean.getId();
+                if (isLogin()){
+                    if (!homeQuizDetailBean.getIs_pate()) {
+                        int oid = -1;
+                        for (HomeQuizDetailBean.OptionListBean optionListBean : homeQuizDetailBean.getOption_list()) {
+                            if (optionListBean.isUserIsSelect()){
+                                oid=optionListBean.getId();
+                            }
                         }
+                        SendCommentModel quizModel = new SendCommentModel(homeQuizDetailBean.getId(),oid );
+                        presenter.quiz(quizModel);
                     }
-                    SendCommentModel quizModel = new SendCommentModel(homeQuizDetailBean.getId(),oid );
-                    presenter.quiz(quizModel);
                 }
+
                 break;
             case R.id.ll_moreLike:
-                SendCommentModel sendCommentModel=new SendCommentModel(homeQuizDetailBean.getId()+"",type);
-                presenter.addLike(sendCommentModel);
+                if (isLogin()){
+                    SendCommentModel sendCommentModel=new SendCommentModel(homeQuizDetailBean.getId()+"",type);
+                    presenter.addLike(sendCommentModel);
+                }
                 break;
             case R.id.tv_wechat:
                 break;

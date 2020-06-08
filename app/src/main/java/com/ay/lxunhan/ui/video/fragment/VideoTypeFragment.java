@@ -11,9 +11,11 @@ import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.contract.VideoTypeContract;
 import com.ay.lxunhan.presenter.VideoTypePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.widget.RecyclerItemDecoration;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -123,12 +125,21 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
                     break;
                 case R.id.tv_attention:
-                    mPosition=position;
-                    presenter.attention(videoBeanList.get(position).getUid());
+                    if (isLogin()){
+                        mPosition=position;
+                        presenter.attention(videoBeanList.get(position).getUid());
+                    }
+
                     break;
                 case R.id.rl_more:
-                    mPosition=position;
-                    shareDialog.show();
+                    if (isLogin()){
+                        mPosition=position;
+                        shareDialog.show();
+                    }
+
+                    break;
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(getActivity(),videoBeanList.get(position).getUid());
                     break;
             }
         });

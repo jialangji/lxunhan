@@ -10,10 +10,12 @@ import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.contract.SmallVideoContract;
 import com.ay.lxunhan.presenter.SmallVideoPresenter;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -107,6 +109,9 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
             switch (view.getId()) {
                 case R.id.ll_line:
                     SmallVideoActivity.startSmallVideoActivity(getActivity(),videoBeanList,position);
+                    break;
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(getActivity(),videoBeanList.get(position).getUid());
                     break;
             }
         });

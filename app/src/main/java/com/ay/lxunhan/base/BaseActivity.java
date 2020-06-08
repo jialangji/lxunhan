@@ -7,10 +7,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ay.lxunhan.R;
+import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.DisplayUtil;
 import com.ay.lxunhan.utils.StatusBarUtil;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.gyf.immersionbar.ImmersionBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -191,6 +193,17 @@ public abstract class BaseActivity<V, P extends BasePresenter<V>> extends AppCom
             getStickyEvent(eventModel);
         }
     }
+
+
+    public boolean isLogin(){
+        if (!UserInfo.getInstance().isLogin()){
+            LoginActivity.startLoginActivity(this);
+            return false;
+        }else {
+            return true;
+        }
+    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {

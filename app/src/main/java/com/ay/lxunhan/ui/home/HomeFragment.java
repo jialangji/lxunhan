@@ -20,10 +20,11 @@ import com.ay.lxunhan.ui.home.activity.ChannelManageActivity;
 import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
+import com.ay.lxunhan.ui.login.LoginActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.PermissionsUtils;
-import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -67,7 +68,6 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     @Override
     protected void initView() {
         super.initView();
-        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
         typeAdapter = new BaseQuickAdapter<TypeBean, BaseViewHolder>(R.layout.item_home_type, typeBeanList) {
             @Override
             protected void convert(BaseViewHolder helper, TypeBean item) {
@@ -89,6 +89,13 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
+
+    }
+
+    @Override
     protected void initData() {
         super.initData();
         presenter.getHomeType();
@@ -103,7 +110,9 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                 return;
             }
             if (typeBeanList.get(position).getId() == 5) {
-                ChannelManageActivity.stratChannelManageActivity(getActivity(), false);
+                if (isLogin()){
+                    ChannelManageActivity.stratChannelManageActivity(getActivity(), false);
+                }
                 return;
             }
             typeId = typeBeanList.get(position).getId();
@@ -129,6 +138,9 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
         });
         homeAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(getActivity(), homeList.get(position).getUid());
+                    break;
                 case R.id.ll_linear:
                     switch (homeList.get(position).getType()) {
                         case 1:
@@ -143,21 +155,26 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                     }
                     break;
                 case R.id.tv_attention:
-                    mPosition = position;
-                    presenter.attention(homeList.get(mPosition).getUid());
+                    if (isLogin()) {
+                        mPosition = position;
+                        presenter.attention(homeList.get(mPosition).getUid());
+                    }
                     break;
                 case R.id.tv_quiz://投票
-                    if (!homeList.get(position).getIs_pate()) {
-                        mPosition = position;
-                        int oid = -1;
-                        for (MultiItemBaseBean.OptionListBean optionListBean : homeList.get(position).getOption_list()) {
-                            if (optionListBean.isUserIsSelect()) {
-                                oid = optionListBean.getId();
+                    if (isLogin()) {
+                        if (!homeList.get(position).getIs_pate()) {
+                            mPosition = position;
+                            int oid = -1;
+                            for (MultiItemBaseBean.OptionListBean optionListBean : homeList.get(position).getOption_list()) {
+                                if (optionListBean.isUserIsSelect()) {
+                                    oid = optionListBean.getId();
+                                }
                             }
+                            SendCommentModel quizModel = new SendCommentModel(homeList.get(position).getId(), oid);
+                            presenter.quiz(quizModel);
                         }
-                        SendCommentModel quizModel = new SendCommentModel(homeList.get(position).getId(), oid);
-                        presenter.quiz(quizModel);
                     }
+
 
                     break;
             }
@@ -233,6 +250,9 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_header:
+                if (isLogin()) {
+                    FriendDetailActivity.startUserDetailActivity(getActivity(), "");
+                }
                 break;
             case R.id.rl_search://搜索界面
                 break;

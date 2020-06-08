@@ -12,8 +12,10 @@ import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.contract.MessageContract;
 import com.ay.lxunhan.presenter.MessagePresenter;
+import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.ui.message.activity.AddFriendActivity;
 import com.ay.lxunhan.ui.message.activity.FriendActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
 import com.ay.lxunhan.ui.public_ac.activity.PyqActivity;
 import com.ay.lxunhan.utils.Contacts;
@@ -53,7 +55,6 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
     @Override
     protected void initView() {
         super.initView();
-        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
         chatListAdapter = new BaseQuickAdapter<ChatListBean, BaseViewHolder>(R.layout.item_chat_list, chatListBeans) {
             @Override
             protected void convert(BaseViewHolder helper, ChatListBean item) {
@@ -129,6 +130,9 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_header:
+                if (isLogin()){
+                    FriendDetailActivity.startUserDetailActivity(getActivity(),"");
+                }
                 break;
             case R.id.rl_search:
                 break;
@@ -178,6 +182,13 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
             chatListBeans.addAll(listBeans);
         }
         chatListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
+
     }
 
     @Override

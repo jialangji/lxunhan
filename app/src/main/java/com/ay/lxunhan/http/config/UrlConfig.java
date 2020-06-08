@@ -197,6 +197,16 @@ public class UrlConfig {
     public static final String PYQ_LIST="api/messages/circles_list";
 
     /**
+     * 聊天列表
+     */
+    public static final String CHAT_LIST="api/messages/message_list";
+
+    /**
+     * 我的信息
+     */
+    public static final String MY_INFO="api/mine/my_info";
+
+    /**
      * 朋友圈详情
      */
     public static final String PYQ_DETAIL="api/messages/circles_show";
@@ -227,12 +237,9 @@ public class UrlConfig {
     public static final String MEIDA_LIST="api/mine/info_for_type";
 
     /**
-     * 聊天列表
+     * 好友动态列表
      */
-    public static final String CHAT_LIST="api/messages/message_list";
+    public static final String USER_DYNAMIC_LIST="api/mine/dynamic_list";
 
-    /**
-     * 我的信息
-     */
-    public static final String MY_INFO="api/mine/my_info";
+
 }

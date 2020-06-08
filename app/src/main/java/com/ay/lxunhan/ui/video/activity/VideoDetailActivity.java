@@ -26,13 +26,12 @@ import com.ay.lxunhan.contract.VideoDetailContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
-import com.ay.lxunhan.ui.public_ac.activity.PyqActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
-import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -94,9 +93,10 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     private List<CommentBean> commentBeans = new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
     private int page = 1;
-    private int type=2;
+    private int type = 2;
     private boolean isRefresh = true;
     private int commentPostion;
+
     @Override
     public VideoDetailPresenter initPresenter() {
         return new VideoDetailPresenter(this);
@@ -105,7 +105,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     @Override
     protected void initView() {
         super.initView();
-        id=getIntent().getStringExtra("id");
+        id = getIntent().getStringExtra("id");
         jzvdStd.backButton.setVisibility(View.GONE);
         jzvdStd.batteryLevel.setVisibility(View.GONE);
         jzvdStd.backButton.setVisibility(View.GONE);//返回按钮
@@ -113,7 +113,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         //用于实现重力感应下切换横竖屏
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         jzAutoFullscreenListener = new Jzvd.JZAutoFullscreenListener();
-        JzvdStd.SAVE_PROGRESS=false;
+        JzvdStd.SAVE_PROGRESS = false;
         JzvdStd.setVideoImageDisplayType(JzvdStd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_PARENT);
         //设置全屏播放
         Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
@@ -130,14 +130,15 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
                 helper.setText(R.id.tv_comment_count, item.getTwo_arr().getCount() + "");
                 helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
                 helper.setGone(R.id.tv_reply, item.getIs_two());
-                TextView tvReplay=helper.getView(R.id.tv_reply);
-                String str=item.getTwo_arr().getName()+"等人共"+item.getTwo_arr().getCount()+"条回复>";
-                SpannableString span=new SpannableString(str);
-                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), 0, item.getTwo_arr().getName().length() , SPAN_EXCLUSIVE_EXCLUSIVE);
-                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)),item.getTwo_arr().getName().length()+2,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                TextView tvReplay = helper.getView(R.id.tv_reply);
+                String str = item.getTwo_arr().getName() + "等人共" + item.getTwo_arr().getCount() + "条回复>";
+                SpannableString span = new SpannableString(str);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), 0, item.getTwo_arr().getName().length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), item.getTwo_arr().getName().length() + 2, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tvReplay.setText(span);
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.ll_comment);
+                helper.addOnClickListener(R.id.iv_header);
             }
         };
         rvComment.setLayoutManager(new LinearLayoutManager(this));
@@ -170,7 +171,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     @Override
     protected void initData() {
         super.initData();
-        presenter.getVideoDetail( id);
+        presenter.getVideoDetail(id);
         presenter.getOneComment(id, type, page);
     }
 
@@ -179,6 +180,9 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         super.initListener();
         commentAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(this, commentBeans.get(position).getUid());
+                    break;
                 case R.id.ll_like:
                     commentPostion = position;
                     SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
@@ -206,9 +210,9 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
                     page = page + 1;
                     presenter.getOneComment(String.valueOf(id), type, page);
 
-                }else {
+                } else {
                     swipeRefresh.finishLoadmore();
-                    ToastUtil.makeShortText(VideoDetailActivity.this,"暂无更多数据");
+                    ToastUtil.makeShortText(VideoDetailActivity.this, "暂无更多数据");
                 }
             }
         });
@@ -234,7 +238,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike,R.id.tv_attention})
+    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
@@ -254,6 +258,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
                 break;
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -335,18 +340,18 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         JzvdStd.goOnPlayOnResume();
     }
 
-    public static void startVideoDetailActivity(Context context,String id){
-        Intent intent=new Intent(context,VideoDetailActivity.class);
-        intent.putExtra("id",id);
+    public static void startVideoDetailActivity(Context context, String id) {
+        Intent intent = new Intent(context, VideoDetailActivity.class);
+        intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
     @Override
     public void getVideoDetailFinish(VideoDetailBean videoDetailBean) {
-        this.videoDetailBean=videoDetailBean;
-        jzvdStd.setUp(videoDetailBean.getVideo(),"", JzvdStd.SCREEN_WINDOW_NORMAL);
+        this.videoDetailBean = videoDetailBean;
+        jzvdStd.setUp(videoDetailBean.getVideo(), "", JzvdStd.SCREEN_WINDOW_NORMAL);
         GlideUtil.loadCircleImgForHead(this, ivHeader, videoDetailBean.getAvatar());
-        GlideUtil.loadImg(this,jzvdStd.thumbImageView,videoDetailBean.getCover());
+        GlideUtil.loadImg(this, jzvdStd.thumbImageView, videoDetailBean.getCover());
         tvName.setText(videoDetailBean.getNickname());
         tvSignature.setText(videoDetailBean.getInto());
         ivSex.setImageDrawable(videoDetailBean.getSex() ? getResources().getDrawable(R.drawable.ic_man) : getResources().getDrawable(R.drawable.ic_woman));
@@ -413,9 +418,9 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
     @Override
     public void attentionFinish() {
-        if (videoDetailBean.getIs_fol()==1){
+        if (videoDetailBean.getIs_fol() == 1) {
             videoDetailBean.setIs_fol(0);
-        }else{
+        } else {
             videoDetailBean.setIs_fol(1);
         }
         tvAttention.setText(videoDetailBean.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));

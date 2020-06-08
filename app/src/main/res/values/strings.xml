@@ -33,6 +33,7 @@
     <string name="history">历史</string>
     <string name="collect">收藏</string>
     <string name="attention_to">已关注</string>
+    <string name="attention_each_other">互相关注</string>
     <string name="user_info">个人资料</string>
     <string name="header">头像：</string>
     <string name="nick_name">昵称：</string>
@@ -166,4 +167,11 @@
     <string name="issue_pyq">发表动态</string>
     <string name="issue">发表</string>
     <string name="shape_my_app_pyq">分享我的韩乐讯动态</string>
+    <string name="user_im">私信</string>
+    <string name="account_info">账号信息</string>
+    <string name="qrcode">二维码：</string>
+    <string name="user_data">个人信息</string>
+    <string name="user_address">所在地：</string>
+    <string name="all">全部</string>
+    <string name="select_look_type">选择查看类型</string>
 </resources>

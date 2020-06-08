@@ -29,8 +29,8 @@ public class NoScrollViewPager extends ViewPager {
     public boolean onTouchEvent(MotionEvent arg0) {
                 /* return false;//super.onTouchEvent(arg0); */
         switch(arg0.getAction()){
-        }
 
+        }
 
         return !noScroll && super.onTouchEvent(arg0);
     }

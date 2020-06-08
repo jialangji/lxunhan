@@ -152,7 +152,7 @@ public class TwoCommentBean {
          */
 
         private int id;
-        private int cid;
+        private String cid;
         private String content;
         private String created_at;
         private String timeText;
@@ -172,11 +172,11 @@ public class TwoCommentBean {
             this.id = id;
         }
 
-        public int getCid() {
+        public String getUid() {
             return cid;
         }
 
-        public void setCid(int cid) {
+        public void setCid(String cid) {
             this.cid = cid;
         }
 

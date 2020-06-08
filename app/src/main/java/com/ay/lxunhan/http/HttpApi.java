@@ -7,6 +7,7 @@ import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
+import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.LoginBean;
@@ -16,6 +17,7 @@ import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
+import com.ay.lxunhan.bean.UserMediaListBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.http.config.UrlConfig;
@@ -313,6 +315,38 @@ public interface HttpApi {
      */
     @GET(UrlConfig.CHAT_LIST)
     Flowable<HttpResult<List<ChatListBean>>> chatList(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     * 我的资料
+     */
+    @GET(UrlConfig.MY_INFO)
+    Flowable<HttpResult<LoginBean>> myinfo(@Query("uqid") String uqid);
+
+    /**
+     * 用户详情
+     */
+    @GET(UrlConfig.MEIDA_USER_INFO)
+    Flowable<HttpResult<HeUserBean>> userInfoDetail(@Query("uqid") String uqid,@Query("uzid") String uzid);
+
+    /**
+     * 用户资料
+     */
+    @GET(UrlConfig.MEIDA_USER_DATA)
+    Flowable<HttpResult<HeUserBean>> userInfoData(@Query("uqid") String uqid,@Query("uzid") String uzid);
+
+    /**
+     * 自媒体人发布列表
+     */
+    @GET(UrlConfig.MEIDA_LIST)
+    Flowable<HttpResult<List<UserMediaListBean>>> userMediaList(@Query("uqid") String uqid, @Query("uzid") String uzid,
+                                                                @Query("page") int page, @Query("type") int type);
+
+    /**
+     *好友详情动态
+     */
+    @GET(UrlConfig.USER_DYNAMIC_LIST)
+    Flowable<HttpResult<List<PyqBean>>> userList(@Query("uqid") String uqid, @Query("uzid") String uzid,
+                                                  @Query("page") int page);
 }
 
 

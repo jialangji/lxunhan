@@ -257,27 +257,23 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
                 showFragment(currentPosition);
                 break;
             case R.id.layout_tab3:
-                if (UserInfo.getInstance().isLogin()){
+                if (isLogin()){
                     if (currentPosition == 2) {
                         return;
                     }
                     currentPosition = 2;
                     setTabSelected(currentPosition);
                     showFragment(currentPosition);
-                }else {
-                    LoginActivity.startLoginActivity(this);
                 }
                 break;
             case R.id.layout_tab4:
-                if (UserInfo.getInstance().isLogin()){
+                if (isLogin()){
                     if (currentPosition == 3) {
                         return;
                     }
                     currentPosition = 3;
                     setTabSelected(currentPosition);
                     showFragment(currentPosition);
-                }else {
-                    LoginActivity.startLoginActivity(this);
                 }
                 break;
         }

@@ -15,8 +15,9 @@ import android.widget.Toast;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseFragment;
-import com.ay.lxunhan.base.BasePresenter;
-import com.ay.lxunhan.ui.login.LoginActivity;
+import com.ay.lxunhan.bean.LoginBean;
+import com.ay.lxunhan.contract.MyContract;
+import com.ay.lxunhan.presenter.MyPresenter;
 import com.ay.lxunhan.ui.my.activity.AttentionActivity;
 import com.ay.lxunhan.ui.my.activity.CollectActivity;
 import com.ay.lxunhan.ui.my.activity.FansActivity;
@@ -39,12 +40,10 @@ import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MyFragment extends BaseFragment {
+public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> implements MyContract.MyView {
 
     @BindView(R.id.tv_money)
     TextView tvMoney;
-    @BindView(R.id.tv_percent)
-    TextView tvPercent;
     @BindView(R.id.iv_header)
     ImageView ivHeader;
     @BindView(R.id.tv_name)
@@ -59,6 +58,8 @@ public class MyFragment extends BaseFragment {
     TextView tvFansCount;
     @BindView(R.id.tv_attention_count)
     TextView tvAttentionCount;
+    @BindView(R.id.tv_lb_bfb)
+    TextView tvLbBfb;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -86,8 +87,8 @@ public class MyFragment extends BaseFragment {
     }
 
     @Override
-    public BasePresenter initPresenter() {
-        return null;
+    public MyPresenter initPresenter() {
+        return new MyPresenter(this);
     }
 
     @Override
@@ -108,6 +109,9 @@ public class MyFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (UserInfo.getInstance().isLogin()){
+            presenter.myinfo();
+        }
     }
 
     @OnClick({R.id.iv_header,R.id.iv_scan, R.id.ll_like, R.id.ll_fans, R.id.ll_attention, R.id.iv_setting, R.id.iv_time_change, R.id.iv_language, R.id.ll_sing, R.id.ll_invite, R.id.rl_lb, R.id.rl_wallet, R.id.rl_notification, R.id.rl_history, R.id.rl_collect})
@@ -214,4 +218,16 @@ public class MyFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void myInfoFinish(LoginBean bean) {
+        GlideUtil.loadCircleImgForHead(getActivity(),ivHeader,bean.getAvatar());
+        tvName.setText(bean.getNickname());
+        ivSex.setImageDrawable(getActivity().getResources().getDrawable(bean.getSex()?R.drawable.ic_man:R.drawable.ic_woman));
+        tvIntro.setText(bean.getAutograph());
+        tvLikeCount.setText(String.valueOf(bean.getLikeCount()));
+        tvAttentionCount.setText(String.valueOf(bean.getBeFolCount()));
+        tvFansCount.setText(String.valueOf(bean.getFolCount()));
+        tvLbBfb.setText(String.format("%s%%", bean.getProportion()));
+        tvMoney.setText(String.valueOf(bean.getGold()));
+    }
 }

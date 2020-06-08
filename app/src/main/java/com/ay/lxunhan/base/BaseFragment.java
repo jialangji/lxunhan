@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ay.lxunhan.R;
+import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.utils.StatusBarUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.gyf.immersionbar.ImmersionBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -192,5 +194,16 @@ public abstract class BaseFragment<V, P extends BasePresenter<V>> extends Fragme
             getStickyEvent(eventModel);
         }
     }
+
+
+    public boolean isLogin(){
+        if (!UserInfo.getInstance().isLogin()){
+            LoginActivity.startLoginActivity(getActivity());
+            return false;
+        }else {
+            return true;
+        }
+    }
+
 
 }

@@ -15,6 +15,7 @@
     </cn.jzvd.JzvdStd>
 
     <LinearLayout
+        android:id="@+id/rl_user"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
         android:orientation="horizontal"

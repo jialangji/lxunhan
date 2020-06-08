@@ -19,6 +19,7 @@ public class CommentBean {
 
     private int id;
     private String content;
+    private String cid;
     private String timeText;
     private String nickname;
     private String avatar;
@@ -37,6 +38,14 @@ public class CommentBean {
 
     private int comment_count;
     private int is_adoption;
+
+    public String getUid() {
+        return cid;
+    }
+
+    public void setUid(String uid) {
+        this.cid = uid;
+    }
 
     public int getId() {
         return id;

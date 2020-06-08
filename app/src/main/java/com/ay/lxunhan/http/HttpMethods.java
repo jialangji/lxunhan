@@ -8,6 +8,7 @@ import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
+import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.LoginBean;
@@ -17,6 +18,7 @@ import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
+import com.ay.lxunhan.bean.UserMediaListBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.bean.model.AcceptModel;
@@ -469,7 +471,43 @@ public class HttpMethods {
         return compositeThread(flowable);
     }
 
+    /**
+     * 我的资料
+     */
+    public Flowable<LoginBean> myInfo(){
+        Flowable<HttpResult<LoginBean>> flowable=httpService.myinfo(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
 
+    /**
+     * 用户详情和资料
+     */
+    public Flowable<HeUserBean> userInfo(String uzid,boolean isData){
+        Flowable<HttpResult<HeUserBean>> flowable;
+        if (isData){
+            flowable=httpService.userInfoDetail(UserInfo.getInstance().getUserId(),uzid);
+        }else {
+            flowable=httpService.userInfoData(UserInfo.getInstance().getUserId(),uzid);
+        }
+        return compositeThread(flowable);
+    }
+
+
+    /**
+     * 自媒体用户发布列表
+     */
+    public Flowable<List<UserMediaListBean>> userMediaList(String uzid,int page,int type){
+        Flowable<HttpResult<List<UserMediaListBean>>> flowable=httpService.userMediaList(UserInfo.getInstance().getUserId(),uzid,page,type);
+        return compositeThread(flowable);
+    }
+
+    /**
+     *好友发布的动态
+     */
+    public Flowable<List<PyqBean>> userList(String uzid,int page){
+        Flowable<HttpResult<List<PyqBean>>> flowable=httpService.userList(UserInfo.getInstance().getUserId(),uzid, page);
+        return compositeThread(flowable);
+     }
 
     /**
      * 批量上传文件

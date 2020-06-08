@@ -26,6 +26,7 @@ import com.ay.lxunhan.contract.HomeDetailContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
@@ -119,6 +120,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                 tvReplay.setText(span);
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.ll_comment);
+                helper.addOnClickListener(R.id.iv_header);
             }
         };
         rvComment.setLayoutManager(new LinearLayoutManager(this));
@@ -156,10 +158,15 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         super.initListener();
         commentAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(this,commentBeans.get(position).getUid());
+                    break;
                 case R.id.ll_like:
-                    commentPostion = position;
-                    SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
-                    presenter.commentLike(sendCommentModel);
+                    if (isLogin()){
+                        commentPostion = position;
+                        SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
+                        presenter.commentLike(sendCommentModel);
+                    }
                     break;
                 case R.id.ll_comment:
                     TwoCommentActivity.startTwoCommentActivity(this, String.valueOf(commentBeans.get(position).getId()));
@@ -189,9 +196,11 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         });
         etComment.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
-                    SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeDetailBean.getId()), homeDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
-                    presenter.sendOneComment(sendCommentModel);
+                if (isLogin()){
+                    if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
+                        SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeDetailBean.getId()), homeDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
+                        presenter.sendOneComment(sendCommentModel);
+                    }
                 }
             }
             return true;
@@ -231,12 +240,16 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                 finish();
                 break;
             case R.id.rl_more:
-                showDialog();
+                if (isLogin()){
+                    showDialog();
+                }
                 break;
             case R.id.ll_moreLike:
+                if (isLogin()){
+                    SendCommentModel sendCommentModel = new SendCommentModel(homeDetailBean.getId() + "", type);
+                    presenter.addLike(sendCommentModel);
+                }
 
-                SendCommentModel sendCommentModel = new SendCommentModel(homeDetailBean.getId() + "", type);
-                presenter.addLike(sendCommentModel);
                 break;
             case R.id.tv_wechat:
                 break;

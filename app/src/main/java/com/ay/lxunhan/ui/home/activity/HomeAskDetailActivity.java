@@ -24,9 +24,9 @@ import com.ay.lxunhan.contract.HomeDetailContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
-import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -119,6 +119,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                     }
 
                 }
+                helper.addOnClickListener(R.id.iv_header);
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.tv_accept);
             }
@@ -163,15 +164,24 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         commentAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
                 case R.id.ll_like:
-                    commentPostion = position;
-                    SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
-                    presenter.commentLike(sendCommentModel);
+                    if (isLogin()) {
+                        commentPostion = position;
+                        SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
+                        presenter.commentLike(sendCommentModel);
+                    }
+
                     break;
                 case R.id.tv_accept:
-                    if (!homeDetailBean.getIs_solve()) {
-                        AcceptModel acceptModel = new AcceptModel(homeDetailBean.getId(),commentBeans.get(position).getId());
-                        presenter.accept(acceptModel);
+                    if (isLogin()) {
+                        if (!homeDetailBean.getIs_solve()) {
+                            AcceptModel acceptModel = new AcceptModel(homeDetailBean.getId(), commentBeans.get(position).getId());
+                            presenter.accept(acceptModel);
+                        }
                     }
+
+                    break;
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(this, commentBeans.get(position).getUid());
                     break;
             }
         });
@@ -191,7 +201,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                     isRefresh = false;
                     page = page + 1;
                     presenter.getOneComment(String.valueOf(id), type, page);
-                }else {
+                } else {
                     swipeRefresh.finishLoadmore();
                 }
 
@@ -200,9 +210,11 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
         etComment.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
-                    SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeDetailBean.getId()), homeDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
-                    presenter.sendOneComment(sendCommentModel);
+                if (isLogin()) {
+                    if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
+                        SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeDetailBean.getId()), homeDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
+                        presenter.sendOneComment(sendCommentModel);
+                    }
                 }
             }
             return true;
@@ -224,26 +236,31 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         return true;
     }
 
-    @OnClick({R.id.rl_finish, R.id.ll_moreLike, R.id.tv_wechat, R.id.rl_more,R.id.tv_attention})
+    @OnClick({R.id.rl_finish, R.id.ll_moreLike, R.id.tv_wechat, R.id.rl_more, R.id.tv_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
                 finish();
                 break;
             case R.id.rl_more:
-                showDialog();
+                if (isLogin()){
+                    showDialog();
+                }
                 break;
             case R.id.ll_moreLike:
-                SendCommentModel sendCommentModel=new SendCommentModel(homeDetailBean.getId()+"",type);
-                presenter.addLike(sendCommentModel);
+                if (isLogin()) {
+                    SendCommentModel sendCommentModel = new SendCommentModel(homeDetailBean.getId() + "", type);
+                    presenter.addLike(sendCommentModel);
+                }
                 break;
             case R.id.tv_wechat:
                 break;
             case R.id.tv_attention:
-                if (homeDetailBean.getIs_fow() != 2) {
-                    presenter.attention(homeDetailBean.getUid());
+                if (isLogin()) {
+                    if (homeDetailBean.getIs_fow() != 2) {
+                        presenter.attention(homeDetailBean.getUid());
+                    }
                 }
-
                 break;
         }
     }
@@ -398,9 +415,9 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
     @Override
     public void attentionFinish() {
-        if (homeDetailBean.getIs_fow()==1){
+        if (homeDetailBean.getIs_fow() == 1) {
             homeDetailBean.setIs_fow(0);
-        }else{
+        } else {
             homeDetailBean.setIs_fow(1);
         }
         tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
