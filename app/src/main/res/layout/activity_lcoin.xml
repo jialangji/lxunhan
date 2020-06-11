@@ -62,7 +62,7 @@
                     android:id="@+id/iv_coin"
                     android:layout_marginStart="@dimen/dp_30"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="@dimen/dp_40"
+                    android:layout_marginTop="@dimen/dp_30"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_coin"/>
                 <TextView
@@ -70,11 +70,37 @@
                     android:layout_width="wrap_content"
                     android:layout_toEndOf="@id/iv_coin"
                     android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_30"
+                    android:layout_marginTop="@dimen/dp_20"
                     android:textSize="@dimen/sp_26"
-                    android:text="132"
+                    tools:text="132"
                     android:textColor="@color/white"
                     android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:id="@+id/tv_cash"
+                    android:layout_toEndOf="@id/tv_coin"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_3"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_radius3_ff80b2"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_10"
+                    tools:text="约13.2元"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_lb_ratio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_coin"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_marginStart="@dimen/dp_30"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:text="@string/bi_rmb"
                     />
 
                 <TextView
@@ -84,10 +110,12 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:layout_marginTop="@dimen/dp_36"
-                    android:layout_marginEnd="@dimen/dp_15"
-                    android:background="@drawable/shape_white_line"
+                    android:background="@drawable/shape_left_radius_change"
                     android:layout_alignParentEnd="true"
-                    android:textSize="@dimen/sp_14"
+                    android:drawableEnd="@drawable/ic_white_finish_right"
+                    android:paddingEnd="@dimen/dp_9"
+                    android:paddingStart="@dimen/dp_9"
+                    android:textSize="@dimen/sp_12"
                     android:text="@string/exchange"
                     />
             </RelativeLayout>
@@ -150,10 +178,16 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:scaleType="fitXY"
                         android:src="@drawable/ic_lb_shop"/>
+                    <View
+                        android:layout_width="@dimen/dp_10"
+                        android:layout_height="match_parent"
+                        />
                     <ImageView
-                        android:id="@+id/_iv_anchor"
+                        android:id="@+id/iv_anchor"
                         android:layout_width="0dp"
+                        android:scaleType="fitXY"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:src="@drawable/ic_exceptional_anchor"/>
@@ -169,6 +203,7 @@
                 android:layout_marginEnd="@dimen/dp_15"
                 android:background="@drawable/shape_white_bg"
                 android:padding="@dimen/dp_15"
+                android:layout_marginBottom="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_12"
                 android:layout_height="wrap_content">
                 <RelativeLayout

@@ -1,7 +1,5 @@
 package com.ay.lxunhan.ui.video.fragment;
 
-import android.content.Context;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +19,6 @@ import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ToastUtil;
-import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -35,10 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
-
-import static android.content.Context.SENSOR_SERVICE;
 
 public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeView, VideoHomePresenter> implements VideoHomeContract.VideoHomeView {
 
@@ -237,7 +231,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
             @Override
             public void collect() {
-
+                presenter.addCollect(String.valueOf(videoBeanList.get(mPosition).getId()),2);
             }
 
             @Override
@@ -294,6 +288,11 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
         peopleBeans.clear();
         peopleBeans.addAll(peopleBeans);
         peopleAdapter.setNewData(peopleBeans);
+    }
+
+    @Override
+    public void addCollectFinish() {
+        ToastUtil.makeShortText(getActivity(),"收藏成功");
     }
 
     @Override

@@ -28,6 +28,7 @@ public class PyqBean implements MultiItemEntity {
 
     private int id;
     private String nickname;
+    private String uid;
     private String avatar;
     private String autograph;
     private String title;
@@ -39,9 +40,38 @@ public class PyqBean implements MultiItemEntity {
     private int sex;
     private List<String> image_arr;
     private int type;
+    private int is_mine;
+    private int is_my;
+
+    public boolean getIs_my() {
+        return is_my==1;
+    }
+
+    public void setIs_my(int is_my) {
+        this.is_my = is_my;
+    }
+
+    public boolean getIs_mine() {
+        return is_mine==1;
+    }
+
+    public void setIs_mine(int is_mine) {
+        this.is_mine = is_mine;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     /**
      * is_cover_type : 1
      */
+
+
 
     private int is_cover_type;
 

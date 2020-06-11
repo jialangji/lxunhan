@@ -103,7 +103,7 @@
                             android:id="@+id/tv_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="张三"
+                            tools:text="张三"
                             android:textColor="@color/color_303133"
                             android:textSize="@dimen/sp_16" />
 
@@ -115,7 +115,7 @@
                             android:id="@+id/tv_signature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="上山打老虎"
+                            tools:text="上山打老虎"
                             android:textColor="@color/color_b2"
                             android:textSize="@dimen/sp_14" />
                     </LinearLayout>
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:text="2020-04-30 17:02:41"
+                        tools:text="2020-04-30 17:02:41"
                         android:textColor="@color/color_b2"
                         android:textSize="@dimen/sp_12" />
 
@@ -197,7 +197,7 @@
                             android:layout_gravity="center"
                             android:textSize="@dimen/sp_12"
                             android:textColor="@color/color_b2"
-                            android:text="(投票后结果可见)"/>
+                            android:text="@string/quiz_end_look"/>
 
                     </LinearLayout>
                     <android.support.v7.widget.RecyclerView

@@ -41,7 +41,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -310,7 +309,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
             @Override
             public void collect() {
-
+                presenter.addCollect(String.valueOf(homeDetailBean.getId()),type);
             }
 
             @Override
@@ -359,6 +358,11 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
+    }
+
+    @Override
+    public void addCollectFinish() {
+        ToastUtil.makeShortText(this,"收藏成功");
     }
 
     @Override

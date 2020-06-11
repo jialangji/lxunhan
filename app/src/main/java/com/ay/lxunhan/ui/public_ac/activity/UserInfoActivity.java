@@ -394,6 +394,10 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
         this.startActivityForResult(intent, INTENT_REQUEST_CODE_CUTTING);
     }
 
+    @Override
+    public boolean isKeyboardEnable() {
+        return true;
+    }
 
     @Override
     public void showProgress() {

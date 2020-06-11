@@ -30,11 +30,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".ui.public_ac.activity.FriendDetailActivity"
-            android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.public_ac.activity.PyqDetailActivity"></activity>
         <activity
-            android:name=".ui.public_ac.activity.PyqActivity"
+            android:name=".ui.public_ac.activity.FriendDetailActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.message.activity.PyqActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity

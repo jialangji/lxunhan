@@ -109,6 +109,7 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
     @Override
     public void onResume() {
         super.onResume();
+        GlideUtil.loadCircleImgForHead(getActivity(),ivHeader, UserInfo.getInstance().getAvatar());
         if (UserInfo.getInstance().isLogin()){
             presenter.myinfo();
         }
@@ -153,10 +154,10 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
             case R.id.ll_like://点赞
                 break;
             case R.id.ll_fans://粉丝
-                FansActivity.startFansActivity(getActivity());
+                FansActivity.startFansActivity(getActivity(),"",true);
                 break;
             case R.id.ll_attention://关注
-                AttentionActivity.startAttentionActivity(getActivity());
+                AttentionActivity.startAttentionActivity(getActivity(),"",true);
                 break;
         }
     }

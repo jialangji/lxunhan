@@ -320,7 +320,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
             @Override
             public void collect() {
-
+                presenter.addCollect(String.valueOf(videoDetailBean.getId()),2);
             }
 
             @Override
@@ -402,6 +402,11 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         EventBus.getDefault().postSticky(new EventModel<>(EventModel.ARTICLELIKE));
         tvLikeCount.setText(videoDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(videoDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
+    }
+
+    @Override
+    public void addCollect() {
+        ToastUtil.makeShortText(this,"收藏成功");
     }
 
     @Override

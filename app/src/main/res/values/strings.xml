@@ -174,4 +174,16 @@
     <string name="user_address">所在地：</string>
     <string name="all">全部</string>
     <string name="select_look_type">选择查看类型</string>
+    <string name="del">删除</string>
+    <string name="get">领取</string>
+    <string name="exchange_lb">兑换乐讯币</string>
+    <string name="please_enter">请输入</string>
+    <string name="exchange_now">立即兑换</string>
+    <string name="reply_1">回复</string>
+    <string name="withdraw_account">提现账号</string>
+    <string name="alipay_account">支付宝账号</string>
+    <string name="wx_account">微信账号</string>
+    <string name="quiz_end_look">(投票后结果可见)</string>
+    <string name="bi_rmb">10乐讯币=1元</string>
+    <string name="come_on_edit_your_sing">快来编辑您的个性签名吧~</string>
 </resources>

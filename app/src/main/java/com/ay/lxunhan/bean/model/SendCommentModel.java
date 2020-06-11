@@ -20,6 +20,12 @@ public class SendCommentModel {
         this.oid = oid;
     }
 
+    public SendCommentModel(String uqid, String fid , String content,String bid) {
+        this.uqid = uqid;
+        this.bid = bid;
+        this.content = content;
+        this.fid = fid;
+    }
 
     public SendCommentModel(String com_id) {//评论点赞
         this.uqid=UserInfo.getInstance().getUserId();

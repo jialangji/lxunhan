@@ -310,7 +310,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void collect() {
-
+                presenter.addCollect(String.valueOf(homeQuizDetailBean.getId()),type);
             }
 
             @Override
@@ -438,6 +438,11 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
+    }
+
+    @Override
+    public void addCollectFinish() {
+        ToastUtil.makeShortText(this,"收藏成功");
     }
 
     @Override

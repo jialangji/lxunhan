@@ -40,4 +40,15 @@ public class HeUserListPresenter extends BasePresenter<HeUserListContract.HeUser
             }
         }));
     }
+
+    @Override
+    public void pyqDelete(String id) {
+        addDisposable(HttpMethods.getInstance().pyqDelete(id).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().pyqDeleteFinish();
+            }
+        }));
+    }
 }

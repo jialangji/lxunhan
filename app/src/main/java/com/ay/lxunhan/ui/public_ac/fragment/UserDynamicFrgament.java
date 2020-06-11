@@ -11,6 +11,7 @@ import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.UserMediaListBean;
 import com.ay.lxunhan.contract.HeUserListContract;
 import com.ay.lxunhan.presenter.HeUserListPresenter;
+import com.ay.lxunhan.ui.public_ac.activity.PyqDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -58,9 +59,9 @@ public class UserDynamicFrgament extends BaseFragment<HeUserListContract.HeUserL
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-        presenter.getHeUserList(userID,page);
+    public void onResume() {
+        super.onResume();
+        presenter.getHeUserList(userID,1);
     }
 
     @Override
@@ -87,6 +88,16 @@ public class UserDynamicFrgament extends BaseFragment<HeUserListContract.HeUserL
                 }
             }
         });
+        adapter.setOnItemChildClickListener((adapter, view, position) -> {
+            switch (view.getId()) {
+                case R.id.tv_delete:
+                    presenter.pyqDelete(String.valueOf(pyqBeanList.get(position).getId()));
+                    break;
+                case R.id.ll_line:
+                    PyqDetailActivity.startPyqDetailActivity(getActivity(), String.valueOf(pyqBeanList.get(position).getId()));
+                    break;
+            }
+        });
     }
 
     @Override
@@ -96,7 +107,7 @@ public class UserDynamicFrgament extends BaseFragment<HeUserListContract.HeUserL
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_public_refresh;
+        return R.layout.frgament_user_dynamic;
     }
 
     @Override
@@ -125,5 +136,12 @@ public class UserDynamicFrgament extends BaseFragment<HeUserListContract.HeUserL
             pyqBeanList.addAll(list);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void pyqDeleteFinish() {
+        isRefresh=true;
+        page=1;
+        presenter.getHeUserList(userID,page);
     }
 }

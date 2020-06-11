@@ -19,12 +19,14 @@ public interface HomeDetailContract {
         void  quiz(SendCommentModel model);
         void  accept(AcceptModel model);
         void  attention(String uid);
+        void  addCollect(String aid,int type);
     }
 
     interface HomeDetailView{
         void getHomeDetailFinish(HomeDetailBean homeDetailBean);
         void getHomeDetailQuizFinish(HomeQuizDetailBean homeQuizDetailBean);
         void getOneCommentFinsh(List<CommentBean> commentBeans);
+        void addCollectFinish();
         void sendCommentFinish();
         void addLikeFinish();
         void commentLikeFinish();

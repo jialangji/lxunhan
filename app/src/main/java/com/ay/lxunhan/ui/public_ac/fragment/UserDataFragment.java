@@ -77,6 +77,11 @@ public class UserDataFragment extends BaseFragment<HeUserInfoContract.HeUserInfo
     }
 
     @Override
+    public void attentionFinish() {
+
+    }
+
+    @Override
     public void showProgress() {
 
     }

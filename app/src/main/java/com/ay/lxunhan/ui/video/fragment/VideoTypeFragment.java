@@ -198,7 +198,7 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void collect() {
-
+                presenter.addCollect(String.valueOf(videoBeanList.get(mPosition).getId()),2);
             }
 
             @Override
@@ -238,5 +238,10 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
             videoBeanList.get(mPosition).setIs_fol(1);
         }
         videoAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void addCollectFinish() {
+        ToastUtil.makeShortText(getActivity(),"收藏成功");
     }
 }

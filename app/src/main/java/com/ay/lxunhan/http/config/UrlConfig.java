@@ -207,21 +207,6 @@ public class UrlConfig {
     public static final String MY_INFO="api/mine/my_info";
 
     /**
-     * 朋友圈详情
-     */
-    public static final String PYQ_DETAIL="api/messages/circles_show";
-
-    /**
-     * 朋友圈删除
-     */
-    public static final String PYQ_DELETE="api/messages/circles_del";
-
-    /**
-     * 朋友圈评论
-     */
-    public static final String PYQ_COMMENT="api/messages/circles_comment_list";
-
-    /**
      * 自媒体人详情
      */
     public static final String MEIDA_USER_INFO="api/mine/info";
@@ -240,6 +225,113 @@ public class UrlConfig {
      * 好友动态列表
      */
     public static final String USER_DYNAMIC_LIST="api/mine/dynamic_list";
+
+
+    /**
+     * 朋友圈详情
+     */
+    public static final String PYQ_DETAIL="api/messages/circles_show";
+
+    /**
+     * 朋友圈删除
+     */
+    public static final String PYQ_DELETE="api/messages/circles_del";
+
+    /**
+     * 粉丝列表
+     */
+    public static final String FANS_LIST="api/users/fan_list";
+
+    /**
+     * 关注列表
+     */
+    public static final String ATTENTION_LIST="api/users/fol_list";
+
+    /**
+     * 乐币兑换
+     */
+    public static final String LB_EXCHANGE="api/users/exchange_gold";
+
+    /**
+     * 乐币查询
+     */
+    public static final String LB_SELECT="api/mine/my_gold_info";
+
+    /**
+     * 乐币任务
+     */
+    public static final String LB_TASK_LIST="api/mine/my_gold_task";
+
+    /**
+     * 乐币列表
+     */
+    public static final String LB_BILL_LIST="api/mine/my_gold_desc";
+
+    /**
+     * 自媒体粉丝列表
+     */
+    public static final String MEDIA_FANS_LIST="api/mine/fans_list";
+
+    /**
+     * 自媒体关注列表
+     */
+    public static final String MEDIA_ATTENTION_LIST="api/mine/follow_list";
+
+    /**
+     * 添加收藏
+     */
+    public static final String ADD_COLLECT="api/mine/collection_add";
+
+    /**
+     * 账单列表
+     */
+    public static final String BILL_LIST="api/users/bill_list";
+
+    /**
+     * 朋友圈评论
+     */
+    public static final String PYQ_COMMENT="api/messages/circles_comment_list";
+
+    /***
+     * 提现申请
+     */
+    public static final String WITHDRAW="api/users/withdraw_add";
+
+    /**
+     * 通知（系统）列表
+     */
+    public static final String NOTATION_SYSTEM_LIST="api/users/notice_list";
+
+    /**
+     * 聊天界面内容
+     */
+    public static final String CHAT_IM_LIST="api/messages/message_show";
+
+    /**
+     * 通知列表
+     */
+    public static final String NOTATION_LIST="api/users/notice_two_list";
+
+    /**
+     * 签到信息
+     */
+    public static final String SING_INFO="api/mine/my_sign_info";
+
+    /**
+     * 用户签到
+     */
+    public static final String USER_SING="api/mine/my_sign_in";
+
+    /**
+     * 历史
+     */
+    public static final String HISTORY="api/mine/my_history";
+
+    /**
+     * 收藏列表
+     */
+    public static final String COLLECT="api/mine/collection_list";
+
 
 
 }

@@ -3,6 +3,7 @@ package com.ay.lxunhan.ui.public_ac.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
@@ -12,7 +13,12 @@ import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.UserMediaListBean;
 import com.ay.lxunhan.contract.HeUserListContract;
 import com.ay.lxunhan.presenter.HeUserListPresenter;
+import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
+import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
+import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
+import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.widget.SelectTypeDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -39,7 +45,6 @@ public class UserHomePageFrgament extends BaseFragment<HeUserListContract.HeUser
     @BindView(R.id.swipe_refresh)
     TwinklingRefreshLayout swipeRefresh;
     private SelectTypeDialog selectTypeDialog;
-    private int mPosition=0;
     private int type=0;
     private int page=1;
     private boolean isRefresh=true;
@@ -79,7 +84,6 @@ public class UserHomePageFrgament extends BaseFragment<HeUserListContract.HeUser
     @Override
     protected void initData() {
         super.initData();
-
         presenter.getHeUserMeidaList(userID,page,type);
     }
 
@@ -113,6 +117,31 @@ public class UserHomePageFrgament extends BaseFragment<HeUserListContract.HeUser
     @Override
     protected void initListener() {
         super.initListener();
+        mediaAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            switch (view.getId()) {
+                case R.id.ll_linear:
+                    switch (userMediaListBeans.get(position).getType()) {
+                        case 1:
+                            HomeDetailActivity.startHomeDetailActivity(getActivity(),userMediaListBeans.get(position).getType(),userMediaListBeans.get(position).getId());
+                            break;
+                        case 2:
+                            VideoDetailActivity.startVideoDetailActivity(getActivity(), String.valueOf(userMediaListBeans.get(position).getId()));
+                            break;
+                        case 3:
+                            HomeAskDetailActivity.startHomeAskDetailActivity(getActivity(), userMediaListBeans.get(position).getType(), userMediaListBeans.get(position).getId());
+                            break;
+                        case 4:
+                            HomeQuziDetailActivity.startHomeQuizDetailActivity(getActivity(), userMediaListBeans.get(position).getId());
+                            break;
+                        case 5:
+
+                            break;
+                    }
+                    break;
+                case R.id.tv_quiz:
+                    break;
+            }
+        });
         swipeRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
@@ -143,7 +172,6 @@ public class UserHomePageFrgament extends BaseFragment<HeUserListContract.HeUser
         }
         selectTypeDialog.show();
         selectTypeDialog.setItemClickListener((position, typeBean) -> {
-            mPosition=position;
             type=typeBean.getType();
             tvSelectType.setText(typeBean.getName());
             page=1;
@@ -169,5 +197,10 @@ public class UserHomePageFrgament extends BaseFragment<HeUserListContract.HeUser
     @Override
     public void getHeUserListFinish(List<PyqBean> list) {
 
+    }
+
+    @Override
+    public void pyqDeleteFinish() {
+        ToastUtil.makeShortText(getActivity(),"删除成功");
     }
 }

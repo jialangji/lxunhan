@@ -63,7 +63,7 @@ public class SelectTypeDialog extends Dialog implements View.OnClickListener {
             }
         };
         rvType.setLayoutManager(new GridLayoutManager(context,3));
-        rvType.addItemDecoration(new GridDividerDecoration(context,10,GridLayoutManager.VERTICAL));
+        rvType.addItemDecoration(new GridDividerDecoration(context,15,GridLayoutManager.VERTICAL));
         rvType.setAdapter(typeAdapter);
         TextView tvCancel = findViewById(R.id.tv_cancel);
         tvCancel.setOnClickListener(this);

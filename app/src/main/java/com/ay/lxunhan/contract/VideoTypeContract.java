@@ -13,9 +13,11 @@ public interface VideoTypeContract {
     interface VideoTypePresenter{
         void getVideoType(String plate_id,int page);
         void attention(String uid);
+        void addCollect(String aid,int type);
     }
     interface VideoTypeView{
         void getVideoTypeFinish(List<VideoBean> list);
         void attentionFinish();
+        void addCollectFinish();
     }
 }

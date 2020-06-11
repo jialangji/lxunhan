@@ -77,7 +77,7 @@ public class ChannelManageActivity extends BaseActivity<ChannelContract.ChannelV
             }
         };
         rvAddchannel.setLayoutManager(new GridLayoutManager(this, 3));
-        rvMychannel.addItemDecoration(new GridDividerDecoration(ChannelManageActivity.this, 12, GridLayoutManager.VERTICAL));
+        rvAddchannel.addItemDecoration(new GridDividerDecoration(ChannelManageActivity.this, 12, GridLayoutManager.VERTICAL));
         rvAddchannel.setAdapter(normalAdapter);
     }
 

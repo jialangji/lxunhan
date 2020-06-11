@@ -122,6 +122,17 @@
                 tools:text="1分钟"
                 android:textColor="@color/color_b2"
                 android:textSize="@dimen/sp_14" />
+            <TextView
+                android:id="@+id/tv_del"
+                android:layout_width="wrap_content"
+                android:layout_toEndOf="@id/tv_time"
+                android:layout_height="wrap_content"
+                android:text="@string/del"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp_4"
+                android:textColor="@color/color_2A6CFF"
+                android:textSize="@dimen/sp_12"
+                />
 
             <LinearLayout
                 android:id="@+id/ll_like"

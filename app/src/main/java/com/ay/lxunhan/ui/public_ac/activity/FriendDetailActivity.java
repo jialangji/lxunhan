@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,8 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.contract.HeUserInfoContract;
 import com.ay.lxunhan.presenter.HeUserInfoPresenter;
+import com.ay.lxunhan.ui.my.activity.AttentionActivity;
+import com.ay.lxunhan.ui.my.activity.FansActivity;
 import com.ay.lxunhan.ui.public_ac.fragment.UserDataFragment;
 import com.ay.lxunhan.ui.public_ac.fragment.UserDynamicFrgament;
 import com.ay.lxunhan.ui.public_ac.fragment.UserHomePageFrgament;
@@ -62,12 +65,13 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
     TabLayout tlLabel;
     @BindView(R.id.view_page)
     NoScrollViewPager viewPage;
-    private List<String> arr=new ArrayList<>();
+    private List<String> arr = new ArrayList<>();
     private String userID;
     private SensorManager sensorManager;
     private Jzvd.JZAutoFullscreenListener jzAutoFullscreenListener;
     private FragmentPagerAdapter vpAdapter;
-    private boolean isMedia=true;
+    private boolean isMedia = true;
+    private HeUserBean heUserBean;
 
     @Override
     public HeUserInfoPresenter initPresenter() {
@@ -88,7 +92,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
     @Override
     protected void initView() {
         super.initView();
-        userID=getIntent().getStringExtra("userId");
+        userID = getIntent().getStringExtra("userId");
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         jzAutoFullscreenListener = new Jzvd.JZAutoFullscreenListener();
         Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
@@ -97,7 +101,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
 
     }
 
-    public void loadVp(){
+    public void loadVp() {
         vpAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -140,53 +144,72 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.tv_attention, R.id.ll_chat})
+    @OnClick({R.id.rl_finish, R.id.iv_header, R.id.tv_attention, R.id.ll_chat, R.id.ll_fans, R.id.ll_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.ll_fans:
+                FansActivity.startFansActivity(this,userID,heUserBean.getIsMine());
+                break;
+            case R.id.ll_attention:
+                AttentionActivity.startAttentionActivity(this,userID,heUserBean.getIsMine());
+                break;
             case R.id.rl_finish:
                 finish();
                 break;
-            case R.id.rl_more:
+            case R.id.iv_header:
+                UserInfoActivity.startUserInfoActivity(this);
                 break;
             case R.id.tv_attention:
+                if (isLogin()) {
+                    presenter.attention(userID);
+                }
                 break;
             case R.id.ll_chat:
                 break;
         }
     }
 
-    public static void startUserDetailActivity(Context context,String uid){
-        Intent intent=new Intent(context,FriendDetailActivity.class);
-        intent.putExtra("userId",uid);
+    public static void startUserDetailActivity(Context context, String uid) {
+        Intent intent = new Intent(context, FriendDetailActivity.class);
+        intent.putExtra("userId", uid);
         context.startActivity(intent);
     }
 
     @Override
     public void getHeUserInfoFinish(HeUserBean bean) {
-        GlideUtil.loadCircleImgForHead(this,ivHeader,bean.getAvatar());
+        heUserBean = bean;
+        GlideUtil.loadCircleImgForHead(this, ivHeader, bean.getAvatar());
         tvName.setText(bean.getNickname());
-        ivSex.setImageDrawable(getResources().getDrawable(bean.getSex()?R.drawable.ic_man:R.drawable.ic_woman));
+        ivSex.setImageDrawable(getResources().getDrawable(bean.getSex() ? R.drawable.ic_man : R.drawable.ic_woman));
         tvAge.setText(bean.getDate_birth());
         tvLikeCount.setText(String.valueOf(bean.getLikeCount()));
         tvAttentionCount.setText(String.valueOf(bean.getBeFolCount()));
         tvFansCount.setText(String.valueOf(bean.getFolCount()));
-        tvAddress.setText(bean.getProvince()+"·"+bean.getCity());
-        if (bean.getIs_fol()==0){
+        if (!TextUtils.isEmpty(bean.getProvince())&&!TextUtils.isEmpty(bean.getCity())){
+            tvAddress.setText(String.format("%s·%s", bean.getProvince(), bean.getCity()));
+        }else if (!TextUtils.isEmpty(bean.getProvince())){
+            tvAddress.setText( bean.getProvince());
+        }else if (!TextUtils.isEmpty(bean.getCity())){
+            tvAddress.setText( bean.getCity());
+        }else {
+            tvAddress.setVisibility(View.GONE);
+        }
+        if (bean.getIs_fol() == 0) {
             tvAttention.setText(StringUtil.getString(R.string.add_attention));
-        }else if (bean.getIs_fol()==1){
+        } else if (bean.getIs_fol() == 1) {
             tvAttention.setText(StringUtil.getString(R.string.attention_to));
-        }else if (bean.getIs_fol()==2){
+        } else if (bean.getIs_fol() == 2) {
             tvAttention.setText(StringUtil.getString(R.string.attention_each_other));
         }
-        isMedia=bean.getIs_media();
-        if (bean.getIs_media()){
+        isMedia = bean.getIs_media();
+        if (bean.getIs_media()) {
             arr.add("主页");
-        } else{
+        } else {
             tvMedia.setVisibility(View.GONE);
             arr.add("动态");
         }
         arr.add("资料");
-        if (bean.getIsMine()){
+        if (bean.getIsMine()) {
             tvAttention.setVisibility(View.GONE);
             llChat.setVisibility(View.INVISIBLE);
         }
@@ -201,6 +224,18 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
     }
 
     @Override
+    public void attentionFinish() {
+        if (heUserBean.getIs_fol() == 0) {
+            heUserBean.setIs_fol(1);
+            tvAttention.setText(StringUtil.getString(R.string.attention_to));
+        } else {
+            heUserBean.setIs_fol(0);
+            tvAttention.setText(StringUtil.getString(R.string.add_attention));
+        }
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //播放器重力感应
@@ -208,7 +243,6 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
         sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         JzvdStd.goOnPlayOnResume();
     }
-
 
 
     @Override

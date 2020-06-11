@@ -3,18 +3,25 @@ package com.ay.lxunhan.http;
 
 
 import com.ay.lxunhan.bean.AddFriendBean;
+import com.ay.lxunhan.bean.AttentionBean;
+import com.ay.lxunhan.bean.BillBean;
 import com.ay.lxunhan.bean.ChannelBean;
 import com.ay.lxunhan.bean.ChatListBean;
+import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.PyqBean;
+import com.ay.lxunhan.bean.PyqCommentBean;
+import com.ay.lxunhan.bean.PyqDetailBean;
+import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
@@ -26,9 +33,11 @@ import com.ay.lxunhan.bean.model.AttentionModel;
 import com.ay.lxunhan.bean.model.AttentionsModel;
 import com.ay.lxunhan.bean.model.ComplaintModel;
 import com.ay.lxunhan.bean.model.CompleteInfoModel;
+import com.ay.lxunhan.bean.model.LbModel;
 import com.ay.lxunhan.bean.model.PublicModel;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.bean.model.SmallVideoWatchModel;
+import com.ay.lxunhan.bean.model.WithdrawModel;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.GsonUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -508,6 +517,120 @@ public class HttpMethods {
         Flowable<HttpResult<List<PyqBean>>> flowable=httpService.userList(UserInfo.getInstance().getUserId(),uzid, page);
         return compositeThread(flowable);
      }
+
+    /**
+     * 朋友圈删除
+     */
+     public Flowable<Object> pyqDelete(String id){
+        Flowable<HttpResult<Object>> flowable=httpService.pyqDelete(UserInfo.getInstance().getUserId(),id);
+        return compositeThread(flowable);
+     }
+
+    /**
+     * 粉丝列表
+     */
+     public Flowable<List<AttentionBean>> fansList(int page){
+         Flowable<HttpResult<List<AttentionBean>>> flowable=httpService.fansList(UserInfo.getInstance().getUserId(),page);
+         return compositeThread(flowable);
+     }
+
+    /**
+     * 自媒体粉丝列表
+     */
+    public Flowable<List<AttentionBean>> mediaFansList(String uzid,int page){
+        Flowable<HttpResult<List<AttentionBean>>> flowable=httpService.mediafansList(UserInfo.getInstance().getUserId(),uzid,page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 关注列表
+     */
+    public Flowable<List<AttentionBean>> attentionList(int page){
+        Flowable<HttpResult<List<AttentionBean>>> flowable=httpService.attentionList(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 自媒体关注列表
+     */
+    public Flowable<List<AttentionBean>> mediaAttentionList(String uzid,int page){
+        Flowable<HttpResult<List<AttentionBean>>> flowable=httpService.mediaAttentionList(UserInfo.getInstance().getUserId(),uzid,page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 乐币展示
+     */
+    public Flowable<LbBean> lbShow(){
+        Flowable<HttpResult<LbBean>> flowable=httpService.lbShow(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 乐币任务
+     */
+    public Flowable<List<TaskBean>> lbTask(){
+        Flowable<HttpResult<List<TaskBean>>> flowable=httpService.lbTaskList(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /**
+     *乐币兑换
+     */
+    public Flowable<Object> lbExchange(LbModel lbModel){
+        Flowable<HttpResult<Object>> flowable=httpService.lbExchange(modeBody(lbModel));
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 乐币明细
+     */
+    public Flowable<List<CoinBean>> lbBill(int page){
+        Flowable<HttpResult<List<CoinBean>>> flowable=httpService.lbBill(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 添加收藏
+     */
+    public Flowable<Object> addCollect(String aid,int type){
+        Flowable<HttpResult<Object>> flowable=httpService.addCollect(UserInfo.getInstance().getUserId(),aid, String.valueOf(type));
+        return compositeThread(flowable);
+    }
+
+
+    /**
+     *
+     * 账单列表
+     */
+    public Flowable<BillBean> billList(int type,int timeType,int page){
+        Flowable<HttpResult<BillBean>> flowable=httpService.billList(UserInfo.getInstance().getUserId(),type,timeType,page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 朋友圈详情
+     */
+    public Flowable<PyqDetailBean> pyqDetail(String id){
+        Flowable<HttpResult<PyqDetailBean>> flowable=httpService.pyqDetail(UserInfo.getInstance().getUserId(),id);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 朋友圈评论
+     */
+    public Flowable<List<PyqCommentBean>> pyqComment(String id,int page){
+        Flowable<HttpResult<List<PyqCommentBean>>> flowable=httpService.pyqComment(UserInfo.getInstance().getUserId(),id,page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 提现
+     */
+    public Flowable<Object> withdraw(WithdrawModel withdrawModel){
+        Flowable<HttpResult<Object>> flowable=httpService.withdraw(modeBody(withdrawModel));
+        return compositeThread(flowable);
+    }
 
     /**
      * 批量上传文件

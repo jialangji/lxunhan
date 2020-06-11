@@ -1,4 +1,4 @@
-package com.ay.lxunhan.ui.public_ac.activity;
+package com.ay.lxunhan.ui.message.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.contract.PyqContract;
 import com.ay.lxunhan.presenter.PyqPresenter;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
+import com.ay.lxunhan.ui.public_ac.activity.PyqDetailActivity;
+import com.ay.lxunhan.utils.ButtonUtils;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -33,6 +36,7 @@ public class PyqActivity extends BaseActivity<PyqContract.PyqView, PyqPresenter>
     private BaseQuickAdapter pyqAdapter;
     private int page=1;
     private boolean isRefresh=true;
+    private int mPosition;
 
 
     @Override
@@ -47,10 +51,9 @@ public class PyqActivity extends BaseActivity<PyqContract.PyqView, PyqPresenter>
         rvPyq.setLayoutManager(new LinearLayoutManager(this));
         rvPyq.setAdapter(pyqAdapter);
     }
-
     @Override
-    protected void initData() {
-        super.initData();
+    protected void onResume() {
+        super.onResume();
         presenter.getPyqList(page);
     }
 
@@ -77,6 +80,26 @@ public class PyqActivity extends BaseActivity<PyqContract.PyqView, PyqPresenter>
                 }
             }
         });
+
+        pyqAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            switch (view.getId()) {
+                case R.id.ll_line:
+                    PyqDetailActivity.startPyqDetailActivity(PyqActivity.this, String.valueOf(pyqBeans.get(position).getId()));
+
+                    break;
+                case R.id.iv_header:
+                    FriendDetailActivity.startUserDetailActivity(PyqActivity.this,pyqBeans.get(position).getUid());
+                    break;
+                case R.id.tv_del:
+                    if (ButtonUtils.isFastDoubleClick(R.id.tv_del)) {
+                        return;
+                    }
+                    mPosition=position;
+                    presenter.pyqDelete(String.valueOf(pyqBeans.get(position).getId()));
+                    break;
+            }
+        });
+
     }
 
     @Override
@@ -115,6 +138,14 @@ public class PyqActivity extends BaseActivity<PyqContract.PyqView, PyqPresenter>
             pyqBeans.addAll(list);
         }
         pyqAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void pyqDeleteFinish() {
+        pyqBeans.remove(mPosition);
+        pyqAdapter.notifyDataSetChanged();
+        ToastUtil.makeShortText(this,"删除成功");
+
     }
 
     @Override

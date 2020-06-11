@@ -39,4 +39,15 @@ public class VideoTypePresenter extends BasePresenter<VideoTypeContract.VideoTyp
             }
         }));
     }
+
+    @Override
+    public void addCollect(String aid, int type) {
+        addDisposable(HttpMethods.getInstance().addCollect(aid, type).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().addCollectFinish();
+            }
+        }));
+    }
 }

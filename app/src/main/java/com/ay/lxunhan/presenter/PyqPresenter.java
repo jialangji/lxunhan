@@ -36,4 +36,15 @@ public class PyqPresenter extends BasePresenter<PyqContract.PyqView> implements 
             }
         }));
     }
+
+    @Override
+    public void pyqDelete(String id) {
+        addDisposable(HttpMethods.getInstance().pyqDelete(id).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().pyqDeleteFinish();
+            }
+        }));
+    }
 }

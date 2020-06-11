@@ -77,7 +77,7 @@
                         android:id="@+id/tv_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="有哪些你租房以后才知道的事?"
+                        tools:text="有哪些你租房以后才知道的事?"
                         android:textColor="@color/color_161824"
                         android:textSize="@dimen/sp_16" />
                     <TextView
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:text="2020-04-30 17:02:41"
+                        tools:text="2020-04-30 17:02:41"
                         android:textColor="@color/color_b2"
                         android:textSize="@dimen/sp_12" />
 
@@ -130,7 +130,7 @@
                                     android:id="@+id/tv_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="张三"
+                                    tools:text="张三"
                                     android:textColor="@color/color_303133"
                                     android:textSize="@dimen/sp_16" />
 
@@ -148,7 +148,7 @@
                                 android:id="@+id/tv_signature"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="上山打老虎"
+                                tools:text="上山打老虎"
                                 android:textColor="@color/color_b2"
                                 android:textSize="@dimen/sp_12" />
                         </LinearLayout>

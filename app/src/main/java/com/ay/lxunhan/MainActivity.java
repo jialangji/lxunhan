@@ -23,7 +23,6 @@ import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.MainPresenter;
 import com.ay.lxunhan.ui.home.HomeFragment;
 import com.ay.lxunhan.ui.login.BootPageActivity;
-import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.ui.message.MessageFrgament;
 import com.ay.lxunhan.ui.my.MyFragment;
 import com.ay.lxunhan.ui.video.fragment.VideoFragment;
@@ -107,12 +106,12 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     protected void initView() {
         super.initView();
         ImmersionBar.with(this).init();
-        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         jzAutoFullscreenListener = new Jzvd.JZAutoFullscreenListener();
         //设置全屏播放
         JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
         JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
-        currentPosition=getIntent().getIntExtra("pox",-1);
+        currentPosition = getIntent().getIntExtra("pox", -1);
         tabs[0] = layoutTab1;
         tabs[1] = layoutTab2;
         tabs[2] = layoutTab3;
@@ -128,17 +127,30 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        showAppointFragment(intent.getIntExtra("pos", 0));
+    }
+
+    public void showAppointFragment(int position) {
+        currentPosition = position;
+        setTabSelected(currentPosition);
+        showFragment(currentPosition);
+
+    }
+
+    @Override
     protected void initData() {
         super.initData();
         tabs[0].performClick();
-        if (UserInfo.getInstance().isLogin()){
+        if (UserInfo.getInstance().isLogin()) {
             presenter.getUserInfo();
         }
     }
 
 
     private Fragment[] getFragments() {
-        Fragment[] fragments = new Fragment[5];
+        Fragment[] fragments = new Fragment[4];
         fragments[0] = getFragment(0);
         fragments[1] = getFragment(1);
         fragments[2] = getFragment(2);
@@ -153,7 +165,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
             fragments = getFragments();
             prePosition = -1;
         } else {
-            fragments = new Fragment[3];
+            fragments = new Fragment[4];
             fragments[0] = getSupportFragmentManager().findFragmentByTag(APP_ID + "0");
             fragments[1] = getSupportFragmentManager().findFragmentByTag(APP_ID + "1");
             fragments[2] = getSupportFragmentManager().findFragmentByTag(APP_ID + "2");
@@ -257,7 +269,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
                 showFragment(currentPosition);
                 break;
             case R.id.layout_tab3:
-                if (isLogin()){
+                if (isLogin()) {
                     if (currentPosition == 2) {
                         return;
                     }
@@ -267,7 +279,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
                 }
                 break;
             case R.id.layout_tab4:
-                if (isLogin()){
+                if (isLogin()) {
                     if (currentPosition == 3) {
                         return;
                     }
@@ -287,7 +299,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     @Override
     protected void getStickyEvent(Object eventModel) {
         super.getStickyEvent(eventModel);
-        EventModel eventModel1= (EventModel) eventModel;
+        EventModel eventModel1 = (EventModel) eventModel;
         switch (eventModel1.getMessageType()) {
             case EventModel.LOGIN_OUT:
                 BootPageActivity.startBootPageActivity(this);
@@ -315,13 +327,11 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(jzAutoFullscreenListener);
     }
-
 
 
     @Override
@@ -333,14 +343,14 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     }
 
 
-    public static void startMainActivity(Context context){
-        Intent intent=new Intent(context,MainActivity.class);
+    public static void startMainActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
 
-    public static void startMainActivity(Context context,int currentPosition){
-        Intent intent=new Intent(context,MainActivity.class);
-        intent.putExtra("pox",currentPosition);
+    public static void startMainActivity(Context context, int currentPosition) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra("pox", currentPosition);
         context.startActivity(intent);
     }
 
@@ -348,6 +358,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     public void getUserInfoFinish(UserInfoBean userInfoBean) {
         UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
     }
+
     @Override
     public void showProgress() {
         hudLoader.show();

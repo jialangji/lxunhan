@@ -78,14 +78,15 @@
 
         <TextView
             android:id="@+id/tv_get"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_56"
+            android:layout_height="@dimen/dp_28"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="@string/attention"
-            android:textColor="@color/color_fc5a8e"
+            android:text="@string/get"
+            android:gravity="center"
+            android:textColor="@color/white"
             android:textSize="@dimen/sp_10"
-            android:background="@drawable/shape_radius_pink_line"
+            android:background="@drawable/shape_radiu_ff9813"
             />
 
     </RelativeLayout>

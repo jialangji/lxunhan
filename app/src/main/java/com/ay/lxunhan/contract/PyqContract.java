@@ -12,10 +12,12 @@ import java.util.List;
 public interface PyqContract {
     interface PyqPresenter{
         void getPyqList(int page);
+        void pyqDelete(String id);
     }
 
     interface PyqView{
         void getPyqFinish(List<PyqBean> list);
+        void pyqDeleteFinish();
         void showProgress();
         void hideProgress();
     }

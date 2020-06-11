@@ -11,11 +11,13 @@ public interface HeUserInfoContract {
     interface HeUserInfoPresenter{
         void getHeUserInfo(String uzid);
         void getHeUserInfoData(String uzid);
+        void attention(String uid);
     }
 
     interface HeUserInfoView{
         void getHeUserInfoFinish(HeUserBean bean);
         void getHeUserInfoDataFinish(HeUserBean bean);
+        void attentionFinish();
         void showProgress();
         void hideProgress();
     }

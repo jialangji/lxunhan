@@ -26,6 +26,8 @@ public interface VideoDetailContract {
         void commentLike(SendCommentModel model);
 
         void attention(String uid);
+
+        void addCollect(String aid,int type);
     }
 
     interface VideoDetailView {
@@ -36,6 +38,8 @@ public interface VideoDetailContract {
         void sendCommentFinish();
 
         void addLikeFinish();
+
+        void addCollect();
 
         void commentLikeFinish();
 

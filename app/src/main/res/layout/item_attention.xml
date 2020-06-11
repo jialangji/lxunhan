@@ -63,13 +63,14 @@
 
     </LinearLayout>
     <TextView
+        android:id="@+id/tv_attention"
         android:layout_width="@dimen/dp_56"
         android:layout_height="@dimen/dp_28"
         android:layout_centerVertical="true"
         android:gravity="center"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/shape_radius_pink"
-        android:textColor="@color/white"
+        android:background="@drawable/shape_radius_pink_line10"
+        android:textColor="@color/color_fc5a8e"
         android:textSize="@dimen/sp_10"
         android:text="@string/attention_to"
         />

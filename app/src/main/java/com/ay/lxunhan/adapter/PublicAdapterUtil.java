@@ -260,6 +260,8 @@ public class PublicAdapterUtil {
                 helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.setText(R.id.tv_content, item.getTitle());
+                helper.setGone(R.id.tv_del,item.getIs_my());
+                helper.addOnClickListener(R.id.tv_del);
                 helper.addOnClickListener(R.id.ll_line);
                 helper.addOnClickListener(R.id.iv_header);
                 switch (helper.getItemViewType()) {
@@ -307,7 +309,9 @@ public class PublicAdapterUtil {
                 helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.setText(R.id.tv_content, item.getTitle());
+                helper.setGone(R.id.tv_delete,item.getIs_mine());
                 helper.addOnClickListener(R.id.ll_line);
+                helper.addOnClickListener(R.id.tv_delete);
                 switch (helper.getItemViewType()) {
                     case 1:
                         GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_cover), item.getImage_arr().get(0), 10);
@@ -318,7 +322,7 @@ public class PublicAdapterUtil {
                         imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getImage_arr()) {
                             @Override
                             protected void convert(BaseViewHolder helper, String itemchild) {
-                                GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild);
+                                GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild, 10);
                             }
                         };
                         rvImg.addItemDecoration(new GridDividerDecoration(context, 10, GridLayoutManager.VERTICAL));
@@ -359,6 +363,7 @@ public class PublicAdapterUtil {
                         JzvdStd.SAVE_PROGRESS = false;
                         JzvdStd.setVideoImageDisplayType(JzvdStd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_PARENT);
                         //设置全屏播放
+                        helper.addOnClickListener(R.id.ll_linear);
                         JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
                         JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
                         GlideUtil.loadRoundTop(context, jzvdStd.thumbImageView, item.getCover().get(0));
@@ -371,6 +376,7 @@ public class PublicAdapterUtil {
                         break;
                     case 5:
                         GlideUtil.loadRoundTop(context, helper.getView(R.id.iv_cover), item.getCover().get(0));
+                        helper.addOnClickListener(R.id.ll_linear);
                         break;
                     case 0:
                         helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
@@ -379,7 +385,6 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.setText(R.id.tv_time, item.getTimeText());
                         helper.addOnClickListener(R.id.ll_linear);
-                        helper.addOnClickListener(R.id.ll_like);
                         helper.setText(R.id.tv_content, item.getTitle());
                         helper.setText(R.id.tv_type, item.getPlate_name());
                         break;
@@ -390,7 +395,6 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.setText(R.id.tv_time, item.getTimeText());
                         helper.addOnClickListener(R.id.ll_linear);
-                        helper.addOnClickListener(R.id.ll_like);
                         helper.setText(R.id.tv_content, item.getTitle());
                         GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_comment_img), item.getCover().get(0));
                         helper.setText(R.id.tv_type, item.getPlate_name());
@@ -402,7 +406,6 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.setText(R.id.tv_time, item.getTimeText());
                         helper.addOnClickListener(R.id.ll_linear);
-                        helper.addOnClickListener(R.id.ll_like);
                         helper.setText(R.id.tv_content, item.getTitle());
                         helper.setText(R.id.tv_type, item.getPlate_name());
                         RecyclerView rvImg = helper.getView(R.id.rv_img);
@@ -423,7 +426,6 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.setText(R.id.tv_time, item.getTimeText());
                         helper.addOnClickListener(R.id.ll_linear);
-                        helper.addOnClickListener(R.id.ll_like);
                         TextView tvTagAsk = helper.getView(R.id.tv_content);
                         tvTagAsk.setText(setSpan(context, item.getBounty_gold(), item.getTitle()));
                         break;
@@ -434,7 +436,6 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.setText(R.id.tv_time, item.getTimeText());
                         helper.addOnClickListener(R.id.ll_linear);
-                        helper.addOnClickListener(R.id.ll_like);
                         TagTextView tvTagquiz = helper.getView(R.id.tv_content);
                         helper.setText(R.id.tv_quiz_title, item.getDesc());
                         tvTagquiz.setContentAndTag(R.layout.item_lable_quiz, item.getTitle(), "投票", R.color.color_49b114);

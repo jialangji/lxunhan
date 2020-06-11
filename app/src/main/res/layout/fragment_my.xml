@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@color/bg_color"
     android:layout_height="match_parent"
@@ -107,7 +108,7 @@
                                 android:id="@+id/tv_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="张三"
+                                tools:text="张三"
                                 android:textColor="@color/color_303133"
                                 android:textSize="@dimen/sp_16" />
 
@@ -129,7 +130,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:text="Finally A Top Secret Way You Ca…"
+                            tools:text="Finally A Top Secret Way You Ca…"
                             android:textColor="@color/color_b2"
                             android:textSize="@dimen/sp_14" />
                     </LinearLayout>
@@ -152,7 +153,7 @@
                                 android:id="@+id/tv_like_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="78"
+                                tools:text="78"
                                 android:textColor="@color/color_303133"
                                 android:textSize="@dimen/sp_16" />
                             <TextView
@@ -181,7 +182,7 @@
                                 android:id="@+id/tv_fans_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="78"
+                                tools:text="78"
                                 android:textColor="@color/color_303133"
                                 android:textSize="@dimen/sp_16" />
                             <TextView
@@ -210,7 +211,7 @@
                                 android:id="@+id/tv_attention_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="78"
+                                tools:text="78"
                                 android:textColor="@color/color_303133"
                                 android:textSize="@dimen/sp_16" />
                             <TextView
@@ -233,7 +234,7 @@
                 android:layout_height="@dimen/dp_100"
                 android:layout_marginStart="@dimen/dp_30"
                 android:layout_marginTop="-190dp"
-                android:src="@drawable/ic_my_select" />
+                tools:src="@drawable/ic_my_select" />
 
             <LinearLayout
                 android:layout_width="match_parent"

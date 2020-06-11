@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_scrollFlags="scroll"
     android:orientation="vertical"
     tools:context=".ui.public_ac.activity.FriendDetailActivity">
 
@@ -33,6 +34,7 @@
             <RelativeLayout
                 android:id="@+id/rl_more"
                 android:layout_width="@dimen/dp_20"
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true">
 
@@ -54,7 +56,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_140"
-                android:background="@drawable/bg_gradient"></RelativeLayout>
+                android:background="@drawable/bg_gradient">
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -131,7 +135,7 @@
                                 android:id="@+id/tv_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="name"
+                                tools:text="name"
                                 android:textColor="@color/color_303133"
                                 android:textSize="@dimen/sp_22" />
 
@@ -149,7 +153,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="@dimen/dp_4"
-                                android:text="22"
+                                tools:text="22"
                                 android:textColor="@color/color_b2"
                                 android:textSize="@dimen/sp_12" />
                         </LinearLayout>
@@ -167,7 +171,8 @@
                                 android:drawableStart="@drawable/ic_yellow_v"
                                 android:drawablePadding="@dimen/dp_2"
                                 android:gravity="center"
-                                android:text="自媒体人"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                tools:text="自媒体人"
                                 android:textColor="@color/color_78"
                                 android:textSize="@dimen/sp_12" />
 
@@ -175,10 +180,9 @@
                                 android:id="@+id/tv_address"
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/dp_25"
-                                android:layout_marginStart="@dimen/dp_20"
                                 android:background="@drawable/shape_type_gray"
                                 android:gravity="center"
-                                android:text="自媒体人"
+                                tools:text="自媒体人"
                                 android:textColor="@color/color_78"
                                 android:textSize="@dimen/sp_12" />
                         </LinearLayout>
@@ -200,7 +204,7 @@
                                     android:id="@+id/tv_like_count"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="78"
+                                    tools:text="78"
                                     android:textColor="@color/color_303133"
                                     android:textSize="@dimen/sp_16" />
 
@@ -231,7 +235,7 @@
                                     android:id="@+id/tv_fans_count"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="78"
+                                    tools:text="78"
                                     android:textColor="@color/color_303133"
                                     android:textSize="@dimen/sp_16" />
 
@@ -262,7 +266,7 @@
                                     android:id="@+id/tv_attention_count"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="78"
+                                    tools:text="78"
                                     android:textColor="@color/color_303133"
                                     android:textSize="@dimen/sp_16" />
 
@@ -309,12 +313,14 @@
                 app:tabRippleColor="@android:color/transparent"
                 app:tabSelectedTextColor="@color/color_fc5a8e"
                 app:tabTextAppearance="@style/TabTextSize2"
-                app:tabTextColor="@color/color_303133"></android.support.design.widget.TabLayout>
+                app:tabTextColor="@color/color_303133">
+            </android.support.design.widget.TabLayout>
 
             <com.ay.lxunhan.widget.NoScrollViewPager
                 android:id="@+id/view_page"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></com.ay.lxunhan.widget.NoScrollViewPager>
+                android:layout_height="match_parent">
+            </com.ay.lxunhan.widget.NoScrollViewPager>
         </LinearLayout>
     </LinearLayout>
 

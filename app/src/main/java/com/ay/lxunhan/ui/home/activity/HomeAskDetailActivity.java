@@ -27,6 +27,7 @@ import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -319,7 +320,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void collect() {
-
+                presenter.addCollect(String.valueOf(homeDetailBean.getId()),type);
             }
 
             @Override
@@ -365,6 +366,11 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
+    }
+
+    @Override
+    public void addCollectFinish() {
+        ToastUtil.makeShortText(this,"收藏成功");
     }
 
     @Override

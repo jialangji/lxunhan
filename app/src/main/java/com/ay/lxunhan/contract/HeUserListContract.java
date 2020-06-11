@@ -14,10 +14,12 @@ public interface HeUserListContract {
     interface HeUserListPresenter{
         void getHeUserMeidaList(String uzid,int page,int type);
         void getHeUserList(String uzid,int page);
+        void pyqDelete(String id);
     }
 
     interface HeUserListView{
         void getHeUserMeidaListFinish(List<UserMediaListBean> listBeans);
         void getHeUserListFinish(List<PyqBean> list);
+        void pyqDeleteFinish();
     }
 }

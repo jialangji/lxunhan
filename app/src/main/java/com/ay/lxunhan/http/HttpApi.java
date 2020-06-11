@@ -2,18 +2,25 @@ package com.ay.lxunhan.http;
 
 
 import com.ay.lxunhan.bean.AddFriendBean;
+import com.ay.lxunhan.bean.AttentionBean;
+import com.ay.lxunhan.bean.BillBean;
 import com.ay.lxunhan.bean.ChannelBean;
 import com.ay.lxunhan.bean.ChatListBean;
+import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.PyqBean;
+import com.ay.lxunhan.bean.PyqCommentBean;
+import com.ay.lxunhan.bean.PyqDetailBean;
+import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.bean.UserInfoBean;
@@ -347,6 +354,106 @@ public interface HttpApi {
     @GET(UrlConfig.USER_DYNAMIC_LIST)
     Flowable<HttpResult<List<PyqBean>>> userList(@Query("uqid") String uqid, @Query("uzid") String uzid,
                                                   @Query("page") int page);
+
+
+
+    /**
+     * 朋友圈删除
+     */
+    @DELETE(UrlConfig.PYQ_DELETE)
+    Flowable<HttpResult<Object>> pyqDelete(@Query("uqid") String uqid, @Query("id") String id);
+
+    /**
+     * 朋友圈详情
+     */
+    @GET(UrlConfig.PYQ_DETAIL)
+    Flowable<HttpResult<PyqDetailBean>> pyqDetail(@Query("uqid") String uqid, @Query("id") String id);
+
+
+    /**
+     * 粉丝列表
+     */
+    @GET(UrlConfig.FANS_LIST)
+    Flowable<HttpResult<List<AttentionBean>>> fansList(@Query("uqid") String uqid,
+                                                 @Query("page") int page);
+
+    /**
+     * 自媒体人粉丝列表
+     */
+    @GET(UrlConfig.MEDIA_FANS_LIST)
+    Flowable<HttpResult<List<AttentionBean>>> mediafansList(@Query("uqid") String uqid, @Query("uzid") String uzid,
+                                                      @Query("page") int page);
+
+
+    /**
+     * 关注列表
+     */
+    @GET(UrlConfig.ATTENTION_LIST)
+    Flowable<HttpResult<List<AttentionBean>>> attentionList(@Query("uqid") String uqid,
+                                                      @Query("page") int page);
+
+
+
+    /**
+     * 粉丝列表
+     */
+    @GET(UrlConfig.MEDIA_ATTENTION_LIST)
+    Flowable<HttpResult<List<AttentionBean>>> mediaAttentionList(@Query("uqid") String uqid, @Query("uzid") String uzid,
+                                                           @Query("page") int page);
+
+
+    /**
+     * 添加收藏
+     */
+    @GET(UrlConfig.ADD_COLLECT)
+    Flowable<HttpResult<Object>> addCollect(@Query("uqid") String uqid,@Query("aid") String aid,@Query("type") String type);
+
+
+    /**
+     * 乐币展示
+     */
+    @GET(UrlConfig.LB_SELECT)
+    Flowable<HttpResult<LbBean>> lbShow(@Query("uqid") String uqid);
+
+    /**
+     * 乐币任务列表
+     */
+    @GET(UrlConfig.LB_TASK_LIST)
+    Flowable<HttpResult<List<TaskBean>>> lbTaskList(@Query("uqid") String uqid);
+
+
+    /***
+     * 乐币兑换
+     */
+    @POST(UrlConfig.LB_EXCHANGE)
+    Flowable<HttpResult<Object>> lbExchange(@Body RequestBody body);
+
+    /**
+     * 乐币明细
+     */
+    @GET(UrlConfig.LB_BILL_LIST)
+    Flowable<HttpResult<List<CoinBean>>> lbBill(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     *账单列表
+     */
+    @GET(UrlConfig.BILL_LIST)
+    Flowable<HttpResult<BillBean>> billList(@Query("uqid") String uqid,@Query("type") int type,
+                                                  @Query("time_type") int time_type,@Query("page") int page);
+
+
+    /**
+     * 朋友圈评论
+     */
+    @GET(UrlConfig.PYQ_COMMENT)
+    Flowable<HttpResult<List<PyqCommentBean>>> pyqComment(@Query("uqid") String uqid,@Query("aid") String aid
+            ,@Query("page") int page);
+
+    /**
+     * 提现
+     */
+    @POST(UrlConfig.WITHDRAW)
+    Flowable<HttpResult<Object>> withdraw(@Body RequestBody body);
 }
 
 

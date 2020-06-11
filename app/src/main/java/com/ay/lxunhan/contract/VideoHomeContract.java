@@ -16,10 +16,12 @@ public interface VideoHomeContract {
         void getVideoHomeList(String title,int page);
         void videoRecords();
         void attention(String uid);
+        void addCollect(String aid,int type);
     }
     interface VideoHomeView{
         void getVideoHomeListFinish(List<VideoBean> list);
         void videoRecords(List<PeopleBean> peopleBeans);
+        void addCollectFinish();
         void attentionFinish();
     }
 }
