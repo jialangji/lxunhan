@@ -32,7 +32,7 @@ public class FriendActivity extends BaseActivity<FriendContract.FriendsView, Fri
     @BindView(R.id.bar_list)
     AZSideBarView barList;
 
-    private List<AZItemEntity<FriendBean>>  data=new ArrayList<>();
+    private List<AZItemEntity<FriendBean>> data=new ArrayList<>();
     private SelectFriendAdapter selectFriendAdapter;
 
     @Override
@@ -64,7 +64,6 @@ public class FriendActivity extends BaseActivity<FriendContract.FriendsView, Fri
             }
         });
         selectFriendAdapter.setOnItemClickListener(countryCode -> {
-
         });
     }
 

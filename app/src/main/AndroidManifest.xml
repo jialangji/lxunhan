@@ -11,14 +11,23 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" /> <!-- 8.0 系统需要 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 8.0 系统上需要 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
+    <permission
+        android:name="com.ay.lxunhan.permission.RECEIVE_MSG"
+        android:protectionLevel="signature" />
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.ay.lxunhan.permission.RECEIVE_MSG" /> <!-- 小米推送 -->
+    <permission
+        android:name="com.ay.lxunhan.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.ay.lxunhan.permission.MIPUSH_RECEIVE" />
 
     <application
         android:name=".base.AppContext"
@@ -30,7 +39,58 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".ui.public_ac.activity.PyqDetailActivity"></activity>
+
+        <!-- 全面屏配置 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" /> <!-- 云信后台服务，请使用独立进程。 -->
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="key_of_your_app" />
+
+        <service
+            android:name="com.netease.nimlib.service.NimService"
+            android:process=":core" /> <!-- 云信后台辅助服务 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService$Aux"
+            android:process=":core" /> <!-- 云信后台辅助服务 -->
+        <service
+            android:name="com.netease.nimlib.job.NIMJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":core" /> <!-- 云信监视系统启动和网络变化的广播接收器，保持和 NimService 同一进程 -->
+        <receiver
+            android:name="com.netease.nimlib.service.NimReceiver"
+            android:exported="false"
+            android:process=":core">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver> <!-- 云信进程间通信 Receiver -->
+        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" /> <!-- 云信进程间通信service -->
+        <service android:name="com.netease.nimlib.service.ResponseService" /> <!-- 云信进程间通信provider -->
+        <!-- android:authorities="{包名}.ipc.provider", 请将com.netease.nim.demo替换为自己的包名 -->
+        <provider
+            android:name="com.netease.nimlib.ipc.NIMContentProvider"
+            android:authorities="com.ay.lxunhan.ipc.provider"
+            android:exported="false"
+            android:process=":core" />
+        <activity android:name=".ui.my.activity.InviteListActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.my.activity.InviteFriendActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.message.activity.ChatP2PActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.my.activity.NotationSystemActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.public_ac.activity.PyqDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.public_ac.activity.FriendDetailActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
@@ -115,11 +175,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my.activity.CollectActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my.activity.HistoryActivity"
-            android:configChanges="keyboardHidden|orientation"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.my.activity.FansActivity"
@@ -172,7 +232,22 @@
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+
+            <!-- Android 接收外部跳转过滤器 -->
+            <intent-filter>
+
+                <!-- 协议部分配置 ,要在web配置相同的 -->
+                <data
+                    android:host="www.hlx.open"
+                    android:scheme="https" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -182,7 +257,30 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
+        </provider> <!-- QQ相关 -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="123" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- 微信相关 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

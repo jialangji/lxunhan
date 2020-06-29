@@ -188,6 +188,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
 
     @Override
     public void getUserInfoFinish(UserInfoBean userInfoBean) {
+        UserInfo.getInstance().setUid(userInfoBean.getUid());
         GlideUtil.loadCircleImgForHead(this,ivHeader,userInfoBean.getAvatar());
         UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
         tvName.setText(userInfoBean.getNickname());

@@ -167,14 +167,13 @@
 
                     </RelativeLayout>
 
-                    <WebView
+                    <TextView
                         android:id="@+id/webview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
                         android:textColor="@color/color_161824"
-                        android:textSize="@dimen/sp_14"
-                        tools:ignore="WebViewLayout" />
+                        android:textSize="@dimen/sp_14" />
 
                 </LinearLayout>
 

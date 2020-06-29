@@ -20,7 +20,6 @@ import com.ay.lxunhan.ui.home.activity.ChannelManageActivity;
 import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
-import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
 import com.ay.lxunhan.utils.Contacts;

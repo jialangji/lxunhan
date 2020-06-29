@@ -13,13 +13,17 @@ import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
+import com.ay.lxunhan.bean.NotationBean;
+import com.ay.lxunhan.bean.NotationSystemBean;
 import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
+import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
@@ -249,11 +253,11 @@ public interface HttpApi {
     Flowable<HttpResult<List<PeopleBean>>> videoRecords(@Query("uqid") String uqid);
 
     /**
-     * 视频推荐列表
+     * 视频小列表
      */
     @GET(UrlConfig.SMALL_VIDEO_LIST)
-    Flowable<HttpResult<List<VideoBean>>> smallVideoList(@Query("uqid") String uqid,@Query("page") int page);
-
+    Flowable<HttpResult<List<VideoBean>>> smallVideoList(@Query("uqid") String uqid,@Query("page") int page,
+                                                         @Query("id") int id);
 
     /**
      * 视频推荐列表
@@ -454,6 +458,61 @@ public interface HttpApi {
      */
     @POST(UrlConfig.WITHDRAW)
     Flowable<HttpResult<Object>> withdraw(@Body RequestBody body);
+
+    /**
+     * 通知消息列表
+     */
+    @GET(UrlConfig.NOTATION_LIST)
+    Flowable<HttpResult<NotationBean>> notation(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     * 系统通知列表
+     */
+    @GET(UrlConfig.NOTATION_SYSTEM_LIST)
+    Flowable<HttpResult<List<NotationSystemBean>>> notationSystem(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     * 历史
+     */
+    @GET(UrlConfig.HISTORY)
+    Flowable<HttpResult<List<UserMediaListBean>>> history(@Query("uqid") String uqid,@Query("page") int page);
+
+
+    /**
+     * 收藏
+     */
+    @GET(UrlConfig.COLLECT)
+    Flowable<HttpResult<List<UserMediaListBean>>> collect(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     * 签到信息
+     */
+    @GET(UrlConfig.SING_INFO)
+    Flowable<HttpResult<SingBean>> singInfo(@Query("uqid") String uqid);
+
+    /**
+     * 用户签到
+     */
+    @GET(UrlConfig.USER_SING)
+    Flowable<HttpResult<String>> userSing(@Query("uqid") String uqid);
+
+    /**
+     * 邀请记录
+     */
+    @GET(UrlConfig.INVITE_LIST)
+    Flowable<HttpResult<InviteBean>> inviteList(@Query("uqid") String uqid,@Query("page") int page);
+
+    /**
+     * 填写邀请码
+     */
+    @GET(UrlConfig.SEND_INVITE_CODE)
+    Flowable<HttpResult<Object>> sendInviteCode(@Query("uqid") String uqid,@Query("code") String page);
+
+    /**
+     * 分享
+     */
+    @GET(UrlConfig.SHARE)
+    Flowable<HttpResult<Object>> share(@Query("uqid") String uqid,@Query("type") int type,@Query("aid") String aid);
 }
 
 

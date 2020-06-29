@@ -22,6 +22,7 @@ import com.ay.lxunhan.ui.my.activity.AttentionActivity;
 import com.ay.lxunhan.ui.my.activity.CollectActivity;
 import com.ay.lxunhan.ui.my.activity.FansActivity;
 import com.ay.lxunhan.ui.my.activity.HistoryActivity;
+import com.ay.lxunhan.ui.my.activity.InviteFriendActivity;
 import com.ay.lxunhan.ui.my.activity.LCoinActivity;
 import com.ay.lxunhan.ui.my.activity.NotificationActivity;
 import com.ay.lxunhan.ui.my.activity.SettingActivity;
@@ -135,6 +136,7 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
                 SingInActivity.startSingInActivity(getActivity());
                 break;
             case R.id.ll_invite://邀请好友
+                InviteFriendActivity.startInviteFriendActivity(getActivity());
                 break;
             case R.id.rl_lb://乐币
                 LCoinActivity.startLCoinActivity(getActivity());

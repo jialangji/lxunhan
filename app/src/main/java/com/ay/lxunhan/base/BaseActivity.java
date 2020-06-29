@@ -10,7 +10,6 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.DisplayUtil;
-import com.ay.lxunhan.utils.StatusBarUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.blankj.utilcode.util.NetworkUtils;

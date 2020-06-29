@@ -19,8 +19,8 @@ public class SmallVideoPresenter extends BasePresenter<SmallVideoContract.SmallV
     }
 
     @Override
-    public void getSmallVideo(int page) {
-        addDisposable(HttpMethods.getInstance().smallVideoList(page).subscribeWith(new BaseSubscriber<List<VideoBean>>(){
+    public void getSmallVideo(int page,int id) {
+        addDisposable(HttpMethods.getInstance().smallVideoList(page,id).subscribeWith(new BaseSubscriber<List<VideoBean>>(){
             @Override
             public void onNext(List<VideoBean> o) {
                 super.onNext(o);

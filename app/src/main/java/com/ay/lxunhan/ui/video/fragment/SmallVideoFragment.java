@@ -12,10 +12,7 @@ import com.ay.lxunhan.contract.SmallVideoContract;
 import com.ay.lxunhan.presenter.SmallVideoPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
-import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
-import com.ay.lxunhan.utils.ToastUtil;
-import com.ay.lxunhan.utils.UserInfo;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -42,6 +39,7 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
     private boolean isRefresh=true;
     private List<VideoBean> videoBeanList = new ArrayList<>();
     private BaseQuickAdapter videoAdapter;
+    private int id=0;
 
     public static SmallVideoFragment newInstance() {
         Bundle args = new Bundle();
@@ -53,7 +51,7 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
     @Override
     protected void initData() {
         super.initData();
-        presenter.getSmallVideo(page);
+        presenter.getSmallVideo(page,id);
 
     }
 
@@ -88,7 +86,7 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
                 super.onRefresh(refreshLayout);
                 isRefresh=true;
                 page=1;
-                presenter.getSmallVideo(page);
+                presenter.getSmallVideo(page,id);
             }
 
             @Override
@@ -97,7 +95,7 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
                 if (page * Contacts.LIMIT == videoBeanList.size()) {
                     isRefresh = false;
                     page = page + 1;
-                    presenter.getSmallVideo(page);
+                    presenter.getSmallVideo(page,id);
 
                 }else {
                     swipeRefresh.finishLoadmore();
@@ -107,8 +105,8 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
 
         videoAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
-                case R.id.ll_line:
-                    SmallVideoActivity.startSmallVideoActivity(getActivity(),videoBeanList,position);
+                case R.id.ll_linear:
+                    SmallVideoActivity.startSmallVideoActivity(getActivity(),videoBeanList.get(position).getId());
                     break;
                 case R.id.iv_header:
                     FriendDetailActivity.startUserDetailActivity(getActivity(),videoBeanList.get(position).getUid());

@@ -186,4 +186,13 @@
     <string name="quiz_end_look">(投票后结果可见)</string>
     <string name="bi_rmb">10乐讯币=1元</string>
     <string name="come_on_edit_your_sing">快来编辑您的个性签名吧~</string>
+    <string name="system">系统</string>
+    <string name="sing_get">签到领取</string>
+    <string name="task">日常任务</string>
+    <string name="invite_friend_give_you_money">邀请好友赚现金奖励</string>
+    <string name="enter_code">填写邀请码</string>
+    <string name="invite_list">邀请记录</string>
+    <string name="friend_lxh">好友乐讯号</string>
+    <string name="invite_time">邀请时间</string>
+    <string name="get_money">获得奖励</string>
 </resources>

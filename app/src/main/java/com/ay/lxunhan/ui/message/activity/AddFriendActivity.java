@@ -6,13 +6,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.contract.AddFriendContract;
 import com.ay.lxunhan.presenter.AddFriendPresneter;
-import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
@@ -34,6 +34,8 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
     RelativeLayout rlSearch;
     @BindView(R.id.rv_hot_people)
     RecyclerView rvHotPeople;
+    @BindView(R.id.tv_attention_all)
+    TextView tvAttentionAll;
     @BindView(R.id.rv_friends)
     RecyclerView rvFriends;
     @BindView(R.id.swipe_refresh)
@@ -43,8 +45,8 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
     private BaseQuickAdapter peopleAdapter;
     private BaseQuickAdapter friendAdapter;
     private int page=1;
-    private int mPosition;
     private boolean isRefresh=true;
+    private boolean noPeople=false;
 
 
 
@@ -62,6 +64,7 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvHotPeople.setLayoutManager(linearLayoutManager);
+        rvHotPeople.setAdapter(peopleAdapter);
         friendAdapter = new BaseQuickAdapter<AddFriendBean.FollowsListBean, BaseViewHolder>(R.layout.item_add_friend,friendsBean) {
             @Override
             protected void convert(BaseViewHolder helper, AddFriendBean.FollowsListBean item) {
@@ -114,7 +117,6 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
         friendAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
                 case R.id.tv_attention:
-                    mPosition=position;
                     presenter.attention(friendsBean.get(position).getUid());
                     break;
             }
@@ -155,17 +157,24 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
             case R.id.rl_search:
                 break;
             case R.id.tv_attention_all:
-                List<String> str=new ArrayList<>();
-                for (AddFriendBean.HotPeopleBean peopleBean : peopleBeans) {
-                    str.add(peopleBean.getUid());
+                if (noPeople){
+                    List<String> str=new ArrayList<>();
+                    for (AddFriendBean.HotPeopleBean peopleBean : peopleBeans) {
+                        str.add(peopleBean.getUid());
+                    }
+                    presenter.attentions(str);
                 }
-                presenter.attentions(str);
                 break;
         }
     }
 
     @Override
     public void getAddFriendFinish(AddFriendBean addFriendBean) {
+        if (addFriendBean.getHot_people()!=null&&addFriendBean.getHot_people().size()>0){
+            noPeople=true;
+        }else {
+            tvAttentionAll.setText("暂无可关注用户");
+        }
         peopleBeans.clear();
         peopleBeans.addAll(addFriendBean.getHot_people());
         if (isRefresh){
@@ -188,12 +197,8 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
 
     @Override
     public void attentionFinish() {
-        if (friendsBean.get(mPosition).getIs_fol()==1){
-            friendsBean.get(mPosition).setIs_fol(0);
-        }else {
-            friendsBean.get(mPosition).setIs_fol(1);
-        }
-        friendAdapter.notifyDataSetChanged();
+        page=1;
+        presenter.getAddFriend("",page);
     }
 
     @Override

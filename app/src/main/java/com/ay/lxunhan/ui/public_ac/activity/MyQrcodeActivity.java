@@ -9,19 +9,26 @@ import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
-import com.ay.lxunhan.base.BasePresenter;
+import com.ay.lxunhan.bean.CountryBean;
+import com.ay.lxunhan.bean.UserInfoBean;
+import com.ay.lxunhan.contract.UserInfoContract;
+import com.ay.lxunhan.presenter.UserInfoPresenter;
 import com.ay.lxunhan.utils.DisplayUtil;
 import com.ay.lxunhan.utils.FileUtils;
 import com.ay.lxunhan.utils.QRCodeUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
+import com.ay.lxunhan.utils.glide.GlideUtil;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MyQrcodeActivity extends BaseActivity {
+import static com.ay.lxunhan.utils.Contacts.DIR_NAME;
+
+public class MyQrcodeActivity extends BaseActivity<UserInfoContract.UserInfoView, UserInfoPresenter> implements UserInfoContract.UserInfoView {
     @BindView(R.id.iv_header)
     ImageView ivHeader;
     @BindView(R.id.tv_name)
@@ -35,15 +42,14 @@ public class MyQrcodeActivity extends BaseActivity {
     private Bitmap bitmap;
 
     @Override
-    public BasePresenter initPresenter() {
-        return null;
+    public UserInfoPresenter initPresenter() {
+        return new UserInfoPresenter(this);
     }
 
     @Override
-    protected void initView() {
-        super.initView();
-        bitmap = QRCodeUtil.createQRCodeBitmap(UserInfo.getInstance().getUserId(), DisplayUtil.dip2px(this,460), DisplayUtil.dip2px(this,460));
-        ivQrcode.setImageBitmap(bitmap);
+    protected void initData() {
+        super.initData();
+        presenter.getUserInfo();
     }
 
     @Override
@@ -69,7 +75,7 @@ public class MyQrcodeActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_save_album:
-                File file=FileUtils.saveBitmap(this,bitmap);
+                File file=FileUtils.saveBitmap(this,bitmap,DIR_NAME);
                 if (file.exists()){
                     ToastUtil.makeShortText(this,"保存成功");
                 }else{
@@ -82,5 +88,36 @@ public class MyQrcodeActivity extends BaseActivity {
     public static void startMyQrcodeActivity(Context context){
         Intent intent=new Intent(context,MyQrcodeActivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void getUserInfoFinish(UserInfoBean userInfoBean) {
+        bitmap = QRCodeUtil.createQRCodeBitmap(userInfoBean.getUid(), DisplayUtil.dip2px(this,460), DisplayUtil.dip2px(this,460));
+        ivQrcode.setImageBitmap(bitmap);
+        GlideUtil.loadCircleImgForHead(this,ivHeader,userInfoBean.getAvatar());
+        UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
+        tvName.setText(userInfoBean.getNickname());
+        tvSignature.setText(userInfoBean.getAutograph());
+        ivSex.setImageDrawable(getResources().getDrawable(userInfoBean.getSex()?R.drawable.ic_man:R.drawable.ic_woman));
+    }
+
+    @Override
+    public void getCountryFinish(List<CountryBean> list) {
+
+    }
+
+    @Override
+    public void updateUserInfoFinish() {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 }

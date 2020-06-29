@@ -34,6 +34,16 @@ public class HeUserBean {
     private int likeCount;
     private int folCount;
     private int beFolCount;
+    private String uqid;
+
+    public String getUqid() {
+        return uqid;
+    }
+
+    public void setUqid(String uqid) {
+        this.uqid = uqid;
+    }
+
     /**
      * signal : 171569501143
      * id : 1

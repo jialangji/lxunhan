@@ -14,9 +14,9 @@ import com.ay.lxunhan.contract.MessageContract;
 import com.ay.lxunhan.presenter.MessagePresenter;
 import com.ay.lxunhan.ui.message.activity.AddFriendActivity;
 import com.ay.lxunhan.ui.message.activity.FriendActivity;
+import com.ay.lxunhan.ui.message.activity.PyqActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
-import com.ay.lxunhan.ui.message.activity.PyqActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.UserInfo;
@@ -107,6 +107,9 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
                     swipeRefresh.finishLoadmore();
                 }
             }
+        });
+        chatListAdapter.setOnItemClickListener((adapter, view, position) -> {
+
         });
     }
 

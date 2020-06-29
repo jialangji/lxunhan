@@ -172,7 +172,6 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     protected void initData() {
         super.initData();
         presenter.getVideoDetail(id);
-        presenter.getOneComment(id, type, page);
     }
 
     @Override
@@ -349,6 +348,8 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     @Override
     public void getVideoDetailFinish(VideoDetailBean videoDetailBean) {
         this.videoDetailBean = videoDetailBean;
+        presenter.getOneComment(id, type, page);
+
         jzvdStd.setUp(videoDetailBean.getVideo(), "", JzvdStd.SCREEN_WINDOW_NORMAL);
         GlideUtil.loadCircleImgForHead(this, ivHeader, videoDetailBean.getAvatar());
         GlideUtil.loadImg(this, jzvdStd.thumbImageView, videoDetailBean.getCover());

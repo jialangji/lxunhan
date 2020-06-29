@@ -6,9 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,7 +27,6 @@ import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
-import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -62,7 +59,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     @BindView(R.id.tv_attention)
     TextView tvAttention;
     @BindView(R.id.webview)
-    WebView webview;
+    TextView webview;
     @BindView(R.id.rv_comment)
     RecyclerView rvComment;
     @BindView(R.id.swipe_refresh)
@@ -138,7 +135,6 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     protected void initData() {
         super.initData();
         presenter.getHomeDetail(type, id);
-        presenter.getOneComment(String.valueOf(id), type, page);
     }
 
     @Override
@@ -333,6 +329,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     @Override
     public void getHomeDetailFinish(HomeDetailBean homeDetailBean) {
         this.homeDetailBean = homeDetailBean;
+        presenter.getOneComment(String.valueOf(id), type, page);
         tvTitle.setText(homeDetailBean.getTitle());
         GlideUtil.loadCircleImgForHead(this, ivHeader, homeDetailBean.getAvatar());
         tvName.setText(homeDetailBean.getNickname());
@@ -344,7 +341,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
             tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
         }
         tvTime.setText(homeDetailBean.getTimeText());
-        webview.loadDataWithBaseURL(null, Utils.getHtmlData(homeDetailBean.getContent()), "text/html", "uft-8", null);
+        webview.setText(homeDetailBean.getContent());
         tvLikeCount.setText(homeDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
     }
@@ -438,21 +435,6 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     @Override
     public void hideProgress() {
         hudLoader.dismiss();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (webview != null) {
-            webview.clearHistory();
-            webview.clearSslPreferences();
-            webview.clearFormData();
-            webview.clearCache(true);
-            webview.clearView();
-            ((ViewGroup) webview.getParent()).removeView(webview);
-            webview.destroy();
-            webview = null;
-        }
-        super.onDestroy();
     }
 
 

@@ -1,12 +1,12 @@
 package com.ay.lxunhan.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
-
-
-import com.ay.lxunhan.R;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -25,7 +25,7 @@ public class FileUtils {
     public static final int SIZETYPE_MB = 3;//获取文件大小单位为MB的double值
     public static final int SIZETYPE_GB = 4;//获取文件大小单位为GB的double值
     public static File saveBitmap(Context context, Bitmap bitmap) {
-        return saveBitmap(context, bitmap, context.getString(R.string.app_name));
+        return saveBitmap(context, bitmap,DIR_NAME);
     }
 
     public static File saveBitmap(Context context, Bitmap bitmap, String dirName) {
@@ -39,6 +39,8 @@ public class FileUtils {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bos.flush();
             bos.close();
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "", "");
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
             return file;
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,7 +51,7 @@ public class FileUtils {
     public static File getSavedFile(Context context, String dirName) {
         File fileDir;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + DIR_NAME + File.separator + dirName);
+            fileDir = new File(Environment.getExternalStorageDirectory() + File.separator +"DCIM/"+dirName );
         } else {
             fileDir = new File(context.getExternalFilesDir(null) + File.separator + dirName);
         }

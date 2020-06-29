@@ -14,14 +14,16 @@ import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.contract.SmallVideoListContract;
 import com.ay.lxunhan.observer.OnViewPagerListener;
 import com.ay.lxunhan.presenter.SmallVideoListPresenter;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.JZVideoPlayerStandardLoopVideo;
 import com.ay.lxunhan.widget.PagerLayoutManager;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +36,14 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
     @BindView(R.id.rv_video)
     RecyclerView rvVideo;
-    private int postion = 0;
+    @BindView(R.id.swipe_refresh)
+    TwinklingRefreshLayout swipeRefresh;
     private List<VideoBean> videoBeanList = new ArrayList<>();
-
     private JZVideoPlayerStandardLoopVideo jzvdStd;
     private BaseQuickAdapter videoAdapter;
+    private int videoId;
+    private int page=1;
+    private boolean isRefresh=true;
 
     @Override
     public SmallVideoListPresenter initPresenter() {
@@ -48,8 +53,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
     @Override
     protected void initView() {
         super.initView();
-        postion = getIntent().getIntExtra("postion", -1);
-        videoBeanList = (List<VideoBean>) getIntent().getSerializableExtra("list");
+        videoId=getIntent().getIntExtra("id",0);
         videoAdapter = new BaseQuickAdapter<VideoBean, BaseViewHolder>(R.layout.item_small_video, videoBeanList) {
             @Override
             protected void convert(BaseViewHolder helper, VideoBean item) {
@@ -113,7 +117,39 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 releaseVideo(view);
             }
         });
-        rvVideo.scrollToPosition(postion);
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        swipeRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                super.onRefresh(refreshLayout);
+                isRefresh=true;
+                page=1;
+                presenter.getSmallVideo(page,videoId);
+            }
+
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+                if (page * Contacts.LIMIT == videoBeanList.size()) {
+                    isRefresh = false;
+                    page = page + 1;
+                    presenter.getSmallVideo(page,videoId);
+
+                }else {
+                    swipeRefresh.finishLoadmore();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        presenter.getSmallVideo(page,videoId);
     }
 
     @Override
@@ -173,15 +209,26 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
         finish();
     }
 
-    public static void startSmallVideoActivity(Context context, List<VideoBean> videoBeans, int postion) {
+    public static void startSmallVideoActivity(Context context, int id) {
         Intent intent = new Intent(context, SmallVideoActivity.class);
-        intent.putExtra("list", (Serializable) videoBeans);
-        intent.putExtra("postion", postion);
+        intent.putExtra("id",id);
         context.startActivity(intent);
     }
 
     @Override
     public void getSmallWatchFinish() {
 
+    }
+
+    @Override
+    public void getSmallVideoFinish(List<VideoBean> list) {
+        if (isRefresh){
+            swipeRefresh.finishRefreshing();
+            videoBeanList.clear();
+        }else{
+            swipeRefresh.finishLoadmore();
+        }
+        videoBeanList.addAll(list);
+        videoAdapter.setNewData(videoBeanList);
     }
 }

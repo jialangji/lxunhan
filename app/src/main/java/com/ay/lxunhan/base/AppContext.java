@@ -5,11 +5,19 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ay.lxunhan.BuildConfig;
+import com.ay.lxunhan.utils.Contacts;
+import com.netease.nimlib.sdk.SDKOptions;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.wanjian.cockroach.Cockroach;
 
 import java.lang.reflect.Constructor;
@@ -21,6 +29,7 @@ public class AppContext extends MultiDexApplication {
     public static Handler mHandler = new Handler();
     public int count = 0;
     public static boolean isOpenUpdateDialog = false;
+    public static IWXAPI mWxApi;
 
     @Override
     public void onCreate() {
@@ -34,10 +43,49 @@ public class AppContext extends MultiDexApplication {
             }
         });
         closeAndroidPDialog();
-//        //websocket初始化
-//        initAppStatusListener();
+        // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
+//        NIMClient.init(this, loginInfo(), options());
+//        // ... your codes
+//        if (NIMUtil.isMainProcess(this)) {
+//            // 注意：以下操作必须在主进程中进行
+//            // 1、UI相关初始化操作
+//            // 2、相关Service调用
+//            NimUIKit.init(this);
+//        }
+//        registToWX();
+//        initWebSDK();
 //        WsManager.getInstance().init();
 //        cockroach();
+
+    }
+
+
+    private SDKOptions options() {
+        SDKOptions options = new SDKOptions();
+        return options;
+    }
+
+    // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
+    private LoginInfo loginInfo() {
+       String account= com.ay.lxunhan.utils.UserInfo.getInstance().getWyyAccount();
+       String token= com.ay.lxunhan.utils.UserInfo.getInstance().getWyyToken();
+        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
+            return new LoginInfo(account, token);
+        } else {
+            return null;
+        }
+    }
+
+    private void initWebSDK() {
+        WbSdk.install(this,new AuthInfo(this, Contacts.WB_APP_ID, Contacts.REDIRECT_URL,
+                Contacts.SCOPE));
+    }
+
+    private void registToWX() {
+        //AppConst.WEIXIN.APP_ID是指你应用在微信开放平台上的AppID，记得替换。
+        mWxApi = WXAPIFactory.createWXAPI(this, Contacts.WX_APP_ID, false);
+        // 将该app注册到微信
+        mWxApi.registerApp(Contacts.WX_APP_ID);
     }
 
     public static AppContext context() {

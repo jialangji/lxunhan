@@ -14,12 +14,36 @@ public class UserInfo {
     private boolean isHavePass;
     private String userId;
     private String avatar;
+    private int loginType;
+    private String uid;
+
+    private String wyyAccount;
+    private String wyyToken;
 
     private UserInfo(Context context) {
         userSp = context.getSharedPreferences(Contacts.USERINFO, Context.MODE_PRIVATE);
         editor = userSp.edit();
     }
 
+    public String getWyyAccount() {
+        return userSp.getString(Contacts.WYY_ACCOUNT,"");
+    }
+
+    public void setWyyAccount(String wyyAccount) {
+        this.wyyAccount = wyyAccount;
+        editor.putString(Contacts.WYY_ACCOUNT,wyyAccount);
+        editor.commit();
+    }
+
+    public String getWyyToken() {
+        return userSp.getString(Contacts.WYY_TOKEN,"");
+    }
+
+    public void setWyyToken(String wyyToken) {
+        this.wyyToken = wyyToken;
+        editor.putString(Contacts.WYY_TOKEN,wyyToken);
+        editor.commit();
+    }
 
     public static UserInfo getInstance() {
         if (userInfo == null) {
@@ -30,6 +54,16 @@ public class UserInfo {
             }
         }
         return userInfo;
+    }
+
+    public String getUid() {
+        return userSp.getString(Contacts.UID,"");
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+        editor.putString(Contacts.UID,uid);
+        editor.commit();
     }
 
     public String getAvatar() {
@@ -59,6 +93,16 @@ public class UserInfo {
     public void setFirstOpen(boolean isFirstOpen) {
         this.isFirstOpen = isFirstOpen;
         editor.putBoolean(Contacts.ISFIRSTOPEN, isFirstOpen);
+        editor.commit();
+    }
+
+    public int getLoginType() {
+        return userSp.getInt(Contacts.LOGIN_TYPE,0);
+    }
+
+    public void setLoginType(int loginType) {
+        this.loginType = loginType;
+        editor.putInt(Contacts.LOGIN_TYPE,0);
         editor.commit();
     }
 

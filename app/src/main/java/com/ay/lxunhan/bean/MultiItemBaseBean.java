@@ -7,6 +7,7 @@ import java.util.List;
 public class MultiItemBaseBean implements MultiItemEntity {
 
 
+
     private int type;
     /**
      * id : 1
@@ -29,7 +30,7 @@ public class MultiItemBaseBean implements MultiItemEntity {
      * desc :
      * is_pate :
      */
-
+    private String video;
     private String bounty_gold;
     private int id;
     private String uid;
@@ -51,6 +52,14 @@ public class MultiItemBaseBean implements MultiItemEntity {
     private List<String> cover;
     private List<OptionListBean> option_list;
     private int is_solve;
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
 
     public boolean getIs_solve() {
         return is_solve==1;

@@ -19,7 +19,16 @@ public class FriendBean {
     private int sex;
     private String nickname;
     private String avatar;
+    private String uqid;
     private int is_media;
+
+    public String getUqid() {
+        return uqid;
+    }
+
+    public void setUqid(String uqid) {
+        this.uqid = uqid;
+    }
 
     public String getUid() {
         return uid;

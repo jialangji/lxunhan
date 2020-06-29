@@ -22,7 +22,16 @@ public class ChatListBean {
     private String avatar;
     private String timeText;
     private int is_media;
+    private String uqid;
     private int sex;
+
+    public String getUqid() {
+        return uqid;
+    }
+
+    public void setUqid(String uqid) {
+        this.uqid = uqid;
+    }
 
     public boolean getSex() {
         return sex==1;

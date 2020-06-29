@@ -120,7 +120,7 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         });
         videoAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
-                case R.id.ll_line:
+                case R.id.ll_linear:
                     VideoDetailActivity.startVideoDetailActivity(getActivity(), String.valueOf(videoBeanList.get(position).getId()));
 
                     break;
@@ -129,7 +129,6 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
                         mPosition=position;
                         presenter.attention(videoBeanList.get(position).getUid());
                     }
-
                     break;
                 case R.id.rl_more:
                     if (isLogin()){

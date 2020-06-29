@@ -141,21 +141,9 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
                 case R.id.iv_header:
                     FriendDetailActivity.startUserDetailActivity(getActivity(),videoBeanList.get(position).getUid());
                     break;
-                case R.id.ll_line:
+                case R.id.ll_linear:
                     if (videoBeanList.get(position).getItemType() == 5) {
-                        List<VideoBean> videoBeans = new ArrayList<>();
-                        for (VideoBean videoBean : videoBeanList) {
-                            if (videoBean.getItemType() == 5) {
-                                videoBeans.add(videoBean);
-                            }
-                        }
-                        int postion = -1;
-                        for (int i = 0; i < videoBeans.size(); i++) {
-                            if (videoBeanList.get(i).getId() == videoBeans.get(i).getId()) {
-                                postion = i;
-                            }
-                        }
-                        SmallVideoActivity.startSmallVideoActivity(getActivity(), videoBeans, postion);
+                        SmallVideoActivity.startSmallVideoActivity(getActivity(),videoBeanList.get(position).getId());
                     } else {
                         VideoDetailActivity.startVideoDetailActivity(getActivity(), String.valueOf(videoBeanList.get(position).getId()));
                     }

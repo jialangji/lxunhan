@@ -12,8 +12,12 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.utils.AppManager;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideCacheUtil;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.tencent.tauth.Tencent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -29,6 +33,8 @@ public class SettingActivity extends BaseActivity {
     TextView tvCache;
     @BindView(R.id.tv_video_type)
     TextView tvVideoType;
+    private Tencent qqTencent;
+
 
     @Override
     public BasePresenter initPresenter() {
@@ -38,6 +44,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+//        qqTencent = Tencent.createInstance(Contacts.QQ_APP_ID,this);
         tvCache.setText(GlideCacheUtil.getInstance().getCacheSize(AppContext.context()));
     }
 
@@ -81,7 +88,20 @@ public class SettingActivity extends BaseActivity {
             case R.id.ll_about_app:
                 break;
             case R.id.tv_login_out:
+//                switch (UserInfo.getInstance().getLoginType()){
+//                    case 0:
+//                        break;
+//                    case 1://QQ登录
+//                        qqTencent.logout(this);
+//                        break;
+//                    case 2://微信退出
+//                        AppContext.mWxApi.unregisterApp();
+//                        break;
+//                    case 3:
+//                        break;
+//                }
                 UserInfo.getInstance().clearAccess();
+//                NIMClient.getService(AuthService.class).logout();
                 EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
                 MainActivity.startMainActivity(this,0);
                 break;

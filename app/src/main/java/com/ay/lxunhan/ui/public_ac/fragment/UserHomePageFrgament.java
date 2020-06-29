@@ -3,7 +3,6 @@ package com.ay.lxunhan.ui.public_ac.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
@@ -16,6 +15,7 @@ import com.ay.lxunhan.presenter.HeUserListPresenter;
 import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
+import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ToastUtil;
@@ -134,7 +134,7 @@ public class UserHomePageFrgament extends BaseFragment<HeUserListContract.HeUser
                             HomeQuziDetailActivity.startHomeQuizDetailActivity(getActivity(), userMediaListBeans.get(position).getId());
                             break;
                         case 5:
-
+                            SmallVideoActivity.startSmallVideoActivity(getActivity(),userMediaListBeans.get(position).getId());
                             break;
                     }
                     break;

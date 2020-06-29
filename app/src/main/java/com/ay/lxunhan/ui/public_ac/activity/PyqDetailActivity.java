@@ -2,7 +2,6 @@ package com.ay.lxunhan.ui.public_ac.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
@@ -88,7 +86,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
     private List<PyqCommentBean> pyqCommentBeans = new ArrayList<>();
     private BaseQuickAdapter imgAdapter;
     private List<String> imgList = new ArrayList<>();
-    private String userId;
+    private String Id;
     private int page = 1;
     private boolean isRefresh = true;
     private BaseQuickAdapter headerAdapter;
@@ -109,7 +107,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
     protected void initView() {
         super.initView();
         tvWechat.setVisibility(View.GONE);
-        userId = getIntent().getStringExtra("id");
+        Id = getIntent().getStringExtra("id");
         imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, imgList) {
             @Override
             protected void convert(BaseViewHolder helper, String itemchild) {
@@ -155,7 +153,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
     @Override
     protected void initData() {
         super.initData();
-        presenter.getPyqDetailShow(userId);
+        presenter.getPyqDetailShow(Id);
 
     }
 
@@ -168,7 +166,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
                 super.onRefresh(refreshLayout);
                 isRefresh = true;
                 page = 1;
-                presenter.getComment(userId, page);
+                presenter.getComment(Id, page);
             }
 
             @Override
@@ -177,7 +175,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
                 if (page * Contacts.LIMIT == pyqCommentBeans.size()) {
                     isRefresh = false;
                     page = page + 1;
-                    presenter.getComment(userId, page);
+                    presenter.getComment(Id, page);
                 } else {
                     swipeRefresh.finishLoadmore();
                 }
@@ -293,7 +291,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         likeBeans.clear();
         likeBeans.addAll(detailBean.getLike_list());
         headerAdapter.notifyDataSetChanged();
-        presenter.getComment(userId, page);
+        presenter.getComment(Id, page);
     }
 
     @Override
@@ -301,12 +299,12 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         isRefresh = true;
         etComment.setText("");
         page = 1;
-        presenter.getComment(userId, page);
+        presenter.getComment(Id, page);
     }
 
     @Override
     public void addLikeFinish() {
-        presenter.getPyqDetailShow(userId);
+        presenter.getPyqDetailShow(Id);
     }
 
     @Override
@@ -317,7 +315,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         }
         isRefresh = true;
         page = 1;
-        presenter.getComment(userId, page);
+        presenter.getComment(Id, page);
     }
 
     @Override
@@ -357,16 +355,9 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         hudLoader.dismiss();
     }
 
-    public static void startPyqDetailActivity(Context context, String userId) {
+    public static void startPyqDetailActivity(Context context, String Id) {
         Intent intent = new Intent(context, PyqDetailActivity.class);
-        intent.putExtra("id", userId);
+        intent.putExtra("id", Id);
         context.startActivity(intent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

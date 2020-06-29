@@ -9,11 +9,17 @@
 
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_video"
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
     <RelativeLayout
         android:id="@+id/view_title"
         android:layout_width="match_parent"

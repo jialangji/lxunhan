@@ -14,13 +14,17 @@ import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
+import com.ay.lxunhan.bean.NotationBean;
+import com.ay.lxunhan.bean.NotationSystemBean;
 import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
+import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
 import com.ay.lxunhan.bean.TypeBean;
@@ -377,8 +381,8 @@ public class HttpMethods {
     /**
      * 小视频
      */
-    public Flowable<List<VideoBean>> smallVideoList(int page){
-        Flowable<HttpResult<List<VideoBean>>> flowable=httpService.smallVideoList(UserInfo.getInstance().getUserId(),page);
+    public Flowable<List<VideoBean>> smallVideoList(int page,int id){
+        Flowable<HttpResult<List<VideoBean>>> flowable=httpService.smallVideoList(UserInfo.getInstance().getUserId(),page,id);
         return compositeThread(flowable);
     }
 
@@ -629,6 +633,80 @@ public class HttpMethods {
      */
     public Flowable<Object> withdraw(WithdrawModel withdrawModel){
         Flowable<HttpResult<Object>> flowable=httpService.withdraw(modeBody(withdrawModel));
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 通知
+     */
+    public Flowable<NotationBean> notation(int page){
+        Flowable<HttpResult<NotationBean>> flowable=httpService.notation(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 系统通知
+     * @param page
+     * @return
+     */
+    public Flowable<List<NotationSystemBean>> notationSystem(int page){
+        Flowable<HttpResult<List<NotationSystemBean>>> flowable=httpService.notationSystem(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 历史
+     */
+    public Flowable<List<UserMediaListBean>> history(int page){
+        Flowable<HttpResult<List<UserMediaListBean>>> flowable=httpService.history(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 收藏
+     */
+    public Flowable<List<UserMediaListBean>> collect(int page){
+        Flowable<HttpResult<List<UserMediaListBean>>> flowable=httpService.collect(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 签到信息
+     */
+    public Flowable<SingBean> singInfo(){
+        Flowable<HttpResult<SingBean>> flowable=httpService.singInfo(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /***
+     * 用户签到
+     */
+    public Flowable<String> userSing(){
+        Flowable<HttpResult<String>> flowable=httpService.userSing(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 邀请记录
+     */
+    public Flowable<InviteBean> inviteList(int page){
+        Flowable<HttpResult<InviteBean>> flowable=httpService.inviteList(UserInfo.getInstance().getUserId(),page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 填写邀请码
+     */
+    public Flowable<Object> sendInviteCode(String code){
+        Flowable<HttpResult<Object>> flowable=httpService.sendInviteCode(UserInfo.getInstance().getUserId(),code);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 分享
+     */
+    public Flowable<Object> share(int type,String aid){
+        Flowable<HttpResult<Object>> flowable=httpService.share(UserInfo.getInstance().getUserId(),type,aid);
         return compositeThread(flowable);
     }
 

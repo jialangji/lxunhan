@@ -139,7 +139,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     protected void initData() {
         super.initData();
         presenter.getHomeQuizDetail(id);
-        presenter.getOneComment(String.valueOf(id), type, page);
+
     }
 
     @Override
@@ -346,6 +346,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     @Override
     public void getHomeDetailQuizFinish(HomeQuizDetailBean homeQuizDetailBean) {
         this.homeQuizDetailBean = homeQuizDetailBean;
+        presenter.getOneComment(String.valueOf(id), type, page);
         GlideUtil.loadCircleImgForHead(this, ivHeader, homeQuizDetailBean.getAvatar());
         tvName.setText(homeQuizDetailBean.getNickname());
         tvSignature.setText(homeQuizDetailBean.getInto());

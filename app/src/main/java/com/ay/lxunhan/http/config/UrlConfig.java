@@ -46,6 +46,7 @@ public class UrlConfig {
      * 首页类型
      */
     public static final String HOME_TYPE = "api/homes/home_section_list";
+
     /**
      * 首页详情
      */
@@ -226,7 +227,6 @@ public class UrlConfig {
      */
     public static final String USER_DYNAMIC_LIST="api/mine/dynamic_list";
 
-
     /**
      * 朋友圈详情
      */
@@ -303,14 +303,24 @@ public class UrlConfig {
     public static final String NOTATION_SYSTEM_LIST="api/users/notice_list";
 
     /**
-     * 聊天界面内容
-     */
-    public static final String CHAT_IM_LIST="api/messages/message_show";
-
-    /**
      * 通知列表
      */
     public static final String NOTATION_LIST="api/users/notice_two_list";
+
+    /**
+     * 历史
+     */
+    public static final String HISTORY="api/mine/my_history";
+
+    /**
+     * 收藏列表
+     */
+    public static final String COLLECT="api/mine/collection_list";
+
+    /**
+     * 聊天界面内容
+     */
+    public static final String CHAT_IM_LIST="api/messages/message_show";
 
     /**
      * 签到信息
@@ -323,15 +333,22 @@ public class UrlConfig {
     public static final String USER_SING="api/mine/my_sign_in";
 
     /**
-     * 历史
+     * 用户是否存在
      */
-    public static final String HISTORY="api/mine/my_history";
+    public static final String USER="api/users/vali_user_id";
 
     /**
-     * 收藏列表
+     * 分享
      */
-    public static final String COLLECT="api/mine/collection_list";
+    public static final String SHARE="api/mine/is_share";
 
+    /**
+     * 填写邀请码
+     */
+    public static final String SEND_INVITE_CODE="api/mine/fill_code";
 
-
+    /**
+     * 邀请记录
+     */
+    public static final String INVITE_LIST="api/mine/code_list";
 }

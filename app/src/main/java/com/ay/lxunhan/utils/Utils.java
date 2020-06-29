@@ -5,15 +5,11 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.widget.EditText;
 
-import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.AppContext;
 
 import java.lang.reflect.Field;
@@ -104,11 +100,11 @@ public class Utils {
     }
 
     public static String getHtmlData(String bodyHTML) {
-        String head = "<head>" +
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> " +
-                "<style>img{max-width: 100%; width:auto; height:auto!important;}</style>" +
+        String head = "<head >" +
+                "<link rel=\"stylesheet\" href=\"file:///android_asset/content-styles.css\" type=\"text/css\">"+
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">"+
                 "</head>";
-        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
+        return "<html>" + head + "<body class=\"ck-content\">" + bodyHTML + "</body></html>";
     }
 
 

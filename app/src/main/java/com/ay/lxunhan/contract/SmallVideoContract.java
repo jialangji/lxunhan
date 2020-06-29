@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface SmallVideoContract {
     interface SmallVideoPresenter{
-        void getSmallVideo(int page);
+        void getSmallVideo(int page,int id);
     }
     interface SmallVideoView{
         void getSmallVideoFinish(List<VideoBean> list);
