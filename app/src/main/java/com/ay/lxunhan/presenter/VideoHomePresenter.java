@@ -14,8 +14,7 @@ import java.util.List;
  * @package com.ay.lxunhan.presenter
  * @date 2020/5/29
  */
-public class VideoHomePresenter
-        extends BasePresenter<VideoHomeContract.VideoHomeView> implements VideoHomeContract.VideoHomePresenter {
+public class VideoHomePresenter extends BasePresenter<VideoHomeContract.VideoHomeView> implements VideoHomeContract.VideoHomePresenter {
     public VideoHomePresenter(VideoHomeContract.VideoHomeView view) {
         super(view);
     }

@@ -20,19 +20,11 @@ public class MessagePresenter extends BasePresenter<MessageContract.MessageView>
 
     @Override
     public void getChatList(int page) {
-        getView().showProgress();
         addDisposable(HttpMethods.getInstance().chatList(page).subscribeWith(new BaseSubscriber<List<ChatListBean>>(){
             @Override
             public void onNext(List<ChatListBean> o) {
                 super.onNext(o);
-                getView().hideProgress();
                 getView().getChatListFinish(o);
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                super.onError(t);
-                getView().hideProgress();
             }
         }));
 

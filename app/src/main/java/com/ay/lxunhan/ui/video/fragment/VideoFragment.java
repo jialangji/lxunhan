@@ -20,6 +20,8 @@ import com.ay.lxunhan.presenter.VideoMainPresenter;
 import com.ay.lxunhan.ui.home.activity.ChannelManageActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
+import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -126,7 +128,6 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
         super.initData();
         presenter.getVideoType();
     }
-
     @Override
     public boolean isUserEvent() {
         return true;
@@ -177,6 +178,9 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
                 }
                 break;
             case R.id.rl_search:
+                if(isLogin()){
+                    SearchActivity.startSearchActivity(getActivity(), Contacts.HISTORY_VIDEO);
+                }
                 break;
             case R.id.iv_edit:
                 PermissionsUtils.getInstance().chekPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/bg_color"
     android:layout_height="match_parent"
     tools:context=".ui.message.activity.ChatP2PActivity">
 
@@ -124,6 +125,7 @@
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/messageActivityBottomLayout"
         android:layout_below="@id/rl_line">
 
         <android.support.v7.widget.RecyclerView
@@ -133,5 +135,20 @@
         </android.support.v7.widget.RecyclerView>
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
+    <LinearLayout
+        android:id="@+id/messageActivityBottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/nim_message_activity_text_layout"/>
+
+        <com.ay.lxunhan.wyyim.emoji.EmoticonPickerView
+            android:id="@+id/emoticon_picker_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+    </LinearLayout>
 
 </RelativeLayout>

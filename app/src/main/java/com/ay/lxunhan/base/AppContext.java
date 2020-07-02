@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.ay.lxunhan.BuildConfig;
 import com.ay.lxunhan.utils.Contacts;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -44,7 +45,7 @@ public class AppContext extends MultiDexApplication {
         });
         closeAndroidPDialog();
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
-//        NIMClient.init(this, loginInfo(), options());
+        NIMClient.init(this, loginInfo(), options());
 //        // ... your codes
 //        if (NIMUtil.isMainProcess(this)) {
 //            // 注意：以下操作必须在主进程中进行

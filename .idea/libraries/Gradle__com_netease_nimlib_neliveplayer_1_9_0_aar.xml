@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.netease.nimlib:neliveplayer:1.9.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/neliveplayer-1.9.0.aar/c2fa6fdc54167dfe7522dacb3276e356/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/neliveplayer-1.9.0.aar/c2fa6fdc54167dfe7522dacb3276e356/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.netease.nimlib/neliveplayer/1.9.0/b94fb58c9e886f7ba949ef21d4d7ae286440ae6f/neliveplayer-1.9.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

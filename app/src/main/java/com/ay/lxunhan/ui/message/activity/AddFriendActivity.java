@@ -13,6 +13,7 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.contract.AddFriendContract;
 import com.ay.lxunhan.presenter.AddFriendPresneter;
+import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
@@ -155,6 +156,7 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
                 finish();
                 break;
             case R.id.rl_search:
+                SearchActivity.startSearchActivity(this, Contacts.HISTORY_ADD_FRIEND);
                 break;
             case R.id.tv_attention_all:
                 if (noPeople){
@@ -191,14 +193,12 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
 
     @Override
     public void attentionsFinish() {
-        page=1;
-        presenter.getAddFriend("",page);
+       swipeRefresh.onRefresh(swipeRefresh);
     }
 
     @Override
     public void attentionFinish() {
-        page=1;
-        presenter.getAddFriend("",page);
+        swipeRefresh.onRefresh(swipeRefresh);
     }
 
     @Override

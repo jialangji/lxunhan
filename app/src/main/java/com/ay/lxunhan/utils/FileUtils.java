@@ -28,6 +28,16 @@ public class FileUtils {
         return saveBitmap(context, bitmap,DIR_NAME);
     }
 
+
+    public static boolean hasExtentsion(String filename) {
+        int dot = filename.lastIndexOf('.');
+        if ((dot > -1) && (dot < (filename.length() - 1))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static File saveBitmap(Context context, Bitmap bitmap, String dirName) {
         File fileDir = getSavedFile(context, dirName);
         if (!fileDir.exists()) fileDir.mkdirs();

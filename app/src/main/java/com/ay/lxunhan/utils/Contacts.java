@@ -52,4 +52,11 @@ public class Contacts {
 
     final static String WYY_ACCOUNT="wyyAccount";
     final static String WYY_TOKEN="wyyToken";
+
+    public final static String HISTORY="history";
+    public final static String HISTORY_HOME="1";
+    public final static String HISTORY_VIDEO="2";
+    public final static String HISTORY_LIVE="3";
+    public final static String HISTORY_FRIEND="4";
+    public final static String HISTORY_ADD_FRIEND="5";
 }

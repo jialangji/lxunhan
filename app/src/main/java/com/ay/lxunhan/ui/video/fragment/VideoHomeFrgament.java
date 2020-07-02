@@ -254,9 +254,9 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
         return false;
     }
 
-    @OnClick(R.id.tv_look_more)
+    @OnClick(R.id.tv_live)
     public void onViewClicked() {
-        tvTitle.setText(getString(R.string.now_live));
+       
     }
 
     @Override

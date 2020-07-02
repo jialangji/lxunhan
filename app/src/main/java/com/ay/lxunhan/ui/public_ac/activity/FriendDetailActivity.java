@@ -29,7 +29,6 @@ import com.ay.lxunhan.ui.public_ac.fragment.UserHomePageFrgament;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.NoScrollViewPager;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +166,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
                 }
                 break;
             case R.id.ll_chat:
-                ChatP2PActivity.startChat(this,heUserBean.getUqid(), SessionTypeEnum.P2P);
+                ChatP2PActivity.startChat(this,heUserBean.getUqid());
                 break;
         }
     }

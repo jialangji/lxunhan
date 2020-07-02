@@ -53,10 +53,9 @@ public class AddFriendPresneter extends BasePresenter<AddFriendContract.AddFrien
     public void attention(String id) {
         addDisposable(HttpMethods.getInstance().attention(id).subscribeWith(new BaseSubscriber<Object>(){
             @Override
-            public void onError(Throwable t) {
-                super.onError(t);
+            public void onNext(Object o) {
+                super.onNext(o);
                 getView().attentionFinish();
-
             }
         }));
     }

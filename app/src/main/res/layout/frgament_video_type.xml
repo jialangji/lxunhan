@@ -41,11 +41,11 @@
                             android:text="@string/recently_watched"
                             />
                         <TextView
-                            android:id="@+id/tv_look_more"
+                            android:id="@+id/tv_live"
                             android:layout_toEndOf="@id/tv_title"
                             android:layout_width="wrap_content"
                             android:layout_marginStart="@dimen/dp_18"
-                            android:text="@string/look_more"
+                            android:text="直播广场"
                             android:layout_height="wrap_content" />
                     </RelativeLayout>
                     <android.support.v7.widget.RecyclerView

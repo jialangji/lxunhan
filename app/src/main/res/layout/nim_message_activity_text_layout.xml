@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textMessageLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/dp_8"
+    android:paddingTop="@dimen/dp_8">
+
+    <FrameLayout
+        android:id="@+id/switchLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextMessage"
+        android:layout_marginLeft="@dimen/dp_6"
+        android:layout_marginRight="@dimen/dp_6">
+        <ImageView
+            android:id="@+id/emoji_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nim_message_button_bottom_emoji_selector"
+            android:contentDescription="@string/empty"
+            android:scaleType="center" />
+    </FrameLayout>
+
+
+    <EditText
+        android:id="@+id/editTextMessage"
+        android:textCursorDrawable="@null"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_6"
+        android:layout_toStartOf="@+id/sendLayout"
+        android:layout_toEndOf="@+id/switchLayout"
+        android:autoLink="web|email|phone"
+        android:background="@drawable/nim_message_input_edittext_box"
+        android:maxHeight="72dip"
+        android:maxLines="4"
+        android:textSize="16sp" />
+
+
+
+    <FrameLayout
+        android:id="@+id/sendLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/dp_6">
+
+
+        <TextView
+            android:id="@+id/buttonSendMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/nim_message_button_bottom_send_selector"
+            android:contentDescription="@string/empty"
+            android:gravity="center"
+            android:text="@string/send"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </FrameLayout>
+
+</RelativeLayout>

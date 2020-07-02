@@ -22,6 +22,7 @@ import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
+import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.UserInfo;
@@ -254,6 +255,10 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                 }
                 break;
             case R.id.rl_search://搜索界面
+                if(isLogin()){
+                    SearchActivity.startSearchActivity(getActivity(), Contacts.HISTORY_HOME);
+                }
+
                 break;
             case R.id.iv_edit://编辑界面
                 PermissionsUtils.getInstance().chekPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,

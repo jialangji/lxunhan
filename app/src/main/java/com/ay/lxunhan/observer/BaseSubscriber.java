@@ -3,17 +3,18 @@ package com.ay.lxunhan.observer;
 
 import android.util.Log;
 
-
 import com.ay.lxunhan.BuildConfig;
+import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.http.ApiException;
-import com.ay.lxunhan.http.HttpMethods;
 import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.blankj.utilcode.util.NetworkUtils;
 
 import io.reactivex.subscribers.DisposableSubscriber;
 
+import static com.ay.lxunhan.http.HttpMethods.HTTP_LOGIN_BlACK;
 import static com.ay.lxunhan.http.HttpMethods.HTTP_NOT_LOGIN;
 import static com.ay.lxunhan.http.HttpMethods.HTTP_SUCCESS;
 
@@ -47,14 +48,20 @@ public class BaseSubscriber<T> extends DisposableSubscriber<T> {
             if (apiException.getErrCode() != HTTP_SUCCESS) {
                 if (null != AppContext.instance) {
                     if (apiException.getErrCode()==HTTP_NOT_LOGIN){
-
-                    }else {
+                        UserInfo.getInstance().clearAccess();
+                        LoginActivity.startLoginActivity(AppContext.context());
+                    }else if (apiException.getErrCode()==HTTP_LOGIN_BlACK){
+                        ToastUtil.makeShortText(AppContext.context(), R.string.account_black);
+                        UserInfo.getInstance().clearAccess();
+                        LoginActivity.startLoginActivity(AppContext.context());
+                    } {
                         ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
                     }
                 }
             }
         }else{
             if (null != AppContext.instance) {
+                Log.e("OKHTTP:error",t.getMessage());
                 ToastUtil.makeShortText(AppContext.instance, t.getMessage());
             }
         }

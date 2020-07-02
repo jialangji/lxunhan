@@ -172,7 +172,7 @@
                                 android:drawablePadding="@dimen/dp_2"
                                 android:gravity="center"
                                 android:layout_marginEnd="@dimen/dp_20"
-                                tools:text="自媒体人"
+                                android:text="@string/media"
                                 android:textColor="@color/color_78"
                                 android:textSize="@dimen/sp_12" />
 

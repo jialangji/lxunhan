@@ -5,6 +5,7 @@ import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.AttentionBean;
 import com.ay.lxunhan.bean.BillBean;
 import com.ay.lxunhan.bean.ChannelBean;
+import com.ay.lxunhan.bean.ChatImBean;
 import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
@@ -269,7 +270,7 @@ public interface HttpApi {
      * 好友列表
      */
     @GET(UrlConfig.FRIEND_LIST)
-    Flowable<HttpResult<List<FriendBean>>> friendsList(@Query("uqid") String uqid);
+    Flowable<HttpResult<List<FriendBean>>> friendsList(@Query("uqid") String uqid,@Query("keys") String keys);
 
     /**
      * 小视频观看记录
@@ -507,6 +508,12 @@ public interface HttpApi {
      */
     @GET(UrlConfig.SEND_INVITE_CODE)
     Flowable<HttpResult<Object>> sendInviteCode(@Query("uqid") String uqid,@Query("code") String page);
+
+    /**
+     * 聊天详情
+     */
+    @GET(UrlConfig.CHAT_IM_LIST)
+    Flowable<HttpResult<ChatImBean>> chatImlist(@Query("uqid") String uqid,@Query("uzid") String uzid,@Query("page") int page);
 
     /**
      * 分享

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface FriendContract {
     interface FriendPresenter{
-        void getFriendsList();
+        void getFriendsList(String keys);
     }
     interface FriendsView{
         void getFriendsFinish(List<FriendBean> friendBeans);

@@ -6,6 +6,7 @@ import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.AttentionBean;
 import com.ay.lxunhan.bean.BillBean;
 import com.ay.lxunhan.bean.ChannelBean;
+import com.ay.lxunhan.bean.ChatImBean;
 import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
@@ -68,6 +69,7 @@ import static com.ay.lxunhan.utils.Contacts.NETWORK_INTERCEPTOR_TYPE_LOG;
 public class HttpMethods {
     public static final int HTTP_SUCCESS = 0;
     public static final int HTTP_NOT_LOGIN = 4011;
+    public static final int HTTP_LOGIN_BlACK = 4010;
     private HttpApi httpService;
     private OkHttpClient okhttpclient;
 
@@ -405,8 +407,8 @@ public class HttpMethods {
     /**
      * 好友列表
      */
-    public Flowable<List<FriendBean>> friendList(){
-        Flowable<HttpResult<List<FriendBean>>> flowable=httpService.friendsList(UserInfo.getInstance().getUserId());
+    public Flowable<List<FriendBean>> friendList(String keys){
+        Flowable<HttpResult<List<FriendBean>>> flowable=httpService.friendsList(UserInfo.getInstance().getUserId(),keys);
         return compositeThread(flowable);
     }
 
@@ -699,6 +701,14 @@ public class HttpMethods {
      */
     public Flowable<Object> sendInviteCode(String code){
         Flowable<HttpResult<Object>> flowable=httpService.sendInviteCode(UserInfo.getInstance().getUserId(),code);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 聊天
+     */
+    public Flowable<ChatImBean> chatIm(String userid,int page){
+        Flowable<HttpResult<ChatImBean>> flowable=httpService.chatImlist(UserInfo.getInstance().getUserId(),userid,page);
         return compositeThread(flowable);
     }
 

@@ -19,9 +19,9 @@ public class FriendsPresenter extends BasePresenter<FriendContract.FriendsView> 
     }
 
     @Override
-    public void getFriendsList() {
+    public void getFriendsList(String keys) {
         getView().showProgress();
-        addDisposable(HttpMethods.getInstance().friendList().subscribeWith(new BaseSubscriber<List<FriendBean>>(){
+        addDisposable(HttpMethods.getInstance().friendList(keys).subscribeWith(new BaseSubscriber<List<FriendBean>>(){
             @Override
             public void onNext(List<FriendBean> o) {
                 super.onNext(o);

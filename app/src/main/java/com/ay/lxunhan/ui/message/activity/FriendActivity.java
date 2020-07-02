@@ -12,6 +12,8 @@ import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.contract.FriendContract;
 import com.ay.lxunhan.presenter.FriendsPresenter;
 import com.ay.lxunhan.ui.message.adapter.SelectFriendAdapter;
+import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
+import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.widget.azlist.AZItemEntity;
 import com.ay.lxunhan.widget.azlist.AZSideBarView;
 import com.ay.lxunhan.widget.azlist.AZTitleDecoration;
@@ -64,13 +66,14 @@ public class FriendActivity extends BaseActivity<FriendContract.FriendsView, Fri
             }
         });
         selectFriendAdapter.setOnItemClickListener(countryCode -> {
+            ChatP2PActivity.startChat(this,countryCode.getUqid());
         });
     }
 
     @Override
     protected void initData() {
         super.initData();
-        presenter.getFriendsList();
+        presenter.getFriendsList("");
     }
 
     @Override
@@ -95,6 +98,7 @@ public class FriendActivity extends BaseActivity<FriendContract.FriendsView, Fri
                 finish();
                 break;
             case R.id.rl_search:
+                SearchActivity.startSearchActivity(this, Contacts.HISTORY_FRIEND);
                 break;
         }
     }

@@ -12,8 +12,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 权限声明 -->
+    <!-- 允许挂载和反挂载文件系统 -->
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" /> <!-- 允许程序获得设备信息 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" /> <!-- 声明程序使用camera和自动对焦功能 -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 8.0 系统上需要 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -39,14 +45,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-
-        <!-- 全面屏配置 -->
+        <activity android:name=".ui.public_ac.activity.SearchActivity" /> <!-- 全面屏配置 -->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" /> <!-- 云信后台服务，请使用独立进程。 -->
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="key_of_your_app" />
+            android:value="60ed902effcc9d5fd058727738488f1c" />
 
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -76,19 +81,25 @@
             android:authorities="com.ay.lxunhan.ipc.provider"
             android:exported="false"
             android:process=":core" />
-        <activity android:name=".ui.my.activity.InviteListActivity"
+
+        <activity
+            android:name=".ui.my.activity.InviteListActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.InviteFriendActivity"
+        <activity
+            android:name=".ui.my.activity.InviteFriendActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.message.activity.ChatP2PActivity"
+        <activity
+            android:name=".ui.message.activity.ChatP2PActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.my.activity.NotationSystemActivity"
+        <activity
+            android:name=".ui.my.activity.NotationSystemActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.public_ac.activity.PyqDetailActivity"
+        <activity
+            android:name=".ui.public_ac.activity.PyqDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity

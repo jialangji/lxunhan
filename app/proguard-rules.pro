@@ -24,3 +24,5 @@
   **[] $VALUES;
   public *;
 }
+-keep class com.netease.LSMediaCapture.**{*;}
+-keep class com.netease.vcloud.**{*;}

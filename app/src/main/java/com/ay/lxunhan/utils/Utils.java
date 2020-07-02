@@ -3,14 +3,18 @@ package com.ay.lxunhan.utils;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.widget.EditText;
 
 import com.ay.lxunhan.base.AppContext;
+import com.ay.lxunhan.wyyim.emoji.EmojiManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,6 +28,37 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class Utils {
+    private static final float SMALL_SCALE = 0.45F;
+    public static void replaceEmoticons(Context context, Editable editable, int start, int count) {
+        if (count <= 0 || editable.length() < start + count)
+            return;
+
+        CharSequence s = editable.subSequence(start, start + count);
+        Matcher matcher = EmojiManager.getPattern().matcher(s);
+        while (matcher.find()) {
+            int from = start + matcher.start();
+            int to = start + matcher.end();
+            String emot = editable.subSequence(from, to).toString();
+            Drawable d = getEmotDrawable(context, emot, SMALL_SCALE);
+            if (d != null) {
+                ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BOTTOM);
+                editable.setSpan(span, from, to, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+    }
+    private static Drawable getEmotDrawable(Context context, String text, float scale) {
+        Drawable drawable = EmojiManager.getDrawable(context, text);
+
+        // scale
+        if (drawable != null) {
+            int width = (int) (drawable.getIntrinsicWidth() * scale);
+            int height = (int) (drawable.getIntrinsicHeight() * scale);
+            drawable.setBounds(0, 0, width, height);
+        }
+
+        return drawable;
+    }
+
 
     // 两次点击按钮之间的点击间隔不能少于1000毫秒
     private static final int MIN_CLICK_DELAY_TIME = 2000;

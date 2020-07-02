@@ -2,6 +2,7 @@ package com.ay.lxunhan.ui.message;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.contract.MessageContract;
 import com.ay.lxunhan.presenter.MessagePresenter;
 import com.ay.lxunhan.ui.message.activity.AddFriendActivity;
+import com.ay.lxunhan.ui.message.activity.ChatP2PActivity;
 import com.ay.lxunhan.ui.message.activity.FriendActivity;
 import com.ay.lxunhan.ui.message.activity.PyqActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
@@ -25,6 +27,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +49,7 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
     private BaseQuickAdapter chatListAdapter;
     private int page=1;
     private boolean isRefresh = true;
+    private Handler uiHandle;
 
     public static MessageFrgament newInstance() {
         Bundle args = new Bundle();
@@ -54,6 +61,7 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
     @Override
     protected void initView() {
         super.initView();
+        uiHandle=new Handler();
         chatListAdapter = new BaseQuickAdapter<ChatListBean, BaseViewHolder>(R.layout.item_chat_list, chatListBeans) {
             @Override
             protected void convert(BaseViewHolder helper, ChatListBean item) {
@@ -62,7 +70,7 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.setText(R.id.tv_intro, item.getBody());
                 helper.setGone(R.id.tv_message_count, item.getNewMessage() > 0);
-                helper.setText(R.id.tv_message_count, item.getNewMessage());
+                helper.setText(R.id.tv_message_count, item.getNewMessage()+"");
                 helper.setImageResource(R.id.iv_sex, item.getSex() ? R.drawable.ic_man : R.drawable.ic_woman);
                 helper.setGone(R.id.iv_v, item.getIs_media());
 
@@ -71,6 +79,28 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvMessage.setLayoutManager(linearLayoutManager);
         rvMessage.setAdapter(chatListAdapter);
+
+
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeReceiveMessage(incomingMessageObserver, true);
+    }
+
+    private Observer<List<IMMessage>> incomingMessageObserver = (Observer<List<IMMessage>>) messages -> {
+        uiHandle.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                page=1;
+                presenter.getChatList(page);
+            }
+        },500);
+
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeReceiveMessage(incomingMessageObserver, false);
     }
 
     @Override
@@ -78,11 +108,6 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
         return new MessagePresenter(this);
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-        presenter.getChatList(page);
-    }
 
     @Override
     protected void initListener() {
@@ -108,9 +133,7 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
                 }
             }
         });
-        chatListAdapter.setOnItemClickListener((adapter, view, position) -> {
-
-        });
+        chatListAdapter.setOnItemClickListener((adapter, view, position) -> ChatP2PActivity.startChat(getActivity(),chatListBeans.get(position).getToAccount()));
     }
 
     @Override
@@ -189,6 +212,7 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
     @Override
     public void onResume() {
         super.onResume();
+        presenter.getChatList(page);
         GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
 
     }

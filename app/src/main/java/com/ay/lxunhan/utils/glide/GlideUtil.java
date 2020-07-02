@@ -19,7 +19,7 @@ import com.bumptech.glide.request.target.Target;
 
 public class GlideUtil {
     private final static int DEFAULT_PIC = R.mipmap.ic_logo;
-    private final static int DEFAULT_AVATAR_PIC = R.mipmap.ic_logo;
+    private final static int DEFAULT_AVATAR_PIC = R.mipmap.ic_icon_round;
     private final static RequestListener requestListener = new RequestListener() {
         @Override
         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {

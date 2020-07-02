@@ -6,6 +6,9 @@
     <string name="str_close_light">关闭闪光灯</string>
     <string name="str_scan_hint">取景框对准二维码, 即可自动扫描</string>
     <!--app-->
+    <string name="empty"></string>
+    <string name="send">发送</string>
+    <string name="black_list_send_tip">消息已发送，但对方拒收</string>
     <string name="app_name">韩乐讯</string>
     <string name="tab1">首页</string>
     <string name="tab2">视频</string>
@@ -195,4 +198,8 @@
     <string name="friend_lxh">好友乐讯号</string>
     <string name="invite_time">邀请时间</string>
     <string name="get_money">获得奖励</string>
+    <string name="media">自媒体人</string>
+    <string name="null_text">不能发送空内容</string>
+    <string name="history_search">历史搜索</string>
+    <string name="account_black">您的账号已被官方拉黑，请联系官方</string>
 </resources>

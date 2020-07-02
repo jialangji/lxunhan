@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,9 +32,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.CompleteInfoView, CompleteInfoPresenter> implements DateTimePickerListener, CompleteInfoContract.CompleteInfoView {
 
@@ -152,6 +150,16 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
         EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN));
         AppManager.getAppManager().finishActivity(BootPageActivity.class);
         finish();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
+            //do something.
+            return true;
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
     }
 
     @Override

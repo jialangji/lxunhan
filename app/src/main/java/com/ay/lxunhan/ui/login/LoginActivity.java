@@ -27,7 +27,10 @@ import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
@@ -65,8 +68,6 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
     LinearLayout llCode;
     @BindView(R.id.et_psw)
     EditText etPsw;
-
-    private RequestCallback loginRequest;
     private boolean isCode = false;
     private int type = 1;
 
@@ -209,44 +210,54 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
     @Override
     public void loginFinish(LoginBean loginBean) {
-        UserInfo.getInstance().setUserId(loginBean.getUqid());
-        UserInfo.getInstance().setLogin(true);
-
-        if (loginBean.getIs_perfect()) {
-            MainActivity.startMainActivity(LoginActivity.this);
-            EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN));
-            AppManager.getAppManager().finishActivity(BootPageActivity.class);
-            finish();
-        } else {
-            CompleteInfoActivity.startCompleteInfoActivity(LoginActivity.this);
-            finish();
-        }
-//        loginRequest =  new RequestCallback<LoginInfo>() {
-//            @Override
-//            public void onSuccess(LoginInfo param) {
-//                loginDone();
-//                  UserInfo.getInstance().setWyyAccount(param.getAccount());
-//        UserInfo.getInstance().setWyyToken(param.getToken());
-//            }
-//
-//            @Override
-//            public void onFailed(int code) {
-//                loginDone();
-//                if (code == 302 || code == 404) {
-//                    ToastUtil.makeShortText(AppContext.instance,
-//                            "账号或者密码错误");
-//                } else {
-//                    ToastUtil.makeShortText(AppContext.instance,
-//                            "登录失败: " + code);
-//                }
-//            }
-//
-//            @Override
-//            public void onException(Throwable exception) {
-//                loginDone();
-//            }
-//        };
+        wyyxLogin(loginBean);
     }
+
+
+    public void  wyyxLogin(LoginBean loginBean){
+        LoginInfo info = new LoginInfo(loginBean.getUqid().toLowerCase(),loginBean.getUqid()); // config...
+        RequestCallback<LoginInfo> callback =
+                new RequestCallback<LoginInfo>() {
+                    @Override
+                    public void onSuccess(LoginInfo param) {
+                        UserInfo.getInstance().setUserId(loginBean.getUqid());
+                        UserInfo.getInstance().setLogin(true);
+                        UserInfo.getInstance().setWyyAccount(param.getAccount());
+                        UserInfo.getInstance().setWyyToken(param.getToken());
+                        if (loginBean.getIs_perfect()) {
+                            MainActivity.startMainActivity(LoginActivity.this);
+                            EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN));
+                            AppManager.getAppManager().finishActivity(BootPageActivity.class);
+                            finish();
+                        } else {
+                            CompleteInfoActivity.startCompleteInfoActivity(LoginActivity.this);
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+
+                        Log.e("WYYX:","code:"+code);
+                        if (code == 302 || code == 404) {
+                            ToastUtil.makeShortText(AppContext.instance,
+                                    "账号或者密码错误");
+                        } else {
+                            ToastUtil.makeShortText(AppContext.instance,
+                                    "登录失败: " + code);
+                        }
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+                        Log.e("WYYX:",exception.getMessage());
+                    }
+                    // 可以在此保存LoginInfo到本地，下次启动APP做自动登录用
+                };
+        NIMClient.getService(AuthService.class).login(info)
+                .setCallback(callback);
+    }
+
 
     @Override
     public void getCodeError() {
@@ -279,9 +290,6 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         AppContext.mWxApi.sendReq(req);
     }
 
-    private void loginDone() {
-        loginRequest = null;
-    }
 
     private class LoginUiListener implements IUiListener {
 
