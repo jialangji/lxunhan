@@ -383,7 +383,6 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
         NIMAntiSpamOption antiSpamOption = new NIMAntiSpamOption();
         antiSpamOption.enable = false;
         textMessage.setNIMAntiSpamOption(antiSpamOption);
-
         // send message to server and save to db
         NIMClient.getService(MsgService.class).sendMessage(textMessage, false).setCallback(new RequestCallback<Void>() {
             @Override
