@@ -45,6 +45,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+        <activity android:name=".ui.public_ac.activity.WebActivity"></activity>
+        <activity android:name=".ui.video.activity.LiveActivity" />
         <activity android:name=".ui.public_ac.activity.SearchActivity" /> <!-- 全面屏配置 -->
         <meta-data
             android:name="android.max_aspect"

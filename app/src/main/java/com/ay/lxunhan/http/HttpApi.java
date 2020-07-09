@@ -16,6 +16,8 @@ import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
+import com.ay.lxunhan.bean.LiveBean;
+import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.NotationBean;
@@ -520,6 +522,25 @@ public interface HttpApi {
      */
     @GET(UrlConfig.SHARE)
     Flowable<HttpResult<Object>> share(@Query("uqid") String uqid,@Query("type") int type,@Query("aid") String aid);
+
+    /**
+     * 直播类型
+     */
+    @GET(UrlConfig.LIVE_TYPE)
+    Flowable<HttpResult<List<LiveBean>>> liveType();
+
+    /**
+     * 直播列表
+     */
+    @GET(UrlConfig.LIVE_LIST)
+    Flowable<HttpResult<List<LiveListBean>>> liveList(@Query("uqid") String uqid,@Query("type") String type,@Query("page") int page);
+
+    /**
+     * 判断用户是否存在
+     */
+    @GET(UrlConfig.USER)
+    Flowable<HttpResult<Object>> userIsVail(@Query("uqid") String uqid,@Query("user_id") String user_id);
+
 }
 
 

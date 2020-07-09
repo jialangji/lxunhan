@@ -27,4 +27,15 @@ public class MyPresenter extends BasePresenter<MyContract.MyView> implements MyC
         }));
 
     }
+
+    @Override
+    public void userIsVail(String id) {
+        addDisposable(HttpMethods.getInstance().userIsVail(id).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().userIsVailFinish(id);
+            }
+        }));
+    }
 }

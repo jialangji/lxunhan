@@ -15,9 +15,12 @@ import com.ay.lxunhan.contract.VideoHomeContract;
 import com.ay.lxunhan.presenter.VideoHomePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
+import com.ay.lxunhan.ui.video.activity.LiveActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ShareUtils;
+import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
@@ -29,6 +32,7 @@ import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -188,11 +192,13 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
             @Override
             public void shareWx() {
+                ShareUtils.shareToWx(Objects.requireNonNull(getActivity()),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                ShareUtils.shareToWxPyq(Objects.requireNonNull(getActivity()),videoBeanList.get(mPosition).getShare_url());
 
             }
 
@@ -208,7 +214,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
             @Override
             public void copyUrl() {
-
+                StringUtil.copyString(videoBeanList.get(mPosition).getShare_url());
             }
 
             @Override
@@ -256,7 +262,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
     @OnClick(R.id.tv_live)
     public void onViewClicked() {
-       
+        LiveActivity.startLiveActivity(getActivity());
     }
 
     @Override
@@ -272,9 +278,9 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
     }
 
     @Override
-    public void videoRecords(List<PeopleBean> peopleBeans) {
+    public void videoRecords(List<PeopleBean> list) {
         peopleBeans.clear();
-        peopleBeans.addAll(peopleBeans);
+        peopleBeans.addAll(list);
         peopleAdapter.setNewData(peopleBeans);
     }
 

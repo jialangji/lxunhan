@@ -24,6 +24,7 @@ import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -285,12 +286,12 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void shareWx() {
-
+                ShareUtils.shareToWx(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
             }
 
             @Override
             public void shareWxPyq() {
-
+                ShareUtils.shareToWxPyq(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
             }
 
             @Override
@@ -305,7 +306,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void copyUrl() {
-
+                StringUtil.copyString(homeDetailBean.getShare_url());
             }
 
             @Override

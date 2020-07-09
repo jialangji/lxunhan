@@ -29,6 +29,7 @@ import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -288,11 +289,13 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
             @Override
             public void shareWx() {
+                ShareUtils.shareToWx(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                ShareUtils.shareToWxPyq(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
@@ -308,7 +311,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
             @Override
             public void copyUrl() {
-
+                StringUtil.copyString(videoDetailBean.getShare_url());
             }
 
             @Override

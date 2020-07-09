@@ -31,6 +31,7 @@ import com.ay.lxunhan.ui.message.activity.ChatP2PActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.db.HistoryDao;
@@ -344,7 +345,6 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
                 break;
             case Contacts.HISTORY_FRIEND:
                 searchFriendAdapter.setOnItemClickListener((adapter, view, position) -> ChatP2PActivity.startChat(SearchActivity.this,friendBeans.get(position).getUqid()));
-
                 break;
             case Contacts.HISTORY_ADD_FRIEND:
                 searchAddFriendAdapter.setOnItemChildClickListener((adapter, view, position) -> {
@@ -395,11 +395,13 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
 
             @Override
             public void shareWx() {
+                ShareUtils.shareToWx(SearchActivity.this,videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                ShareUtils.shareToWxPyq(SearchActivity.this,videoBeanList.get(mPosition).getShare_url());
 
             }
 
@@ -415,7 +417,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
 
             @Override
             public void copyUrl() {
-
+                StringUtil.copyString(videoBeanList.get(mPosition).getShare_url());
             }
 
             @Override

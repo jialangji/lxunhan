@@ -14,8 +14,9 @@ import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ShareUtils;
+import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
-import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.widget.RecyclerItemDecoration;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -166,11 +167,13 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void shareWx() {
+                ShareUtils.shareToWx(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                ShareUtils.shareToWxPyq(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
@@ -186,13 +189,12 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void copyUrl() {
-
+                StringUtil.copyString(videoBeanList.get(mPosition).getShare_url());
             }
 
             @Override
             public void complaint() {
                 ComplaintActivity.startComplaintActivity(getActivity(), String.valueOf(videoBeanList.get(mPosition).getId()), 2);
-
             }
 
             @Override

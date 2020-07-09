@@ -29,6 +29,7 @@ import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.TwoCommentActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -279,11 +280,13 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void shareWx() {
+                ShareUtils.shareToWx(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                ShareUtils.shareToWxPyq(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
@@ -299,7 +302,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void copyUrl() {
-
+                StringUtil.copyString(homeQuizDetailBean.getShare_url());
             }
 
             @Override
@@ -410,12 +413,11 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
             switch (view.getId()) {
                 case R.id.rl_select:
                     if (!homeQuizDetailBean.getIs_pate()) {
-                        for (int i = 0; i < homeQuizDetailBean.getOption_list().size(); i++) {
-                            if (i == position) {
-                                homeQuizDetailBean.getOption_list().get(position).setUserIsSelect(true);
-                            } else {
-                                homeQuizDetailBean.getOption_list().get(position).setUserIsSelect(false);
+                        if (!homeQuizDetailBean.getIs_pate()) {
+                            for (HomeQuizDetailBean.OptionListBean optionListBean : homeQuizDetailBean.getOption_list()) {
+                                optionListBean.setUserIsSelect(false);
                             }
+                            homeQuizDetailBean.getOption_list().get(position).setUserIsSelect(true);
                         }
                     }
                     baseQuickAdapter.notifyDataSetChanged();

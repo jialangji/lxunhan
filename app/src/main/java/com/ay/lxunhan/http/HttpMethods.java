@@ -17,6 +17,8 @@ import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
+import com.ay.lxunhan.bean.LiveBean;
+import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.NotationBean;
@@ -648,8 +650,6 @@ public class HttpMethods {
 
     /**
      * 系统通知
-     * @param page
-     * @return
      */
     public Flowable<List<NotationSystemBean>> notationSystem(int page){
         Flowable<HttpResult<List<NotationSystemBean>>> flowable=httpService.notationSystem(UserInfo.getInstance().getUserId(),page);
@@ -717,6 +717,30 @@ public class HttpMethods {
      */
     public Flowable<Object> share(int type,String aid){
         Flowable<HttpResult<Object>> flowable=httpService.share(UserInfo.getInstance().getUserId(),type,aid);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 获取直播类型
+     */
+    public Flowable<List<LiveBean>> getLiveType(){
+        Flowable<HttpResult<List<LiveBean>>> flowable=httpService.liveType();
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 直播列表
+     */
+    public Flowable<List<LiveListBean>> getLiveList(String type,int page){
+        Flowable<HttpResult<List<LiveListBean>>> flowable=httpService.liveList(UserInfo.getInstance().getUserId(),type,page);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 判断用户是否存在
+     */
+    public Flowable<Object> userIsVail(String id){
+        Flowable<HttpResult<Object>> flowable=httpService.userIsVail(UserInfo.getInstance().getUserId(),id);
         return compositeThread(flowable);
     }
 

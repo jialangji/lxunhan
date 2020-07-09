@@ -111,6 +111,7 @@ public class PublicAdapterUtil {
                         tvTagquiz.setContentAndTag(R.layout.item_lable_quiz, item.getTitle(), "投票", R.color.color_49b114);
                         RecyclerView rvQuiz = helper.getView(R.id.rv_quiz);
                         helper.setText(R.id.tv_quiz, item.getIs_pate() ? StringUtil.getString(R.string.quiz_to) : StringUtil.getString(R.string.quiz));
+
                         baseQuickAdapter = new BaseQuickAdapter<MultiItemBaseBean.OptionListBean, BaseViewHolder>(R.layout.item_quiz, item.getOption_list()) {
                             @Override
                             protected void convert(BaseViewHolder helperChild, MultiItemBaseBean.OptionListBean itemChild) {
@@ -160,13 +161,10 @@ public class PublicAdapterUtil {
                             switch (view.getId()) {
                                 case R.id.rl_select:
                                     if (!item.getIs_pate()) {
-                                        for (int i = 0; i < item.getOption_list().size(); i++) {
-                                            if (i == position) {
-                                                item.getOption_list().get(position).setUserIsSelect(true);
-                                            } else {
-                                                item.getOption_list().get(position).setUserIsSelect(false);
-                                            }
+                                        for (MultiItemBaseBean.OptionListBean optionListBean : item.getOption_list()) {
+                                            optionListBean.setUserIsSelect(false);
                                         }
+                                        item.getOption_list().get(position).setUserIsSelect(true);
                                     }
                                     baseQuickAdapter.notifyDataSetChanged();
                                     break;

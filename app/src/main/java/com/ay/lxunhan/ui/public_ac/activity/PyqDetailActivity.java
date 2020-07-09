@@ -216,7 +216,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         }
         replyDialog.setOnReplyClickListenr(() -> {
             if (!TextUtils.isEmpty(replyDialog.getContent())) {
-                SendCommentModel sendCommentModel = null;
+                SendCommentModel sendCommentModel;
                 if (pyqCommentBeans.get(position).getFid() == 0) {
                     sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(pyqCommentBeans.get(position).getId()), replyDialog.getContent(), String.valueOf(pyqCommentBeans.get(position).getCid()));
                 } else {

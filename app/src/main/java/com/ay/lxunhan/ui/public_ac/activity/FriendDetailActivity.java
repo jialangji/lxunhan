@@ -195,6 +195,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
             tvAddress.setText( bean.getCity());
         }else {
             tvAddress.setVisibility(View.GONE);
+
         }
         if (bean.getIs_fol() == 0) {
             tvAttention.setText(StringUtil.getString(R.string.add_attention));
@@ -202,6 +203,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
             tvAttention.setText(StringUtil.getString(R.string.attention_to));
         } else if (bean.getIs_fol() == 2) {
             tvAttention.setText(StringUtil.getString(R.string.attention_each_other));
+            llChat.setVisibility(View.VISIBLE);
         }
         isMedia = bean.getIs_media();
         if (bean.getIs_media()) {

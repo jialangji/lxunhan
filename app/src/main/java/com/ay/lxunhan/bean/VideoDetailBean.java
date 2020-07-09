@@ -46,6 +46,25 @@ public class VideoDetailBean {
     private int sex;
     private String cover;
 
+    private String share_url;
+    private String piiic_url;
+
+    public String getShare_url() {
+        return share_url;
+    }
+
+    public void setShare_url(String share_url) {
+        this.share_url = share_url;
+    }
+
+    public String getPiiic_url() {
+        return piiic_url;
+    }
+
+    public void setPiiic_url(String piiic_url) {
+        this.piiic_url = piiic_url;
+    }
+
     public String getCover() {
         return cover;
     }

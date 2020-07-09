@@ -351,4 +351,25 @@ public class UrlConfig {
      * 邀请记录
      */
     public static final String INVITE_LIST="api/mine/code_list";
+
+    /**
+     * 直播类型
+     */
+    public static final String LIVE_TYPE="api/live/live_type";
+
+    /**
+     * 直播列表
+     */
+    public static final String LIVE_LIST="api/live/live_list";
+
+    /**
+     * 增加直播间观看人数
+     */
+    public static final String ADD_LIVE_SEE_COUNT="api/live/see_live";
+
+    /**
+     * 减少直播间观看人数
+     */
+    public static final String DELETE_LIVE_SEE_COUNT="api/live/leave_live";
+
 }

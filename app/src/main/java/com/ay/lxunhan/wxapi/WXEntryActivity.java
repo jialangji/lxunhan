@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.ay.lxunhan.base.AppContext;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -16,6 +17,7 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -57,7 +59,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
             case BaseResp.ErrCode.ERR_USER_CANCEL:
-                if (RETURN_MSG_TYPE_SHARE == resp.getType()) ToastUtil.makeShortText(this,"分享失败");
+                if (RETURN_MSG_TYPE_SHARE == resp.getType())
+                    ToastUtil.makeShortText(this,"分享失败");
                 else ToastUtil.makeShortText(this,"登录失败");
                 break;
             case BaseResp.ErrCode.ERR_OK:
@@ -67,6 +70,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         String code = ((SendAuth.Resp) resp).code;
                         Log.e("WXAPI","code = " + code);
                         UserInfo.getInstance().setLoginType(Contacts.WXLOGIN);
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.WX_LOGIN, code));
 //                        getAccessToken(code);
                         //就在这个地方，用网络库什么的或者自己封的网络api，发请求去咯，注意是get请求
                         

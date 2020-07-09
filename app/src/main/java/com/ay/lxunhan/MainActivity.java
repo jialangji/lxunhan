@@ -303,7 +303,10 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
         switch (eventModel1.getMessageType()) {
             case EventModel.LOGIN_OUT:
                 BootPageActivity.startBootPageActivity(this);
-                presenter.getUserInfo();
+                if (!UserInfo.getInstance().isLogin()){
+                    presenter.getUserInfo();
+                }
+
                 break;
         }
     }

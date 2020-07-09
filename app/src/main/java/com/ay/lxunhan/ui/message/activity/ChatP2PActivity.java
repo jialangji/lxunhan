@@ -394,6 +394,9 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
             @Override
             public void onFailed(int code) {
                 Log.e("IM:", "CODE:" + code);
+                if (code==404){
+                    ToastUtil.makeShortText(ChatP2PActivity.this,"对方还不是您的好友");
+                }
                 sendFailWithBlackList(code, textMessage);
             }
 

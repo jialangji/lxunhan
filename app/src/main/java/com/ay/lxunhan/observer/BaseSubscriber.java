@@ -48,12 +48,13 @@ public class BaseSubscriber<T> extends DisposableSubscriber<T> {
             if (apiException.getErrCode() != HTTP_SUCCESS) {
                 if (null != AppContext.instance) {
                     if (apiException.getErrCode()==HTTP_NOT_LOGIN){
+                        ToastUtil.makeShortText(AppContext.context(), apiException.getErrMessage());
                         UserInfo.getInstance().clearAccess();
-                        LoginActivity.startLoginActivity(AppContext.context());
+                        LoginActivity.startLoginActivity2(AppContext.context());
                     }else if (apiException.getErrCode()==HTTP_LOGIN_BlACK){
                         ToastUtil.makeShortText(AppContext.context(), R.string.account_black);
                         UserInfo.getInstance().clearAccess();
-                        LoginActivity.startLoginActivity(AppContext.context());
+                        LoginActivity.startLoginActivity2(AppContext.context());
                     } {
                         ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
                     }

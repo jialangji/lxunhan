@@ -28,11 +28,13 @@ import com.ay.lxunhan.ui.my.activity.NotificationActivity;
 import com.ay.lxunhan.ui.my.activity.SettingActivity;
 import com.ay.lxunhan.ui.my.activity.SingInActivity;
 import com.ay.lxunhan.ui.my.activity.WalletActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.public_ac.activity.UserInfoActivity;
+import com.ay.lxunhan.ui.public_ac.activity.WebActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.PermissionsUtils;
-import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
+import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.google.zxing.activity.CaptureActivity;
 
@@ -129,6 +131,7 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
                 SettingActivity.startSettingActivity(getActivity());
                 break;
             case R.id.iv_time_change://日夜间切换
+                WebActivity.startWebActivity(getActivity());
                 break;
             case R.id.iv_language://语言切换
                 break;
@@ -191,7 +194,12 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
             Bundle bundle = data.getExtras();
             assert bundle != null;
             String scanResult = bundle.getString(Contacts.INTENT_EXTRA_KEY_QR_SCAN);
-            ToastUtil.makeShortText(getActivity(),scanResult);
+            if (Utils.isUrl(scanResult)){
+                WebActivity.startWebActivity(getActivity(),scanResult);
+            }else {
+                presenter.userIsVail(scanResult);
+            }
+
         }
     }
     @Override
@@ -232,5 +240,10 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
         tvFansCount.setText(String.valueOf(bean.getFolCount()));
         tvLbBfb.setText(String.format("%s%%", bean.getProportion()));
         tvMoney.setText(String.valueOf(bean.getGold()));
+    }
+
+    @Override
+    public void userIsVailFinish(String id) {
+        FriendDetailActivity.startUserDetailActivity(getActivity(),id);
     }
 }

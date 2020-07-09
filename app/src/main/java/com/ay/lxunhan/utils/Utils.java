@@ -3,6 +3,7 @@ package com.ay.lxunhan.utils;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.wyyim.emoji.EmojiManager;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -57,6 +59,29 @@ public class Utils {
         }
 
         return drawable;
+    }
+
+    /**
+     * 是否是网页
+     */
+    public static boolean isUrl(String str){
+        return str.startsWith("http://") || str.startsWith("https://");
+    }
+
+    public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
+        if (needRecycle) {
+            bmp.recycle();
+        }
+
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 

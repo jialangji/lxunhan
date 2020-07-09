@@ -53,7 +53,7 @@ public class AppContext extends MultiDexApplication {
 //            // 2、相关Service调用
 //            NimUIKit.init(this);
 //        }
-//        registToWX();
+        registToWX();
 //        initWebSDK();
 //        WsManager.getInstance().init();
 //        cockroach();

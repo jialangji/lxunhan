@@ -41,6 +41,7 @@
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_share_friend"
                 android:drawablePadding="@dimen/dp_2"
+                android:visibility="gone"
                 android:gravity="center"
                 android:text="@string/share_friend"
                 android:textColor="@color/color_161824"
@@ -182,6 +183,7 @@
                 android:layout_weight="1"
                 android:drawablePadding="@dimen/dp_2"
                 android:gravity="center"
+                android:visibility="gone"
                 android:textColor="@color/color_161824"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>

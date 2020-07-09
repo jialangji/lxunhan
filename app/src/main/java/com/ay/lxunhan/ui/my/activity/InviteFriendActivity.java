@@ -11,9 +11,12 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.contract.InviteContract;
+import com.ay.lxunhan.http.config.UrlConfig;
 import com.ay.lxunhan.presenter.InvitePresenter;
+import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.widget.ShareFriendDialog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,6 +28,7 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
     TextView tvLb;
     @BindView(R.id.et_code)
     EditText etCode;
+    private ShareFriendDialog shareDialog;
 
     @Override
     protected void initData() {
@@ -63,7 +67,8 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
                 InviteListActivity.startInviteListActivity(this);
                 break;
             case R.id.tv_invite:
-
+                String url= UrlConfig.BASE_URL+"/yaoqing?yaoqingma=";
+                showDialog(url);
                 break;
             case R.id.tv_sure:
                 if (TextUtils.isEmpty(StringUtil.getFromEdit(etCode))){
@@ -73,6 +78,25 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
                 presenter.sendInviteCode(StringUtil.getFromEdit(etCode));
                 break;
         }
+    }
+
+
+    private void showDialog(String url){
+        if (shareDialog == null) {
+            shareDialog = new ShareFriendDialog(this, R.style.selectPicDialogstyle);
+        }
+        shareDialog.show();
+        shareDialog.setItemClickListener(new ShareFriendDialog.ItemClickListener() {
+            @Override
+            public void shareQQ() {
+
+            }
+
+            @Override
+            public void shareWx() {
+                ShareUtils.shareToWx(InviteFriendActivity.this,url);
+            }
+        });
     }
 
     @Override

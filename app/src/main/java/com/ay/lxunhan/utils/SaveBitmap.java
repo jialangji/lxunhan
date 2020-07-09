@@ -1,11 +1,10 @@
 package com.ay.lxunhan.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Environment;
 import android.view.View;
 
@@ -15,6 +14,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class SaveBitmap {
     //保存图片至本地
@@ -22,7 +25,7 @@ public class SaveBitmap {
         saveImageToGallery(context,viewShot(view));
     }
 
-    private static Bitmap viewShot(final View view){
+    public static Bitmap viewShot(final View view){
         if (view == null)
             return null;
         view.setDrawingCacheEnabled(true);
@@ -79,8 +82,25 @@ public class SaveBitmap {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // 最后通知图库更新
-        String path = Environment.getExternalStorageDirectory() + "/ saveImage /" + fileName; context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
         return Environment.getExternalStorageDirectory() + "/saveImage/" + fileName;
+    }
+
+    public final static Bitmap returnBitMap(String url) {
+        URL myFileUrl;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+            HttpURLConnection conn;
+            conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }

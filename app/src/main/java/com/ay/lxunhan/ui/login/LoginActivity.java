@@ -122,6 +122,13 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         context.startActivity(intent);
     }
 
+
+    public static void startLoginActivity2(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        context.startActivity(intent);
+    }
+
     @OnClick({R.id.tv_change_login, R.id.tv_code, R.id.tv_login, R.id.tv_forget_psw, R.id.tv_register, R.id.iv_qq, R.id.iv_wx, R.id.iv_wb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -193,8 +200,8 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 //                qqTencent.login(this, "all", new LoginUiListener());
                 break;
             case R.id.iv_wx:
-//                loginType=2;
-//                wxLogin();
+                loginType=2;
+                wxLogin();
                 break;
             case R.id.iv_wb:
 //                loginType=3;
@@ -237,7 +244,6 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
                     @Override
                     public void onFailed(int code) {
-
                         Log.e("WYYX:","code:"+code);
                         if (code == 302 || code == 404) {
                             ToastUtil.makeShortText(AppContext.instance,
@@ -290,6 +296,21 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         AppContext.mWxApi.sendReq(req);
     }
 
+    @Override
+    public boolean isUserEvent() {
+        return true;
+    }
+
+    @Override
+    protected void getStickyEvent(Object eventModel) {
+        super.getStickyEvent(eventModel);
+        EventModel eventModel1= (EventModel) eventModel;
+        switch (eventModel1.getMessageType()){
+            case EventModel.WX_LOGIN:
+                String code= (String) eventModel1.getData();
+                break;
+        }
+    }
 
     private class LoginUiListener implements IUiListener {
 
@@ -309,7 +330,6 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
         @Override
         public void onError(UiError uiError) {
-
             Log.e("QQ_LOGIN", "错误码：" + uiError.errorCode + " 错误信息：" + uiError.errorMessage);
         }
 
@@ -400,7 +420,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
                     }
                 }
                 break;
-            case 2:
+            case 3:
                 if (mSsoHandler != null) {
                     mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
                 }

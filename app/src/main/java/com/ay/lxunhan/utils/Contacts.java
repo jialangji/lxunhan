@@ -16,7 +16,7 @@ public class Contacts {
     static final String LOGIN_TYPE="login_type";
 
     public static final String QQ_APP_ID="";
-    public static final String WX_APP_ID="";
+    public static final String WX_APP_ID="wx08cbd3a5db2809a2";
     public static final String WB_APP_ID="";
 
     /**

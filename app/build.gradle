@@ -118,4 +118,10 @@ dependencies {
     implementation files('libs/Livestreaming-3.4.0.jar')
 
     implementation 'com.github.AnJiaoDe:MultiFlowLayout:1.1.1'
+
+
+    api 'com.just.agentweb:agentweb:4.1.2@aar'
+    api 'com.just.agentweb:filechooser:4.1.2@aar'
+    api 'com.just.agentweb:download:4.0.3-alpha@aar'
+    api 'com.github.Justson:Downloader:v4.0.3'
 }

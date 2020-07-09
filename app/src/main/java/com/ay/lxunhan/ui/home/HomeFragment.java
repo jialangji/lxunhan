@@ -99,7 +99,10 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     protected void initData() {
         super.initData();
         presenter.getHomeType();
-        presenter.getHomeList(1, "", page);
+        if (!UserInfo.getInstance().isLogin()){
+            typeId=2;
+        }
+        setRefresh();
     }
 
     @Override
@@ -108,6 +111,11 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
         typeAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (typeId == typeBeanList.get(position).getId()) {
                 return;
+            }
+            if (typeBeanList.get(position).getId()==1){
+                if (!isLogin()){
+                    return;
+                }
             }
             if (typeBeanList.get(position).getId() == 5) {
                 if (isLogin()){
@@ -300,6 +308,9 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
             case EventModel.LOGIN:
             case EventModel.LOGIN_OUT:
                 presenter.getHomeType();
+                if (!UserInfo.getInstance().isLogin()){
+                    typeId=2;
+                }
                 setRefresh();
                 break;
 

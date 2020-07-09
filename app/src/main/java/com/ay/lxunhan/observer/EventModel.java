@@ -7,6 +7,7 @@ public class EventModel<T> {
     public static final int SENDCOMMENT=4;
     public static final int LOGIN_OUT=10000;
     public static final int LOGIN=10001;
+    public static final int WX_LOGIN=5;
     private int messageType;
     private int data2;
     private T data;
