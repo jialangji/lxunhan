@@ -303,7 +303,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
         switch (eventModel1.getMessageType()) {
             case EventModel.LOGIN_OUT:
                 BootPageActivity.startBootPageActivity(this);
-                if (!UserInfo.getInstance().isLogin()){
+                if (UserInfo.getInstance().isLogin()){
                     presenter.getUserInfo();
                 }
 
@@ -333,6 +333,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     @Override
     protected void onPause() {
         super.onPause();
+        JzvdStd.goOnPlayOnPause();
         sensorManager.unregisterListener(jzAutoFullscreenListener);
     }
 
@@ -340,6 +341,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     @Override
     protected void onResume() {
         super.onResume();
+        JzvdStd.goOnPlayOnResume();
         //播放器重力感应
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);

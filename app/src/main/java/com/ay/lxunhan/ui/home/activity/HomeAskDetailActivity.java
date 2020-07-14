@@ -2,6 +2,7 @@ package com.ay.lxunhan.ui.home.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -30,6 +31,7 @@ import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
+import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -80,6 +82,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     private HomeDetailBean homeDetailBean;
     private int commentPostion;
     private ShareDialog shareDialog;
+    private ShareImgDialog shareImgDialog;
 
     @Override
     public HomeDetailPresenter initPresenter() {
@@ -241,7 +244,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                 finish();
                 break;
             case R.id.rl_more:
-                if (isLogin()){
+                if (isLogin()) {
                     showDialog();
                 }
                 break;
@@ -252,6 +255,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
                 }
                 break;
             case R.id.tv_wechat:
+                ShareUtils.shareToWx(HomeAskDetailActivity.this, homeDetailBean.getShare_url());
                 break;
             case R.id.tv_attention:
                 if (isLogin()) {
@@ -276,22 +280,23 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void shareQQ() {
-
+                ShareUtils.shareToQQ(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
             }
 
             @Override
             public void shareQQRoom() {
+                ShareUtils.shareToQQRoom(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWx() {
-                ShareUtils.shareToWx(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
+                ShareUtils.shareToWx(HomeAskDetailActivity.this, homeDetailBean.getShare_url());
             }
 
             @Override
             public void shareWxPyq() {
-                ShareUtils.shareToWxPyq(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
+                ShareUtils.shareToWxPyq(HomeAskDetailActivity.this, homeDetailBean.getShare_url());
             }
 
             @Override
@@ -301,7 +306,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void shareImg() {
-
+                showImg(homeDetailBean.getPiiic_url());
             }
 
             @Override
@@ -317,13 +322,34 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void collect() {
-                presenter.addCollect(String.valueOf(homeDetailBean.getId()),type);
+                presenter.addCollect(String.valueOf(homeDetailBean.getId()), type);
             }
 
             @Override
             public void cancel() {
 
             }
+        });
+    }
+
+
+    public void showImg(String url) {
+        if (shareImgDialog == null) {
+            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle, url);
+        }
+        shareImgDialog.show();
+        shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
+            @Override
+            public void shareQQ(String bitmap) {
+                ShareUtils.shareToQQImg(HomeAskDetailActivity.this,bitmap);
+
+            }
+
+            @Override
+            public void shareWb(Bitmap bitmap) {
+
+            }
+
         });
     }
 
@@ -368,7 +394,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
     @Override
     public void addCollectFinish() {
-        ToastUtil.makeShortText(this,"收藏成功");
+        ToastUtil.makeShortText(this, "收藏成功");
     }
 
     @Override

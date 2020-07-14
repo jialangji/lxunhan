@@ -1,5 +1,6 @@
 package com.ay.lxunhan.ui.video.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,8 +23,10 @@ import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
+import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -57,6 +60,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
     private BaseQuickAdapter videoAdapter;
     private ShareDialog shareDialog;
     private int mPosition;
+    private ShareImgDialog shareImgDialog;
 
     public static VideoHomeFrgament newInstance() {
         Bundle args = new Bundle();
@@ -69,8 +73,9 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
     protected void initData() {
         super.initData();
         presenter.getVideoHomeList("", page);
-        presenter.videoRecords();
+
     }
+
 
     @Override
     protected void initView() {
@@ -114,6 +119,9 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
     public void onResume() {
         super.onResume();
         JzvdStd.goOnPlayOnResume();
+        if (UserInfo.getInstance().isLogin()){
+            presenter.videoRecords();
+        }
     }
 
     @Override
@@ -182,11 +190,13 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
             @Override
             public void shareQQ() {
+                ShareUtils.shareToQQ(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                ShareUtils.shareToQQRoom(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
@@ -209,7 +219,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
             @Override
             public void shareImg() {
-
+                showImg(videoBeanList.get(mPosition).getPiiic_url());
             }
 
             @Override
@@ -230,6 +240,25 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
 
             @Override
             public void cancel() {
+
+            }
+        });
+    }
+
+    public void showImg(String url){
+        if (shareImgDialog == null) {
+            shareImgDialog = new ShareImgDialog(getActivity(), R.style.selectPicDialogstyle,url);
+        }
+        shareImgDialog.show();
+        shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
+            @Override
+            public void shareQQ(String bitmap) {
+                ShareUtils.shareToQQImg(getActivity(),bitmap);
+
+            }
+
+            @Override
+            public void shareWb(Bitmap bitmap) {
 
             }
         });

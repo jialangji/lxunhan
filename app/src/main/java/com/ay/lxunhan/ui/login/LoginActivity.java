@@ -20,6 +20,7 @@ import com.ay.lxunhan.bean.model.PublicModel;
 import com.ay.lxunhan.contract.LoginContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.LoginPresenter;
+import com.ay.lxunhan.ui.public_ac.activity.BindPhoneActivity;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.RxHelper;
@@ -76,10 +77,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
      * QQ
      */
     private Tencent qqTencent;
-    private String qqOpenId;
-    private String qqAccess_token;
-    private String qqExpires_in;
-
+    private static final String APP_SECRET = "32d6d5e5be5031d864e70d06f4eda9c9";
     /**
      * 新浪微博
      */
@@ -93,8 +91,16 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
     @Override
     protected void initView() {
         super.initView();
-//        qqTencent = Tencent.createInstance(Contacts.QQ_APP_ID, this);
-//        mSsoHandler = new SsoHandler(this);
+        qqTencent = AppContext.mTencent;
+        //  mSsoHandler = new SsoHandler(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (UserInfo.getInstance().isWxLogin()) {
+            getWxAccessToken(UserInfo.getInstance().getWxCode());
+        }
     }
 
     @Override
@@ -125,7 +131,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
     public static void startLoginActivity2(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -160,6 +166,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
                 }
                 break;
             case R.id.tv_login:
+                loginType = 0;
                 if (TextUtils.isEmpty(StringUtil.getFromEdit(etPhone))) {
                     ToastUtil.makeShortText(this, "请输入手机号");
                     return;
@@ -196,11 +203,11 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
                 finish();
                 break;
             case R.id.iv_qq:
-//                loginType=1;
-//                qqTencent.login(this, "all", new LoginUiListener());
+                loginType = 1;
+                qqTencent.login(this, "all", new LoginUiListener());
                 break;
             case R.id.iv_wx:
-                loginType=2;
+                loginType = 2;
                 wxLogin();
                 break;
             case R.id.iv_wb:
@@ -220,19 +227,32 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         wyyxLogin(loginBean);
     }
 
+    @Override
+    public void threeFinish(LoginBean bean) {
+        wyyxLogin(bean);
+    }
 
-    public void  wyyxLogin(LoginBean loginBean){
-        LoginInfo info = new LoginInfo(loginBean.getUqid().toLowerCase(),loginBean.getUqid()); // config...
+
+    public void wyyxLogin(LoginBean loginBean) {
+        LoginInfo info = new LoginInfo(loginBean.getUqid().toLowerCase(), loginBean.getUqid()); // config...
         RequestCallback<LoginInfo> callback =
                 new RequestCallback<LoginInfo>() {
                     @Override
                     public void onSuccess(LoginInfo param) {
                         UserInfo.getInstance().setUserId(loginBean.getUqid());
-                        UserInfo.getInstance().setLogin(true);
                         UserInfo.getInstance().setWyyAccount(param.getAccount());
                         UserInfo.getInstance().setWyyToken(param.getToken());
+                        if (loginType != 0) {
+                            if (!loginBean.getIs_phone()) {
+                                BindPhoneActivity.startBindPhoneActivity(LoginActivity.this);
+                                finish();
+                                return;
+                            }
+                        }
+
                         if (loginBean.getIs_perfect()) {
                             MainActivity.startMainActivity(LoginActivity.this);
+                            UserInfo.getInstance().setLogin(true);
                             EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN));
                             AppManager.getAppManager().finishActivity(BootPageActivity.class);
                             finish();
@@ -240,11 +260,12 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
                             CompleteInfoActivity.startCompleteInfoActivity(LoginActivity.this);
                             finish();
                         }
+
                     }
 
                     @Override
                     public void onFailed(int code) {
-                        Log.e("WYYX:","code:"+code);
+                        Log.e("WYYX:", "code:" + code);
                         if (code == 302 || code == 404) {
                             ToastUtil.makeShortText(AppContext.instance,
                                     "账号或者密码错误");
@@ -256,14 +277,13 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
                     @Override
                     public void onException(Throwable exception) {
-                        Log.e("WYYX:",exception.getMessage());
+                        Log.e("WYYX:", exception.getMessage());
                     }
                     // 可以在此保存LoginInfo到本地，下次启动APP做自动登录用
                 };
         NIMClient.getService(AuthService.class).login(info)
                 .setCallback(callback);
     }
-
 
     @Override
     public void getCodeError() {
@@ -272,12 +292,12 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
     @Override
     public void showProgress() {
-
+        hudLoader.show();
     }
 
     @Override
     public void hideProgress() {
-
+        hudLoader.dismiss();
     }
 
     private void loginToSina() {
@@ -296,33 +316,17 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         AppContext.mWxApi.sendReq(req);
     }
 
-    @Override
-    public boolean isUserEvent() {
-        return true;
-    }
-
-    @Override
-    protected void getStickyEvent(Object eventModel) {
-        super.getStickyEvent(eventModel);
-        EventModel eventModel1= (EventModel) eventModel;
-        switch (eventModel1.getMessageType()){
-            case EventModel.WX_LOGIN:
-                String code= (String) eventModel1.getData();
-                break;
-        }
-    }
-
     private class LoginUiListener implements IUiListener {
 
         @Override
         public void onComplete(Object response) {
             //获取openid
-            Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
             try {
                 UserInfo.getInstance().setLoginType(Contacts.QQLOGIN);
-                qqOpenId = ((JSONObject) response).getString("openid");
-                qqAccess_token = ((JSONObject) response).getString("access_token");
-                qqExpires_in = ((JSONObject) response).getString("expires_in");
+                String OpenId = ((JSONObject) response).getString("openid");
+                String Access_token = ((JSONObject) response).getString("access_token");
+                AppContext.mTencent.setAccessToken(((JSONObject) response).getString("access_token"),((JSONObject) response).getString("expires_in"));
+                presenter.threeLogin(OpenId, Access_token, Contacts.QQLOGIN);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -345,15 +349,10 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
             runOnUiThread(() -> {
                 mAccessToken = token;
                 if (mAccessToken.isSessionValid()) {
-                    // 显示 Token
-//                        updateTokenView(false);
-                    // 保存 Token 到 SharedPreferences
                     UserInfo.getInstance().setLoginType(Contacts.WBLOGIN);
-//                        AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
-                    Log.e("WB", "授权成功");
-                    //获取个人资料
-                    //https://api.weibo.com/2/users/show.json
-                    getWbUserInfo(mAccessToken.getToken(), mAccessToken.getUid());
+                    String OpenId = mAccessToken.getUid();
+                    String Access_token = mAccessToken.getToken();
+                    presenter.threeLogin(OpenId, Access_token, Contacts.WBLOGIN);
                 }
             });
         }
@@ -369,12 +368,20 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         }
     }
 
-    private void getWbUserInfo(String access, String openid) {
+    private void getWxAccessToken(String code) {
         createProgressDialog();
-        String getUserInfoUrl = "https://api.weibo.com/2/users/show.json/access_token=" + access + "&uid=" + openid;
+        //获取授权
         OkHttpClient okHttpClient = new OkHttpClient();
+        String loginUrl = "https://api.weixin.qq.com/sns/oauth2/access_token" +
+                "?appid=" +
+                Contacts.WX_APP_ID +
+                "&secret=" +
+                APP_SECRET +
+                "&code=" +
+                code +
+                "&grant_type=authorization_code";
         final Request request = new Request.Builder()
-                .url(getUserInfoUrl)
+                .url(loginUrl)
                 .get()//默认就是GET请求，可以不写
                 .build();
         Call call = okHttpClient.newCall(request);
@@ -387,13 +394,23 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseInfo = response.body().string();
-//                Log.d("Wx", "onResponse: " + responseInfo);
-//                SharedPreferences.Editor editor= getSharedPreferences("userInfo", MODE_PRIVATE).edit();
-//                editor.putString("responseInfo", responseInfo);
-//                editor.commit();
-                finish();
+                assert response.body() != null;
                 mProgressDialog.dismiss();
+                String responseInfo = response.body().string();
+                Log.d("wx", "onResponse: " + responseInfo);
+                UserInfo.getInstance().setWxLogin(false);
+                String token;
+                String openId;
+                try {
+                    JSONObject jsonObject = new JSONObject(responseInfo);
+                    token = jsonObject.getString("access_token");
+                    openId = jsonObject.getString("openid");
+                    Log.e("LoginActivity", "token:" + token + "\n openID:" + openId);
+                    runOnUiThread(() -> presenter.threeLogin(openId, token, Contacts.WXLOGIN));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -415,9 +432,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
             case 1:
                 Tencent.onActivityResultData(requestCode, resultCode, data, new LoginUiListener());
                 if (requestCode == Constants.REQUEST_API) {
-                    if (resultCode == Constants.REQUEST_LOGIN) {
-                        Tencent.handleResultData(data, new LoginUiListener());
-                    }
+                    Tencent.handleResultData(data, new LoginUiListener());
                 }
                 break;
             case 3:
@@ -426,5 +441,7 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
                 }
                 break;
         }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

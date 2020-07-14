@@ -25,6 +25,15 @@ public class LoginBean {
     private int folCount;
     private int beFolCount;
     private String proportion;
+    private int is_phone;
+
+    public boolean getIs_phone() {
+        return is_phone==1;
+    }
+
+    public void setIs_phone(int is_phone) {
+        this.is_phone = is_phone;
+    }
 
 
     public boolean getIs_media() {//是否为自媒体 true是 false否

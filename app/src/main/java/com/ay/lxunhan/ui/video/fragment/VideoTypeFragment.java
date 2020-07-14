@@ -1,5 +1,6 @@
 package com.ay.lxunhan.ui.video.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.widget.RecyclerItemDecoration;
 import com.ay.lxunhan.widget.ShareDialog;
+import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -46,6 +48,8 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
     private int mPosition;
     private ShareDialog shareDialog;
     private String id;
+    private ShareImgDialog shareImgDialog;
+
     public static VideoTypeFragment newInstance(String id) {
         Bundle args = new Bundle();
         VideoTypeFragment fragment = new VideoTypeFragment();
@@ -157,11 +161,13 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void shareQQ() {
+                ShareUtils.shareToQQ(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                ShareUtils.shareToQQRoom(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
@@ -184,7 +190,7 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void shareImg() {
-
+                showImg(videoBeanList.get(mPosition).getPiiic_url());
             }
 
             @Override
@@ -204,6 +210,25 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void cancel() {
+
+            }
+        });
+    }
+
+    public void showImg(String url){
+        if (shareImgDialog == null) {
+            shareImgDialog = new ShareImgDialog(getActivity(), R.style.selectPicDialogstyle,url);
+        }
+        shareImgDialog.show();
+        shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
+            @Override
+            public void shareQQ(String bitmap) {
+                ShareUtils.shareToQQImg(getActivity(),bitmap);
+
+            }
+
+            @Override
+            public void shareWb(Bitmap bitmap) {
 
             }
         });

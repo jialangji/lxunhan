@@ -27,6 +27,7 @@ import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
+import com.ay.lxunhan.bean.RechargeBean;
 import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
@@ -35,6 +36,7 @@ import com.ay.lxunhan.bean.UserInfoBean;
 import com.ay.lxunhan.bean.UserMediaListBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
+import com.ay.lxunhan.bean.WxOrderBean;
 import com.ay.lxunhan.bean.model.AcceptModel;
 import com.ay.lxunhan.bean.model.AttentionModel;
 import com.ay.lxunhan.bean.model.AttentionsModel;
@@ -743,6 +745,39 @@ public class HttpMethods {
         Flowable<HttpResult<Object>> flowable=httpService.userIsVail(UserInfo.getInstance().getUserId(),id);
         return compositeThread(flowable);
     }
+
+    /**
+     * 三方登录
+     */
+    public Flowable<LoginBean> threeLogin(String openid,String token,int type){
+        Flowable<HttpResult<LoginBean>> flowable=httpService.threeLogin(openid, token, type);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 绑定手机
+     */
+    public Flowable<Object> bindPhone(String phone,String code){
+        Flowable<HttpResult<Object>> flowable=httpService.bindThreePhone(UserInfo.getInstance().getUserId(),code,phone);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 充值
+     */
+    public Flowable<List<RechargeBean>> rechargeList(){
+        Flowable<HttpResult<List<RechargeBean>>> flowable=httpService.rechargeList();
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 充值
+     */
+    public Flowable<WxOrderBean> recharge(String id){
+        Flowable<HttpResult<WxOrderBean>> flowable=httpService.recharge(UserInfo.getInstance().getUserId(),id);
+        return compositeThread(flowable);
+    }
+
 
     /**
      * 批量上传文件

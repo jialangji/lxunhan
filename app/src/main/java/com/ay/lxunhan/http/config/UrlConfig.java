@@ -1,7 +1,9 @@
 package com.ay.lxunhan.http.config;
 
-
 public class UrlConfig {
+    /**
+     * 域名
+     */
     public static final String BASE_URL = "http://hlx.51appdevelop.com";
 
     /**
@@ -38,8 +40,20 @@ public class UrlConfig {
      * 首页列表
      */
     public static final String HOME_LIST = "api/homes/many_list";
+
+    /**
+     * 首页推荐列表
+     */
     public static final String HOME_LIST_ARTICLE = "api/homes/article_list";
+
+    /**
+     * 首页问答列表
+     */
     public static final String HOME_LIST_ASK = "api/homes/answers_list";
+
+    /**
+     * 首页投票列表
+     */
     public static final String HOME_LIST_QUIZ = "api/homes/vote_list";
 
     /**
@@ -363,6 +377,16 @@ public class UrlConfig {
     public static final String LIVE_LIST="api/live/live_list";
 
     /**
+     * 三方登录
+     */
+    public static final String THREE_LOGIN="api/mine/third_login";
+
+    /**
+     *三方账号绑定
+     */
+    public static final String THREE_BIND_PHONE="api/mine/third_bind";
+
+    /**
      * 增加直播间观看人数
      */
     public static final String ADD_LIVE_SEE_COUNT="api/live/see_live";
@@ -371,5 +395,21 @@ public class UrlConfig {
      * 减少直播间观看人数
      */
     public static final String DELETE_LIVE_SEE_COUNT="api/live/leave_live";
+
+    /**
+     * 直播礼物列表
+     */
+    public static final String LIVE_GIFT="api/live/gifts_list";
+
+    /**
+     * 充值列表
+     */
+    public static final String RECHARGE_LIST="api/mine/recharge_list";
+
+    /**
+     * 充值
+     */
+    public static final String RECHARGE_WX="api/mine/recharge";
+
 
 }

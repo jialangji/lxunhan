@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class InviteBean {
 
+
     /**
      * data : [{"id":4,"signal":"165469501198","gold":10,"created_date":"2020-06-29"},{"id":5,"signal":"165469501198","gold":10,"created_date":"2020-06-28"}]
      * gold : {"value":"10"}
@@ -16,6 +17,11 @@ public class InviteBean {
 
     private GoldBean gold;
     private List<DataBean> data;
+    /**
+     * user : {"invite_code":"123456"}
+     */
+
+    private UserBean user;
 
     public GoldBean getGold() {
         return gold;
@@ -31,6 +37,14 @@ public class InviteBean {
 
     public void setData(List<DataBean> data) {
         this.data = data;
+    }
+
+    public UserBean getUser() {
+        return user;
+    }
+
+    public void setUser(UserBean user) {
+        this.user = user;
     }
 
     public static class GoldBean {
@@ -92,6 +106,22 @@ public class InviteBean {
 
         public void setCreated_date(String created_date) {
             this.created_date = created_date;
+        }
+    }
+
+    public static class UserBean {
+        /**
+         * invite_code : 123456
+         */
+
+        private String invite_code;
+
+        public String getInvite_code() {
+            return invite_code;
+        }
+
+        public void setInvite_code(String invite_code) {
+            this.invite_code = invite_code;
         }
     }
 }

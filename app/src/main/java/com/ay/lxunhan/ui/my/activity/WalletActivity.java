@@ -45,11 +45,14 @@ public class WalletActivity extends BaseActivity<MainContract.MainView, MainPres
         presenter.getUserInfo();
     }
 
-    @OnClick({R.id.rl_finish,  R.id.rl_withdraw,R.id.rl_bill})
+    @OnClick({R.id.rl_finish,  R.id.rl_withdraw,R.id.rl_bill,R.id.rl_recharge})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
                 finish();
+                break;
+            case R.id.rl_recharge:
+                BuyCoinActivity.startBuyCoinActivity(this);
                 break;
             case R.id.rl_withdraw:
                 WithDrawActivity.startWithdrawActivity(this);

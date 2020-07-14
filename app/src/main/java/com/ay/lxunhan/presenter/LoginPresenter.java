@@ -51,4 +51,23 @@ public class LoginPresenter extends BasePresenter<LoginContract.LoginView> imple
             }
         }));
     }
+
+    @Override
+    public void threeLogin(String openid, String token, int type) {
+        getView().showProgress();
+        addDisposable(HttpMethods.getInstance().threeLogin(openid, token, type).subscribeWith(new BaseSubscriber<LoginBean>(){
+            @Override
+            public void onNext(LoginBean o) {
+                super.onNext(o);
+                getView().hideProgress();
+                getView().threeFinish(o);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                super.onError(t);
+                getView().hideProgress();
+            }
+        }));
+    }
 }

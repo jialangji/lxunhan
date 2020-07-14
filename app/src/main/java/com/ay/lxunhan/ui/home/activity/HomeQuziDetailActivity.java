@@ -2,6 +2,7 @@ package com.ay.lxunhan.ui.home.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -36,6 +37,7 @@ import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
+import com.ay.lxunhan.widget.ShareImgDialog;
 import com.ay.lxunhan.widget.TagTextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -93,6 +95,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     private HomeQuizDetailBean homeQuizDetailBean;
     private int commentPostion;
     private ShareDialog shareDialog;
+    private ShareImgDialog shareImgDialog;
 
     @Override
     public HomeDetailPresenter initPresenter() {
@@ -254,6 +257,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
                 }
                 break;
             case R.id.tv_wechat:
+                ShareUtils.shareToWx(this,homeQuizDetailBean.getShare_url());
                 break;
         }
     }
@@ -270,11 +274,13 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void shareQQ() {
+                ShareUtils.shareToQQ(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                ShareUtils.shareToQQRoom(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
@@ -297,7 +303,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void shareImg() {
-
+                showImg(homeQuizDetailBean.getPiiic_url());
             }
 
             @Override
@@ -318,6 +324,26 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void cancel() {
+
+            }
+        });
+    }
+
+
+    public void showImg(String url){
+        if (shareImgDialog == null) {
+            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle,url);
+        }
+        shareImgDialog.show();
+        shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
+            @Override
+            public void shareQQ(String bitmap) {
+                ShareUtils.shareToQQImg(HomeQuziDetailActivity.this,bitmap);
+
+            }
+
+            @Override
+            public void shareWb(Bitmap bitmap) {
 
             }
         });

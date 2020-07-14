@@ -1,5 +1,6 @@
 package com.ay.lxunhan.ui.public_ac.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import com.ay.lxunhan.contract.UserInfoContract;
 import com.ay.lxunhan.presenter.UserInfoPresenter;
 import com.ay.lxunhan.utils.DisplayUtil;
 import com.ay.lxunhan.utils.FileUtils;
+import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.utils.QRCodeUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
@@ -75,12 +77,27 @@ public class MyQrcodeActivity extends BaseActivity<UserInfoContract.UserInfoView
                 finish();
                 break;
             case R.id.ll_save_album:
-                File file=FileUtils.saveBitmap(this,bitmap,DIR_NAME);
-                if (file.exists()){
-                    ToastUtil.makeShortText(this,"保存成功");
-                }else{
-                    ToastUtil.makeShortText(this,"保存失败");
-                }
+                PermissionsUtils.getInstance().chekPermissions(MyQrcodeActivity.this, new String[]{Manifest.permission.CAMERA,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        new PermissionsUtils.IPermissionsResult() {
+                            @Override
+                            public void passPermissons() {
+                                File file=FileUtils.saveBitmap(MyQrcodeActivity.this,bitmap,DIR_NAME);
+                                assert file != null;
+                                if (file.exists()){
+                                    ToastUtil.makeShortText(MyQrcodeActivity.this,"保存成功");
+                                }else{
+                                    ToastUtil.makeShortText(MyQrcodeActivity.this,"保存失败");
+                                }
+                            }
+
+                            @Override
+                            public void forbitPermissons() {
+
+                            }
+                        });
+
                 break;
         }
     }

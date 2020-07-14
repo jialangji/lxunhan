@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="match_parent"
+        android:background="@drawable/shape_grayec_line_4"
+        android:layout_height="@dimen/dp_65">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_lb_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_14"
+                android:layout_gravity="center"
+                android:textColor="@color/color_161824"
+                tools:text="300乐讯币"/>
+
+            <TextView
+                android:id="@+id/tv_lb_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_10"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/color_78"
+                tools:text="300乐讯币"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_lable"
+            android:layout_width="@dimen/dp_15"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_height="@dimen/dp_15"
+            android:src="@drawable/ic_coin_lable"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

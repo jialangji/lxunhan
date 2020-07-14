@@ -3,6 +3,7 @@ package com.ay.lxunhan.ui.video.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
+import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -97,6 +99,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     private int type = 2;
     private boolean isRefresh = true;
     private int commentPostion;
+    private ShareImgDialog shareImgDialog;
 
     @Override
     public VideoDetailPresenter initPresenter() {
@@ -238,7 +241,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_attention})
+    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_attention, R.id.tv_wechat})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
@@ -255,6 +258,9 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
                 if (videoDetailBean.getIs_fol() != 2) {
                     presenter.attention(videoDetailBean.getUid());
                 }
+                break;
+            case R.id.tv_wechat:
+                ShareUtils.shareToWx(this,videoDetailBean.getShare_url());
                 break;
         }
     }
@@ -279,11 +285,13 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
             @Override
             public void shareQQ() {
+                ShareUtils.shareToQQ(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                ShareUtils.shareToQQRoom(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
@@ -306,7 +314,7 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
             @Override
             public void shareImg() {
-
+                showImg(videoDetailBean.getPiiic_url());
             }
 
             @Override
@@ -331,7 +339,24 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
             }
         });
     }
+    public void showImg(String url){
+        if (shareImgDialog == null) {
+            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle,url);
+        }
+        shareImgDialog.show();
+        shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
+            @Override
+            public void shareQQ(String bitmap) {
+                ShareUtils.shareToQQImg(VideoDetailActivity.this,bitmap);
 
+            }
+
+            @Override
+            public void shareWb(Bitmap bitmap) {
+
+            }
+        });
+    }
 
     @Override
     protected void onResume() {

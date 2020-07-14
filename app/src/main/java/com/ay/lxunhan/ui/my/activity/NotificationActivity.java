@@ -2,7 +2,6 @@ package com.ay.lxunhan.ui.my.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NotificationActivity extends BaseActivity<NotificationContact.NotificationView, NotificationPresenter> implements NotificationContact.NotificationView {
@@ -59,7 +57,6 @@ public class NotificationActivity extends BaseActivity<NotificationContact.Notif
     @Override
     protected void initView() {
         super.initView();
-
         notificationAdapter = new BaseQuickAdapter<NotationBean.NewsListBean, BaseViewHolder>(R.layout.item_notification, notificationBeans) {
             @Override
             protected void convert(BaseViewHolder helper, NotationBean.NewsListBean item) {
@@ -106,29 +103,26 @@ public class NotificationActivity extends BaseActivity<NotificationContact.Notif
                 }
             }
         });
-        notificationAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (notificationBeans.get(position).getGenre()) {
-                    case 1:
-                        HomeDetailActivity.startHomeDetailActivity(NotificationActivity.this, 1, notificationBeans.get(position).getAid());
-                        break;
-                    case 2:
-                        VideoDetailActivity.startVideoDetailActivity(NotificationActivity.this, String.valueOf(notificationBeans.get(position).getAid()));
-                        break;
-                    case 3:
-                        HomeAskDetailActivity.startHomeAskDetailActivity(NotificationActivity.this, 3, notificationBeans.get(position).getAid());
-                        break;
-                    case 4:
-                        HomeQuziDetailActivity.startHomeQuizDetailActivity(NotificationActivity.this, notificationBeans.get(position).getAid());
-                        break;
-                    case 5:
-                        SmallVideoActivity.startSmallVideoActivity(NotificationActivity.this, notificationBeans.get(position).getAid());
-                        break;
-                    case 6:
-                        PyqDetailActivity.startPyqDetailActivity(NotificationActivity.this, String.valueOf(notificationBeans.get(position).getAid()));
-                        break;
-                }
+        notificationAdapter.setOnItemClickListener((adapter, view, position) -> {
+            switch (notificationBeans.get(position).getGenre()) {
+                case 1:
+                    HomeDetailActivity.startHomeDetailActivity(NotificationActivity.this, 1, notificationBeans.get(position).getAid());
+                    break;
+                case 2:
+                    VideoDetailActivity.startVideoDetailActivity(NotificationActivity.this, String.valueOf(notificationBeans.get(position).getAid()));
+                    break;
+                case 3:
+                    HomeAskDetailActivity.startHomeAskDetailActivity(NotificationActivity.this, 3, notificationBeans.get(position).getAid());
+                    break;
+                case 4:
+                    HomeQuziDetailActivity.startHomeQuizDetailActivity(NotificationActivity.this, notificationBeans.get(position).getAid());
+                    break;
+                case 5:
+                    SmallVideoActivity.startSmallVideoActivity(NotificationActivity.this, notificationBeans.get(position).getAid());
+                    break;
+                case 6:
+                    PyqDetailActivity.startPyqDetailActivity(NotificationActivity.this, String.valueOf(notificationBeans.get(position).getAid()));
+                    break;
             }
         });
     }
@@ -175,6 +169,7 @@ public class NotificationActivity extends BaseActivity<NotificationContact.Notif
     public void getNotificationFinish(NotationBean notationBean) {
         if (notationBean.getTz_count() == 0 && TextUtils.isEmpty(notationBean.getTz()) && TextUtils.isEmpty(notationBean.getTz_timeText())) {
             llSystem.setVisibility(View.GONE);
+            swipeRefresh.finishRefreshing();
             return;
         }
         tvContent.setText(notationBean.getTz());

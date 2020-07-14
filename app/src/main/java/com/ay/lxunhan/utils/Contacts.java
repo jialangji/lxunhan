@@ -15,7 +15,7 @@ public class Contacts {
     public static final int WBLOGIN=3;
     static final String LOGIN_TYPE="login_type";
 
-    public static final String QQ_APP_ID="";
+    public static final String QQ_APP_ID="101891062";
     public static final String WX_APP_ID="wx08cbd3a5db2809a2";
     public static final String WB_APP_ID="";
 
@@ -52,6 +52,8 @@ public class Contacts {
 
     final static String WYY_ACCOUNT="wyyAccount";
     final static String WYY_TOKEN="wyyToken";
+    final static String WX_CODE="wxcode";
+    final static String WX_ISLOGIN="wxIsLogin";
 
     public final static String HISTORY="history";
     public final static String HISTORY_HOME="1";

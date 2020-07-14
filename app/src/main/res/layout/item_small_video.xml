@@ -52,7 +52,6 @@
                 android:gravity="center"
                 android:layout_height="wrap_content">
                 <ImageView
-
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
                     android:src="@drawable/ic_white_comment"/>

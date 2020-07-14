@@ -2,6 +2,7 @@ package com.ay.lxunhan.ui.home.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -36,6 +37,7 @@ import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
+import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -88,6 +90,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     private boolean isRefresh = true;
     private int commentPostion;
     private ShareDialog shareDialog;
+    private ShareImgDialog shareImgDialog;
 
 
     @Override
@@ -252,6 +255,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
                 break;
             case R.id.tv_wechat:
+                ShareUtils.shareToWx(this,homeDetailBean.getShare_url());
                 break;
         }
     }
@@ -269,11 +273,13 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
             @Override
             public void shareQQ() {
+                ShareUtils.shareToQQ(HomeDetailActivity.this,homeDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                ShareUtils.shareToQQRoom(HomeDetailActivity.this,homeDetailBean.getShare_url());
 
             }
 
@@ -296,7 +302,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
             @Override
             public void shareImg() {
-
+                showImg(homeDetailBean.getPiiic_url());
             }
 
             @Override
@@ -317,6 +323,25 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
             @Override
             public void cancel() {
+
+            }
+        });
+    }
+
+    public void showImg(String url){
+        if (shareImgDialog == null) {
+            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle,url);
+        }
+        shareImgDialog.show();
+        shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
+            @Override
+            public void shareQQ(String bitmap) {
+                ShareUtils.shareToQQImg(HomeDetailActivity.this,bitmap);
+
+            }
+
+            @Override
+            public void shareWb(Bitmap bitmap) {
 
             }
         });

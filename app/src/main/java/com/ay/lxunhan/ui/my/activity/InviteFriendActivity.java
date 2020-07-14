@@ -11,7 +11,6 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.contract.InviteContract;
-import com.ay.lxunhan.http.config.UrlConfig;
 import com.ay.lxunhan.presenter.InvitePresenter;
 import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
@@ -29,6 +28,7 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
     @BindView(R.id.et_code)
     EditText etCode;
     private ShareFriendDialog shareDialog;
+    private String code;
 
     @Override
     protected void initData() {
@@ -67,8 +67,10 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
                 InviteListActivity.startInviteListActivity(this);
                 break;
             case R.id.tv_invite:
-                String url= UrlConfig.BASE_URL+"/yaoqing?yaoqingma=";
-                showDialog(url);
+                if(code!=null){
+                    String url="http://sanyserver.51appdevelop.com/#/yaoqing?yaoqingma="+code;
+                    showDialog(url);
+                }
                 break;
             case R.id.tv_sure:
                 if (TextUtils.isEmpty(StringUtil.getFromEdit(etCode))){
@@ -89,6 +91,7 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
         shareDialog.setItemClickListener(new ShareFriendDialog.ItemClickListener() {
             @Override
             public void shareQQ() {
+                ShareUtils.shareToQQ(InviteFriendActivity.this,url);
 
             }
 
@@ -108,6 +111,8 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
     @Override
     public void getInviteCoinFinish(InviteBean bean) {
         tvLb.setText(bean.getGold().getValue());
+        code=bean.getUser().getInvite_code();
+
     }
 
     @Override

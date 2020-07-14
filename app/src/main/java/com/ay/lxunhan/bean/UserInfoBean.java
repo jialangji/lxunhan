@@ -31,6 +31,15 @@ public class UserInfoBean {
     private String age;
     private String address;
     private String uid;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getUid() {
         return uid;

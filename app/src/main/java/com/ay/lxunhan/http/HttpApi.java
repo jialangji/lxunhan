@@ -11,6 +11,7 @@ import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.FriendBean;
+import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
@@ -26,6 +27,7 @@ import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
+import com.ay.lxunhan.bean.RechargeBean;
 import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
@@ -34,6 +36,7 @@ import com.ay.lxunhan.bean.UserInfoBean;
 import com.ay.lxunhan.bean.UserMediaListBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
+import com.ay.lxunhan.bean.WxOrderBean;
 import com.ay.lxunhan.http.config.UrlConfig;
 
 import java.util.List;
@@ -541,6 +544,50 @@ public interface HttpApi {
     @GET(UrlConfig.USER)
     Flowable<HttpResult<Object>> userIsVail(@Query("uqid") String uqid,@Query("user_id") String user_id);
 
+    /**
+     * 三方登录
+     */
+    @GET(UrlConfig.THREE_LOGIN)
+    Flowable<HttpResult<LoginBean>> threeLogin(@Query("openid") String openid,@Query("token") String token,
+                                               @Query("type") int type);
+
+
+    /**
+     * 绑定手机
+     */
+    @GET(UrlConfig.THREE_BIND_PHONE)
+    Flowable<HttpResult<Object>> bindThreePhone(@Query("uqid") String uqid,@Query("code") String code,
+                                                @Query("phone") String phone);
+
+    /**
+     *添加直播间观看人数
+     */
+    @GET(UrlConfig.ADD_LIVE_SEE_COUNT)
+    Flowable<HttpResult<Object>> addLiveSeeCount(@Query("uqid") String uqid,@Query("lid") String lid);
+
+    /**
+     *减少直播间观看人数
+     */
+    @GET(UrlConfig.DELETE_LIVE_SEE_COUNT)
+    Flowable<HttpResult<Object>> deleteLiveSeeCount(@Query("uqid") String uqid,@Query("lid") String lid);
+
+    /**
+     * 礼物列表
+     */
+    @GET(UrlConfig.LIVE_GIFT)
+    Flowable<HttpResult<GiftBean>>  liveGift(@Query("type") String type);
+
+    /**
+     * 充值列表
+     */
+    @GET(UrlConfig.RECHARGE_LIST)
+    Flowable<HttpResult<List<RechargeBean>>> rechargeList();
+
+    /**
+     * 充值
+     */
+    @GET(UrlConfig.RECHARGE_WX)
+    Flowable<HttpResult<WxOrderBean>> recharge(@Query("uqid") String uqid,@Query("id") String id);
 }
 
 

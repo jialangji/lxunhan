@@ -2,6 +2,9 @@ package com.ay.lxunhan.ui.my.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,13 +14,12 @@ import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.observer.EventModel;
-import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideCacheUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.tencent.tauth.Tencent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -33,7 +35,6 @@ public class SettingActivity extends BaseActivity {
     TextView tvCache;
     @BindView(R.id.tv_video_type)
     TextView tvVideoType;
-    private Tencent qqTencent;
 
 
     @Override
@@ -44,7 +45,6 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-//        qqTencent = Tencent.createInstance(Contacts.QQ_APP_ID,this);
         tvCache.setText(GlideCacheUtil.getInstance().getCacheSize(AppContext.context()));
     }
 
@@ -74,8 +74,15 @@ public class SettingActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_account:
+                AccountSecurityActivity.startAccountSecurity(this);
                 break;
             case R.id.ll_msg_setting:
+                boolean Jurisdiction = NotificationManagerCompat.from(AppContext.context()).areNotificationsEnabled();
+                if (!Jurisdiction) {
+                    gotoSet();
+                }else {
+                    ToastUtil.makeShortText(SettingActivity.this,"您已开启通知");
+                }
                 break;
             case R.id.ll_agreement:
                 break;
@@ -88,23 +95,49 @@ public class SettingActivity extends BaseActivity {
             case R.id.ll_about_app:
                 break;
             case R.id.tv_login_out:
-//                switch (UserInfo.getInstance().getLoginType()){
-//                    case 0:
-//                        break;
-//                    case 1://QQ登录
-//                        qqTencent.logout(this);
-//                        break;
-//                    case 2://微信退出
-//                        AppContext.mWxApi.unregisterApp();
-//                        break;
-//                    case 3:
-//                        break;
-//                }
+                switch (UserInfo.getInstance().getLoginType()){
+                    case 0:
+                        break;
+                    case  Contacts.QQLOGIN://QQ登录
+                        AppContext.mTencent.logout(this);
+                        break;
+                    case  Contacts.WXLOGIN://微信退出
+                        AppContext.mWxApi.unregisterApp();
+                        break;
+                    case Contacts.WBLOGIN:
+                        break;
+                }
                 UserInfo.getInstance().clearAccess();
-//                NIMClient.getService(AuthService.class).logout();
+                NIMClient.getService(AuthService.class).logout();
                 EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
                 MainActivity.startMainActivity(this,0);
                 break;
         }
+    }
+
+    //设置页面
+    private void gotoSet() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            Intent intent = new Intent();
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", SettingActivity.this.getPackageName());
+            intent.putExtra("app_uid", SettingActivity.this.getApplicationInfo().uid);
+            startActivity(intent);
+        }
+//        else if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+//            Intent intent = new Intent();
+//            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//            intent.addCategory(Intent.CATEGORY_DEFAULT);
+//            intent.setData(Uri.parse("package:" + Home2Activity.this.getPackageName()));
+//            startActivity(intent);
+//        }
+        else {
+            Intent localIntent = new Intent();
+            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", SettingActivity.this.getPackageName(), null));
+            startActivity(localIntent);
+        }
+
     }
 }

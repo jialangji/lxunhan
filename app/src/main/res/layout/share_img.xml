@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -8,10 +8,10 @@
     <LinearLayout
         android:id="@+id/other_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_linear"
         android:padding="@dimen/dp_56"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/layout_webview"
@@ -24,8 +24,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/shape_top_grayf7"
         android:orientation="vertical">
 
@@ -110,4 +112,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

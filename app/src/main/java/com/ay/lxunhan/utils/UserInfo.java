@@ -19,6 +19,8 @@ public class UserInfo {
 
     private String wyyAccount;
     private String wyyToken;
+    private String wxCode;
+    private boolean isWxLogin;
 
     private UserInfo(Context context) {
         userSp = context.getSharedPreferences(Contacts.USERINFO, Context.MODE_PRIVATE);
@@ -32,6 +34,26 @@ public class UserInfo {
     public void setWyyAccount(String wyyAccount) {
         this.wyyAccount = wyyAccount;
         editor.putString(Contacts.WYY_ACCOUNT,wyyAccount);
+        editor.commit();
+    }
+
+    public boolean isWxLogin() {
+        return userSp.getBoolean(Contacts.WX_ISLOGIN,false);
+    }
+
+    public void setWxLogin(boolean wxLogin) {
+        isWxLogin = wxLogin;
+        editor.putBoolean(Contacts.WX_ISLOGIN,wxLogin);
+        editor.commit();
+    }
+
+    public String getWxCode() {
+        return userSp.getString(Contacts.WX_CODE,"");
+    }
+
+    public void setWxCode(String wxCode) {
+        this.wxCode = wxCode;
+        editor.putString(Contacts.WX_CODE,wxCode);
         editor.commit();
     }
 

@@ -1,6 +1,9 @@
 package com.ay.lxunhan.base;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
@@ -17,8 +20,10 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AuthInfo;
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.tencent.tauth.Tencent;
 import com.wanjian.cockroach.Cockroach;
 
 import java.lang.reflect.Constructor;
@@ -31,6 +36,7 @@ public class AppContext extends MultiDexApplication {
     public int count = 0;
     public static boolean isOpenUpdateDialog = false;
     public static IWXAPI mWxApi;
+    public static Tencent mTencent;
 
     @Override
     public void onCreate() {
@@ -54,6 +60,7 @@ public class AppContext extends MultiDexApplication {
 //            NimUIKit.init(this);
 //        }
         registToWX();
+        mTencent = Tencent.createInstance(Contacts.QQ_APP_ID, this.getApplicationContext());
 //        initWebSDK();
 //        WsManager.getInstance().init();
 //        cockroach();
@@ -87,6 +94,15 @@ public class AppContext extends MultiDexApplication {
         mWxApi = WXAPIFactory.createWXAPI(this, Contacts.WX_APP_ID, false);
         // 将该app注册到微信
         mWxApi.registerApp(Contacts.WX_APP_ID);
+        //建议动态监听微信启动广播进行注册到微信
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // 将该app注册到微信
+                mWxApi.registerApp(Contacts.WX_APP_ID);
+            }
+        }, new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
+
     }
 
     public static AppContext context() {

@@ -10,6 +10,8 @@ import android.widget.RelativeLayout;
 
 import com.ay.lxunhan.R;
 
+import java.util.Objects;
+
 /**
  * @author ${jlj}
  * @package com.ay.lxunhan.widget
@@ -30,6 +32,8 @@ public class ShareFriendDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.dialog_share_friend);
+        Objects.requireNonNull(getWindow()).setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
         RelativeLayout otherView=findViewById(R.id.other_view);
         ImageView ivCancel=findViewById(R.id.iv_cancel);
         LinearLayout llQQ=findViewById(R.id.ll_qq);
