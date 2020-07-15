@@ -411,5 +411,13 @@ public class UrlConfig {
      */
     public static final String RECHARGE_WX="api/mine/recharge";
 
+    /**
+     *创建直播
+     */
+    public static final String CREATE_LIVE="api/live/create_live";
 
+    /**
+     * 直播详情
+     */
+    public static final String LIVE_DETAIL="api/live/desc_live";
 }

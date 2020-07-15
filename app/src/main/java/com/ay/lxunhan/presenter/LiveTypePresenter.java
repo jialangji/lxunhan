@@ -19,9 +19,9 @@ public class LiveTypePresenter extends BasePresenter<LiveTypeContract.LiveTypeVi
     }
 
     @Override
-    public void getLiveType() {
+    public void getLiveType(int type) {
         getView().showProgress();
-        addDisposable(HttpMethods.getInstance().getLiveType().subscribeWith(new BaseSubscriber<List<LiveBean>>(){
+        addDisposable(HttpMethods.getInstance().getLiveType(type).subscribeWith(new BaseSubscriber<List<LiveBean>>(){
             @Override
             public void onNext(List<LiveBean> o) {
                 super.onNext(o);

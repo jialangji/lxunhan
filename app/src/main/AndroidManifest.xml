@@ -44,7 +44,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".ui.public_ac.activity.PayResultActivity"></activity>
+        <activity android:name=".ui.live.LiveRoomActivity"></activity>
+        <activity android:name=".ui.live.CreateLiveActivity" />
+        <activity android:name=".ui.public_ac.activity.PayResultActivity" />
         <activity android:name=".ui.my.activity.UpdatePhoneActivity" />
         <activity android:name=".ui.my.activity.AccountSecurityActivity" />
         <activity android:name=".ui.my.activity.PayActivity" />

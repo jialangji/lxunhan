@@ -10,6 +10,7 @@ import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
+import com.ay.lxunhan.bean.CreateBean;
 import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
@@ -18,6 +19,7 @@ import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LiveBean;
+import com.ay.lxunhan.bean.LiveDetailBean;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
@@ -77,6 +79,7 @@ public interface HttpApi {
      */
     @POST(UrlConfig.COMPLETE_INFO)
     Flowable<HttpResult<Object>> completeInfo(@Body RequestBody body);
+
     /**
      *完善信息
      */
@@ -530,7 +533,7 @@ public interface HttpApi {
      * 直播类型
      */
     @GET(UrlConfig.LIVE_TYPE)
-    Flowable<HttpResult<List<LiveBean>>> liveType();
+    Flowable<HttpResult<List<LiveBean>>> liveType(@Query("type") int type);
 
     /**
      * 直播列表
@@ -575,7 +578,7 @@ public interface HttpApi {
      * 礼物列表
      */
     @GET(UrlConfig.LIVE_GIFT)
-    Flowable<HttpResult<GiftBean>>  liveGift(@Query("type") String type);
+    Flowable<HttpResult<List<GiftBean>>> liveGift(@Query("type") String type);
 
     /**
      * 充值列表
@@ -588,6 +591,27 @@ public interface HttpApi {
      */
     @GET(UrlConfig.RECHARGE_WX)
     Flowable<HttpResult<WxOrderBean>> recharge(@Query("uqid") String uqid,@Query("id") String id);
+
+    /**
+     * 创建直播间
+     */
+    @Multipart
+    @POST(UrlConfig.CREATE_LIVE)
+    Flowable<HttpResult<CreateBean>> createLive(@Query("uqid") String uqid, @Query("name") String name, @Query("type") String type,
+                                                @Part MultipartBody.Part cover);
+    /**
+     * 创建直播间
+     */
+    @POST(UrlConfig.CREATE_LIVE)
+    Flowable<HttpResult<CreateBean>> createLive(@Query("uqid") String uqid,@Query("name") String name, @Query("type") String type);
+
+    /**
+     * 直播详情
+     */
+    @GET(UrlConfig.LIVE_DETAIL)
+    Flowable<HttpResult<LiveDetailBean>> liveDetail(@Query("uqid") String uqid);
+
+
 }
 
 

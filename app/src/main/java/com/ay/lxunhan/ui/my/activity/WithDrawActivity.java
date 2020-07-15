@@ -42,7 +42,7 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
     @BindView(R.id.tv_account_info)
     TextView tvAccountInfo;
     private String balance;
-    private int withdrawType=0;
+    private int withdrawType = 0;
 
     @Override
     public WithDrawPresenter initPresenter() {
@@ -127,16 +127,14 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
             case R.id.tv_withdraw:
                 if (!TextUtils.isEmpty(StringUtil.getFromEdit(etPrice))) {
                     if (BigDecimalUtils.compareIsBig(balance, StringUtil.getFromEdit(etPrice))) {
-                        if (withdrawType!=0) {
-                            if (!TextUtils.isEmpty(StringUtil.getFromEdit(etAccount))) {
-                                WithdrawModel withdrawModel=new WithdrawModel(withdrawType,StringUtil.getFromEdit(etPrice),StringUtil.getFromEdit(etAccount));
-                                presenter.withdraw(withdrawModel);
-                            }else{
-                                ToastUtil.makeShortText(this, "请输入提现账号");
-                            }
+
+                        if (!TextUtils.isEmpty(StringUtil.getFromEdit(etAccount))) {
+                            WithdrawModel withdrawModel = new WithdrawModel(withdrawType, StringUtil.getFromEdit(etPrice), StringUtil.getFromEdit(etAccount));
+                            presenter.withdraw(withdrawModel);
                         } else {
-                            ToastUtil.makeShortText(this, "请选择提现方式");
+                            ToastUtil.makeShortText(this, "请输入提现账号");
                         }
+
                     } else {
                         ToastUtil.makeShortText(this, "余额不足无法提现");
                     }
@@ -161,7 +159,7 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
 
     @Override
     public void withdrawFinish() {
-        ToastUtil.makeShortText(this,"提现申请已提交");
+        ToastUtil.makeShortText(this, "提现申请已提交");
         etPrice.setText("");
         checkWx.setChecked(false);
         checkAlipay.setChecked(false);

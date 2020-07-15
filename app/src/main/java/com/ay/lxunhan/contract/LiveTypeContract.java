@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface LiveTypeContract {
     interface LiveTypePresenter{
-        void getLiveType();
+        void getLiveType(int type);
     }
 
     interface LiveTypeView{

@@ -26,6 +26,7 @@
     <color name="color_fc">#FCFCFC</color>
     <color name="color_8bdd3d">#8BDD3D</color>
     <color name="color_2A6CFF">#2A6CFF</color>
+    <color name="white_trans">#50ffffff</color>
 
     <!-- 二维码-->
     <color name="viewfinder_frame">#ff000000</color>

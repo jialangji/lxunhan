@@ -13,6 +13,7 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.LiveBean;
 import com.ay.lxunhan.contract.LiveTypeContract;
 import com.ay.lxunhan.presenter.LiveTypePresenter;
+import com.ay.lxunhan.ui.live.CreateLiveActivity;
 import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
 import com.ay.lxunhan.ui.video.fragment.LiveFragment;
 import com.ay.lxunhan.utils.Contacts;
@@ -52,7 +53,7 @@ public class LiveActivity extends BaseActivity<LiveTypeContract.LiveTypeView, Li
     @Override
     protected void initData() {
         super.initData();
-        presenter.getLiveType();
+        presenter.getLiveType(0);
     }
 
     @Override
@@ -100,6 +101,7 @@ public class LiveActivity extends BaseActivity<LiveTypeContract.LiveTypeView, Li
                 SearchActivity.startSearchActivity(this, Contacts.HISTORY_LIVE);
                 break;
             case R.id.iv_live:
+                CreateLiveActivity.startCreateLiveActivity(this);
                 break;
         }
     }

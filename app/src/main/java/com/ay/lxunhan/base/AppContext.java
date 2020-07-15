@@ -13,9 +13,12 @@ import android.util.Log;
 
 import com.ay.lxunhan.BuildConfig;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.wyyim.liveuser.CustomAttachParser;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.util.NIMUtil;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.sina.weibo.sdk.WbSdk;
@@ -53,12 +56,13 @@ public class AppContext extends MultiDexApplication {
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(this, loginInfo(), options());
 //        // ... your codes
-//        if (NIMUtil.isMainProcess(this)) {
-//            // 注意：以下操作必须在主进程中进行
-//            // 1、UI相关初始化操作
-//            // 2、相关Service调用
-//            NimUIKit.init(this);
-//        }
+        if (NIMUtil.isMainProcess(this)) {
+            // 注意：以下操作必须在主进程中进行
+            // 1、UI相关初始化操作
+            // 2、相关Service调用
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
+        }
+
         registToWX();
         mTencent = Tencent.createInstance(Contacts.QQ_APP_ID, this.getApplicationContext());
 //        initWebSDK();

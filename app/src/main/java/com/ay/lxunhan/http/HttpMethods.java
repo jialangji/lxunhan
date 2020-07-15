@@ -11,13 +11,16 @@ import com.ay.lxunhan.bean.ChatListBean;
 import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
+import com.ay.lxunhan.bean.CreateBean;
 import com.ay.lxunhan.bean.FriendBean;
+import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LiveBean;
+import com.ay.lxunhan.bean.LiveDetailBean;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
@@ -190,6 +193,7 @@ public class HttpMethods {
         Flowable<HttpResult<List<MultiItemBaseBean>>> flowable=httpService.getHomeList(UserInfo.getInstance().getUserId(),type,title,page, Contacts.LIMIT);
         return compositeThread(flowable);
     }
+
     /**
      * 推荐列表
      */
@@ -204,6 +208,7 @@ public class HttpMethods {
         Flowable<HttpResult<List<MultiItemBaseBean>>> flowable=httpService.getHomeListAsk(UserInfo.getInstance().getUserId(),page, Contacts.LIMIT);
         return compositeThread(flowable);
     }
+
     /**
      * 投票列表
      */
@@ -608,7 +613,6 @@ public class HttpMethods {
         return compositeThread(flowable);
     }
 
-
     /**
      *
      * 账单列表
@@ -725,8 +729,8 @@ public class HttpMethods {
     /**
      * 获取直播类型
      */
-    public Flowable<List<LiveBean>> getLiveType(){
-        Flowable<HttpResult<List<LiveBean>>> flowable=httpService.liveType();
+    public Flowable<List<LiveBean>> getLiveType(int type){
+        Flowable<HttpResult<List<LiveBean>>> flowable=httpService.liveType(type);
         return compositeThread(flowable);
     }
 
@@ -775,6 +779,46 @@ public class HttpMethods {
      */
     public Flowable<WxOrderBean> recharge(String id){
         Flowable<HttpResult<WxOrderBean>> flowable=httpService.recharge(UserInfo.getInstance().getUserId(),id);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 创建直播间
+     */
+    public Flowable<CreateBean> createLive(String title, String type, MultipartBody.Part part) {
+        Flowable<HttpResult<CreateBean>> flowable;
+        if (part != null) {
+            flowable = httpService.createLive(UserInfo.getInstance().getUserId(), title,type, part);
+        } else {
+            flowable = httpService.createLive(UserInfo.getInstance().getUserId(), title,type);
+        }
+
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 直播间信息
+     */
+    public Flowable<LiveDetailBean> liveDetail(){
+        Flowable<HttpResult<LiveDetailBean>> flowable=httpService.liveDetail(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 观看人数增减
+     */
+    public Flowable<Object> liveSeeCount(String lid,boolean isAdd){
+        Flowable<HttpResult<Object>> flowable;
+        if (isAdd){
+            flowable=httpService.addLiveSeeCount(UserInfo.getInstance().getUserId(),lid);
+        }else {
+            flowable=httpService.deleteLiveSeeCount(UserInfo.getInstance().getUserId(),lid);
+        }
+        return compositeThread(flowable);
+    }
+
+    public Flowable<List<GiftBean>> giftList(String type){
+        Flowable<HttpResult<List<GiftBean>>> flowable=httpService.liveGift(type);
         return compositeThread(flowable);
     }
 

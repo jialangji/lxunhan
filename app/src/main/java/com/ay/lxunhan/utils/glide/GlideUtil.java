@@ -178,6 +178,17 @@ public class GlideUtil {
                 .into(v); // 需要显示的ImageView控件
     }
 
+    public static void loadRoundImg(Context context, ImageView v, Bitmap url) {
+        GlideApp.with(context)
+                .load(url)
+                .transform(new MultiTransformation<>(new CenterCrop(),new RoundCustomTransformation(context,10)))
+                // 图片地址
+                .placeholder(DEFAULT_PIC)// 正在加载中的图片
+                .error(DEFAULT_PIC) // 加载失败的图片
+                // .listener(requestListener)
+                .into(v); // 需要显示的ImageView控件
+    }
+
     public static void loadCircleImgForHead(Context context, ImageView v, String url) {
         GlideApp.with(context)
                 .load(url) // 图片地址
