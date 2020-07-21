@@ -21,6 +21,33 @@ public class GiftBean {
     private String cover;
     private int gold;
     private int count;
+    private boolean isSelect;
+    private String header;
+    private String userName;
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
+    }
 
     public int getId() {
         return id;

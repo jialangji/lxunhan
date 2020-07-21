@@ -21,6 +21,8 @@ public class UserInfo {
     private String wyyToken;
     private String wxCode;
     private boolean isWxLogin;
+    private String userName;
+
 
     private UserInfo(Context context) {
         userSp = context.getSharedPreferences(Contacts.USERINFO, Context.MODE_PRIVATE);
@@ -64,6 +66,16 @@ public class UserInfo {
     public void setWyyToken(String wyyToken) {
         this.wyyToken = wyyToken;
         editor.putString(Contacts.WYY_TOKEN,wyyToken);
+        editor.commit();
+    }
+
+    public String getUserName() {
+        return userSp.getString(Contacts.USERNAME,"");
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+        editor.putString(Contacts.USERNAME,userName);
         editor.commit();
     }
 

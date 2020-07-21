@@ -9,6 +9,7 @@ import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.contract.LiveListContract;
 import com.ay.lxunhan.presenter.LiveListPresenter;
+import com.ay.lxunhan.ui.live.LiveRoomActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -95,6 +96,7 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
                 }
             }
         });
+        liveAdapter.setOnItemClickListener((adapter, view, position) -> LiveRoomActivity.startAudience(getActivity(),liveListBeans.get(position).getRoomcode(),liveListBeans.get(position).getHttpPullUrl(),true,liveListBeans.get(position).getLid()));
     }
 
     @Override

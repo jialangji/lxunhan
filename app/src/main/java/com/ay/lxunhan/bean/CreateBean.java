@@ -34,6 +34,15 @@ public class CreateBean {
     private String hlsPullUrl;
     private String rtmpPullUrl;
     private String created_at;
+    private String roomcode;
+
+    public String getRoomcode() {
+        return roomcode;
+    }
+
+    public void setRoomcode(String roomcode) {
+        this.roomcode = roomcode;
+    }
 
     public int getId() {
         return id;

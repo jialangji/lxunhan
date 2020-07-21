@@ -36,7 +36,7 @@ public class ShareUtils {
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "韩乐讯";
         msg.description = "";
-        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_logo);
+        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_logo);
         Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
         msg.thumbData = Utils.bmpToByteArray(thumbBmp, true);
 
@@ -62,7 +62,7 @@ public class ShareUtils {
         WXMediaMessage msg = new WXMediaMessage(webpage);
         msg.title = "韩乐讯";
         msg.description = "";
-        Bitmap thumbBmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_logo);
+        Bitmap thumbBmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_logo);
         msg.thumbData = Utils.bmpToByteArray(thumbBmp, true);
         //构造一个Req
         SendMessageToWX.Req req = new SendMessageToWX.Req();

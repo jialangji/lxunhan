@@ -191,6 +191,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
         UserInfo.getInstance().setUid(userInfoBean.getUid());
         GlideUtil.loadCircleImgForHead(this,ivHeader,userInfoBean.getAvatar());
         UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
+        UserInfo.getInstance().setUserName(userInfoBean.getNickname());
         tvName.setText(userInfoBean.getNickname());
         if (userInfoBean.getSex()){
             tvSex.setText("男");

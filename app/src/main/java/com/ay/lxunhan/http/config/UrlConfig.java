@@ -420,4 +420,25 @@ public class UrlConfig {
      * 直播详情
      */
     public static final String LIVE_DETAIL="api/live/desc_live";
+
+    /**
+     * 关闭直播间
+     */
+    public static final String LIVE_FINISH="api/live/live_close";
+
+    /**
+     * 赠送礼物
+     */
+    public static final String SEND_GIFT="api/live/give_gifts";
+
+    /**
+     * 直播间详情
+     */
+    public static final String LIVE_INFO="api/live/people_desc";
+
+    /**
+     * 开启直播
+     */
+    public static final String OPEN_LIVE="api/live/start_live";
+
 }

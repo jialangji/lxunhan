@@ -24,6 +24,43 @@ public class LiveListBean {
     private String lid;
     private int lstate;
     private int people;
+    private String httpPullUrl;
+    private String hlsPullUrl;
+    private String rtmpPullUrl;
+    private String roomcode;
+
+
+    public String getRoomcode() {
+        return roomcode;
+    }
+
+    public void setRoomcode(String roomcode) {
+        this.roomcode = roomcode;
+    }
+
+    public String getHttpPullUrl() {
+        return httpPullUrl;
+    }
+
+    public void setHttpPullUrl(String httpPullUrl) {
+        this.httpPullUrl = httpPullUrl;
+    }
+
+    public String getHlsPullUrl() {
+        return hlsPullUrl;
+    }
+
+    public void setHlsPullUrl(String hlsPullUrl) {
+        this.hlsPullUrl = hlsPullUrl;
+    }
+
+    public String getRtmpPullUrl() {
+        return rtmpPullUrl;
+    }
+
+    public void setRtmpPullUrl(String rtmpPullUrl) {
+        this.rtmpPullUrl = rtmpPullUrl;
+    }
 
     public int getId() {
         return id;

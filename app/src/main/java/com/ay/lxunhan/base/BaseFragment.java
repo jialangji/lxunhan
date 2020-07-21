@@ -1,7 +1,9 @@
 package com.ay.lxunhan.base;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.ui.login.LoginActivity;
-import com.ay.lxunhan.utils.StatusBarUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.gyf.immersionbar.ImmersionBar;
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -204,6 +205,21 @@ public abstract class BaseFragment<V, P extends BasePresenter<V>> extends Fragme
             return true;
         }
     }
+
+    protected void showConfirmDialog(String title, String message, DialogInterface.OnClickListener okEvent, DialogInterface.OnClickListener cancelEvent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.sure,
+                okEvent);
+        if (cancelEvent != null) {
+            builder.setNegativeButton(R.string.cancel,
+                    cancelEvent);
+        }
+        builder.setCancelable(false);
+        builder.show();
+    }
+
 
 
 }

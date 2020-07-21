@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.ay.lxunhan.BuildConfig;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.wyyim.liveuser.CustomAttachParser;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -79,8 +80,8 @@ public class AppContext extends MultiDexApplication {
 
     // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
     private LoginInfo loginInfo() {
-       String account= com.ay.lxunhan.utils.UserInfo.getInstance().getWyyAccount();
-       String token= com.ay.lxunhan.utils.UserInfo.getInstance().getWyyToken();
+        String account = UserInfo.getInstance().getWyyAccount();
+        String token =  UserInfo.getInstance().getWyyToken();
         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
             return new LoginInfo(account, token);
         } else {
@@ -121,6 +122,7 @@ public class AppContext extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+
 
 //    /**
 //     * 初始化应用前后台状态监听

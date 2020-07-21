@@ -43,6 +43,7 @@ public class Contacts {
     final static String USERINFO = APP_ID + "_userinfo";//存储本地用户信息的文件名
     final static String USERID = "userId";
     final static String UID="uid";
+    final static String USERNAME="userName";
 
     final static String ISLOGIN = "isLogin";
     final static String ISFIRSTOPEN = "isFirstOpen";

@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.bean.LiveBean;
@@ -47,6 +46,15 @@ public class SelectLiveTypeDialog extends Dialog implements View.OnClickListener
 
         Objects.requireNonNull(getWindow()).setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
+        View ontherView=findViewById(R.id.other_view);
+        ontherView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener!=null){
+                    itemClickListener.cancel();
+                }
+            }
+        });
         RecyclerView rvType = findViewById(R.id.rv_type);
         BaseQuickAdapter typeAdapter = new BaseQuickAdapter<LiveBean, BaseViewHolder>(R.layout.item_live_type,liveBeans) {
             @Override
@@ -58,8 +66,6 @@ public class SelectLiveTypeDialog extends Dialog implements View.OnClickListener
         };
         rvType.setLayoutManager(new LinearLayoutManager(context));
         rvType.setAdapter(typeAdapter);
-        TextView tvCancel = findViewById(R.id.tv_cancel);
-        tvCancel.setOnClickListener(this);
         typeAdapter.setOnItemClickListener((adapter, view, position) -> {
             for (LiveBean liveBean : liveBeans) {
                 liveBean.setSelect(false);
@@ -79,5 +85,6 @@ public class SelectLiveTypeDialog extends Dialog implements View.OnClickListener
 
     public interface ItemClickListener {
         void onItem(LiveBean typeBean);
+        void cancel();
     }
 }

@@ -5,9 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.live.CreateLiveActivity">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_live_bg"/>
 
     <com.netease.vcloud.video.render.NeteaseView
         android:id="@+id/live_filter_view"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -99,7 +105,7 @@
                             android:textColorHint="@color/white"
                             android:singleLine="true"
                             android:textSize="@dimen/sp_14"
-                            android:hint="XXX正在直播"
+                            android:hint="输入直播间名称"
                             />
                         <ImageView
                             android:layout_width="@dimen/dp_13"
@@ -115,6 +121,7 @@
             <RelativeLayout
                 android:id="@+id/rl_fanzhuan"
                 android:layout_width="@dimen/dp_20"
+                android:visibility="gone"
                 android:layout_alignParentEnd="true"
                 android:layout_height="wrap_content">
                 <TextView

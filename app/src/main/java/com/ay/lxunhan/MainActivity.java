@@ -362,6 +362,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     @Override
     public void getUserInfoFinish(UserInfoBean userInfoBean) {
         UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
+        UserInfo.getInstance().setUserName(userInfoBean.getNickname());
     }
 
     @Override

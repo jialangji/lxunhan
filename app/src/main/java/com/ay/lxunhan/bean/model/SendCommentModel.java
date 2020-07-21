@@ -20,7 +20,7 @@ public class SendCommentModel {
         this.oid = oid;
     }
 
-    public SendCommentModel(String uqid, String fid , String content,String bid) {
+    public SendCommentModel(String uqid, String fid,String content,String bid) {
         this.uqid = uqid;
         this.bid = bid;
         this.content = content;

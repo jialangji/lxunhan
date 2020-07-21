@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/ll_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_70"
+    android:layout_height="@dimen/dp_105">
+    <LinearLayout
+        android:id="@+id/ll_gift"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_gift"
+            android:layout_width="@dimen/dp_55"
+            android:layout_height="@dimen/dp_55"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="matrix"
+            />
+        <TextView
+            android:id="@+id/tv_gift_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_7"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/color_b2"
+            />
+        <TextView
+            android:id="@+id/tv_gift_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/sp_10"
+            android:textColor="@color/color_78"
+            />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

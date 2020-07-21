@@ -28,16 +28,11 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.ay.lxunhan.permission.RECEIVE_MSG" /> <!-- 小米推送 -->
-    <permission
-        android:name="com.ay.lxunhan.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.ay.lxunhan.permission.MIPUSH_RECEIVE" />
 
     <application
         android:name=".base.AppContext"
         android:allowBackup="true"
-        android:icon="@drawable/ic_logo"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
@@ -286,6 +281,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <receiver android:name="com.ay.lxunhan.demo.receiver.IncomingCallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"

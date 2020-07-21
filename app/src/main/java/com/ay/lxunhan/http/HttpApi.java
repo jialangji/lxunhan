@@ -19,6 +19,7 @@ import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LiveBean;
+import com.ay.lxunhan.bean.LiveDetail;
 import com.ay.lxunhan.bean.LiveDetailBean;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.LoginBean;
@@ -611,7 +612,30 @@ public interface HttpApi {
     @GET(UrlConfig.LIVE_DETAIL)
     Flowable<HttpResult<LiveDetailBean>> liveDetail(@Query("uqid") String uqid);
 
+    /**
+     * 主播关闭直播间
+     */
+    @GET(UrlConfig.LIVE_FINISH)
+    Flowable<HttpResult<Object>> liveFinish(@Query("uqid") String uqid,@Query("lid") String lid);
 
+    /**
+     * 送礼物
+     */
+    @GET(UrlConfig.SEND_GIFT)
+    Flowable<HttpResult<Object>> sendGift(@Query("uqid") String uqid,@Query("gid") String gid,@Query("lid") String lid
+    ,@Query("count") String count);
+
+    /**
+     * 获取直播间信息
+     */
+    @GET(UrlConfig.LIVE_INFO)
+    Flowable<HttpResult<LiveDetail>> liveInfo(@Query("uqid") String uqid,@Query("lid") String lid);
+
+    /**
+     * 开启直播
+     */
+    @GET(UrlConfig.OPEN_LIVE)
+    Flowable<HttpResult<Object>> openLive(@Query("uqid") String uqid,@Query("lid") String lid);
 }
 
 

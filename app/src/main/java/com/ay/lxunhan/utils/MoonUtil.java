@@ -47,7 +47,7 @@ public class MoonUtil {
         }
     }
 
-    private static SpannableString replaceEmoticons(Context context, String value, float scale, int align) {
+    public static SpannableString replaceEmoticons(Context context, String value, float scale, int align) {
         if (TextUtils.isEmpty(value)) {
             value = "";
         }

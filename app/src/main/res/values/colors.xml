@@ -53,4 +53,7 @@
     <color name="color_fca2bc">#F3A2BC</color>
     <color name="color_c8">#c8c8c8</color>
     <color name="color_8d">#8d8d8d</color>
+    <color name="color_9">#999999</color>
+    <color name="color_chat_text">#ffffff</color>
+    <color name="bg_media_player_controller">#7f000000</color>
 </resources>

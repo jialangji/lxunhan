@@ -228,4 +228,10 @@
     <string name="change_cover">更换封面</string>
     <string name="part">参与</string>
     <string name="yi_part">已参与</string>
+    <string name="live_finish">直播已结束</string>
+    <string name="live_time">本次直播时长</string>
+    <string name="back">返回</string>
+    <string name="buffering">缓冲中</string>
+    <string name="send_gift">送了</string>
+    <string name="gift">礼物</string>
 </resources>

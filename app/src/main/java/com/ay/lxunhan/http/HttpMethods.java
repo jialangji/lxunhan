@@ -20,6 +20,7 @@ import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LiveBean;
+import com.ay.lxunhan.bean.LiveDetail;
 import com.ay.lxunhan.bean.LiveDetailBean;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.LoginBean;
@@ -817,11 +818,46 @@ public class HttpMethods {
         return compositeThread(flowable);
     }
 
+    /**
+     * 礼物列表
+     */
     public Flowable<List<GiftBean>> giftList(String type){
         Flowable<HttpResult<List<GiftBean>>> flowable=httpService.liveGift(type);
         return compositeThread(flowable);
     }
 
+    /**
+     * 关闭直播间
+     */
+    public Flowable<Object> liveClose(String lid){
+        Flowable<HttpResult<Object>> flowable=httpService.liveFinish(UserInfo.getInstance().getUserId(),lid);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 送礼物
+     */
+    public Flowable<Object> sendGift(String lid,String aid,String count){
+        Flowable<HttpResult<Object>> flowable=httpService.sendGift(UserInfo.getInstance().getUserId(),aid,lid,count);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 直播间信息
+     */
+    public Flowable<LiveDetail> liveInfo(String lid){
+        Flowable<HttpResult<LiveDetail>> flowable=httpService.liveInfo(UserInfo.getInstance().getUserId(),lid);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 打开直播
+
+     */
+    public Flowable<Object> openLive(String lid){
+        Flowable<HttpResult<Object>> flowable=httpService.openLive(UserInfo.getInstance().getUserId(),lid);
+        return compositeThread(flowable);
+    }
 
     /**
      * 批量上传文件

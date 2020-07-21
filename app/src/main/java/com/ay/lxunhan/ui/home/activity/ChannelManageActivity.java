@@ -90,7 +90,6 @@ public class ChannelManageActivity extends BaseActivity<ChannelContract.ChannelV
                     mPosition = position;
                     if (isVideo) {
                         presenter.deleteVideoChannel(String.valueOf(myChannelList.get(position).getId()));
-
                     } else {
                         presenter.deleteChannel(String.valueOf(myChannelList.get(position).getId()));
                     }

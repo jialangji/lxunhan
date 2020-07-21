@@ -1,7 +1,10 @@
 package com.ay.lxunhan.base;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +34,7 @@ public abstract class BaseActivity<V, P extends BasePresenter<V>> extends AppCom
     protected Context mContext;
     protected ImmersionBar immersionBar;
     protected View titleBar;
-
+    private static Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +61,12 @@ public abstract class BaseActivity<V, P extends BasePresenter<V>> extends AppCom
     public boolean isUserEvent() {
         return false;
     }
-
+    protected final Handler getBaseHandler() {
+        if (handler == null) {
+            handler = new Handler(getMainLooper());
+        }
+        return handler;
+    }
 
     @Override
     protected void onResume() {
@@ -209,7 +217,16 @@ public abstract class BaseActivity<V, P extends BasePresenter<V>> extends AppCom
         super.attachBaseContext(newBase);
     }
 
-
+    public void showConfirmDialog(String title, String message, DialogInterface.OnClickListener okEvent, DialogInterface.OnClickListener cancelEvent){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.sure,
+                okEvent);
+        builder.setNegativeButton(R.string.cancel,
+                cancelEvent);
+        builder.show();
+    }
 
     protected boolean isSetNoNetView() {
         return false;

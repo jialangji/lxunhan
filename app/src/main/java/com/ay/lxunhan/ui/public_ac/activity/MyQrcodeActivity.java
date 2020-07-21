@@ -113,6 +113,8 @@ public class MyQrcodeActivity extends BaseActivity<UserInfoContract.UserInfoView
         ivQrcode.setImageBitmap(bitmap);
         GlideUtil.loadCircleImgForHead(this,ivHeader,userInfoBean.getAvatar());
         UserInfo.getInstance().setAvatar(userInfoBean.getAvatar());
+        UserInfo.getInstance().setUserName(userInfoBean.getNickname());
+
         tvName.setText(userInfoBean.getNickname());
         tvSignature.setText(userInfoBean.getAutograph());
         ivSex.setImageDrawable(getResources().getDrawable(userInfoBean.getSex()?R.drawable.ic_man:R.drawable.ic_woman));

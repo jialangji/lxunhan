@@ -1,7 +1,9 @@
 package com.ay.lxunhan.wyyim.liveuser;
 
+
 import com.alibaba.fastjson.JSONObject;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachment;
+
 
 
 public abstract class CustomAttachment implements MsgAttachment {

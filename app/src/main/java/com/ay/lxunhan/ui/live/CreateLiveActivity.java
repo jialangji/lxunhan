@@ -38,7 +38,7 @@ import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.SelectImageDialog;
 import com.ay.lxunhan.widget.SelectLiveTypeDialog;
-import com.netease.LSMediaCapture.lsLogUtil;
+import com.ay.lxunhan.wyyim.liveuser.PublishParam;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.vcloud.video.render.NeteaseView;
@@ -122,7 +122,7 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
     @Override
     protected void onPause() {
         super.onPause();
-        mLSMediaCapture.stopVideoPreview();
+//        mLSMediaCapture.stopVideoPreview();
     }
 
     @Override
@@ -135,9 +135,9 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
     @Override
     protected void onResume() {
         super.onResume();
-        if (bPermission){
-            mLSMediaCapture.startVideoPreview(filterSurfaceView, true, true, lsMediaCapture.VideoQuality.HIGH, true);
-        }
+//        if (bPermission){
+//            mLSMediaCapture.startVideoPreview(filterSurfaceView, true, true, lsMediaCapture.VideoQuality.HIGH, true);
+//        }
     }
 
     @Override
@@ -145,22 +145,22 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
         super.initView();
         bPermission = checkPublishPermission();
         mainHandler = new Handler(Looper.getMainLooper());
-        lsMediaCapture.LsMediaCapturePara lsMediaCapturePara = new lsMediaCapture.LsMediaCapturePara();
-        lsMediaCapturePara.setContext(getApplicationContext()); //设置SDK上下文（建议使用ApplicationContext）
-        lsMediaCapturePara.setMessageHandler(this); //设置SDK消息回调
-        lsMediaCapturePara.setLogLevel(lsLogUtil.LogLevel.INFO); //日志级别
-        lsMediaCapturePara.setUploadLog(true);//是否上传SDK日志
-        mLSMediaCapture = new lsMediaCapture(lsMediaCapturePara);
-        if (bPermission){
-            mLSMediaCapture.startVideoPreview(filterSurfaceView, true, true, lsMediaCapture.VideoQuality.HIGH, true);
-        }
+//        lsMediaCapture.LsMediaCapturePara lsMediaCapturePara = new lsMediaCapture.LsMediaCapturePara();
+//        lsMediaCapturePara.setContext(getApplicationContext()); //设置SDK上下文（建议使用ApplicationContext）
+//        lsMediaCapturePara.setMessageHandler(this); //设置SDK消息回调
+//        lsMediaCapturePara.setLogLevel(lsLogUtil.LogLevel.INFO); //日志级别
+//        lsMediaCapturePara.setUploadLog(true);//是否上传SDK日志
+//        mLSMediaCapture = new lsMediaCapture(lsMediaCapturePara);
+//        if (bPermission){
+//            mLSMediaCapture.startVideoPreview(filterSurfaceView, true, true, lsMediaCapture.VideoQuality.HIGH, true);
+//        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mLSMediaCapture.stopVideoPreview();
-        mLSMediaCapture.destroyVideoPreview();
+//        mLSMediaCapture.stopVideoPreview();
+//        mLSMediaCapture.destroyVideoPreview();
     }
 
     @Override
@@ -177,21 +177,23 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
-                if (mLSMediaCapture != null) {
-                    mLSMediaCapture.stopVideoPreview();
-                    mLSMediaCapture.destroyVideoPreview();
-                }
+//                if (mLSMediaCapture != null) {
+//                    mLSMediaCapture.stopVideoPreview();
+//                    mLSMediaCapture.destroyVideoPreview();
+//                }
                 finish();
                 break;
             case R.id.tv_select:
                 if (liveBeans.size()>0){
+
                     showDialog(liveBeans);
+
                 }
                 break;
             case R.id.rl_fanzhuan:
-                if (mLSMediaCapture != null) {
-                    mLSMediaCapture.switchCamera();
-                }
+//                if (mLSMediaCapture != null) {
+//                    mLSMediaCapture.switchCamera();
+//                }
                 break;
             case R.id.tv_open_live:
                 if (!bPermission) {
@@ -228,7 +230,6 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
 
                             @Override
                             public void forbitPermissons() {
-
                             }
                         });
                 break;
@@ -240,20 +241,28 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
             selectTypeDialog = new SelectLiveTypeDialog(this, R.style.selectPicDialogstyle,liveBeans);
         }
         selectTypeDialog.show();
-        selectTypeDialog.setItemClickListener(typeBean -> {
-            typeId= String.valueOf(typeBean.getId());
-            tvSelect.setText(typeBean.getName());
+        selectTypeDialog.setItemClickListener(new SelectLiveTypeDialog.ItemClickListener() {
+            @Override
+            public void onItem(LiveBean typeBean) {
+                typeId= String.valueOf(typeBean.getId());
+                tvSelect.setText(typeBean.getName());
+            }
+
+            @Override
+            public void cancel() {
+                selectTypeDialog.dismiss();
+            }
         });
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            //do something.
-            if (mLSMediaCapture != null) {
-                mLSMediaCapture.stopVideoPreview();
-                mLSMediaCapture.destroyVideoPreview();
-            }
+//            do something.
+//            if (mLSMediaCapture != null) {
+//                mLSMediaCapture.stopVideoPreview();
+//                mLSMediaCapture.destroyVideoPreview();
+//            }
             finish();
             return true;
         } else {
@@ -332,13 +341,11 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
             case MSG_START_PREVIEW_ERROR://视频预览出错，可能是获取不到camera的使用权限
             {
                 Log.e(TAG, "test: in handleMessage, MSG_START_PREVIEW_ERROR");
-                ToastUtil.makeShortText(this, "无法打开相机，可能没有相关的权限");
                 break;
             }
             case MSG_AUDIO_RECORD_ERROR://音频采集出错，获取不到麦克风的使用权限
             {
                 Log.i(TAG, "test: in handleMessage, MSG_AUDIO_RECORD_ERROR");
-                ToastUtil.makeShortText(this, "无法开启录音，可能没有相关的权限");
                 break;
             }
         }
@@ -389,19 +396,36 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
     @Override
     public void getLiveTypeFinish(List<LiveBean> beans) {
         liveBeans.clear();
-        liveBeans.addAll(beans);
+        for (LiveBean bean : beans) {
+            if (bean.getId()==1&&bean.getId()==2){
+                return;
+            }else{
+                liveBeans.add(bean);
+            }
+        }
+
     }
 
     @Override
     public void getLiveDetailFinish(LiveDetailBean bean) {
         GlideUtil.loadRoundImg(this,ivHeader,bean.getCover());
+        typeId= String.valueOf(bean.getLtype());
         tvSelect.setText(bean.getLtypenm());
         etTitle.setText(bean.getLname());
     }
-
+    public static final String QUALITY_HD = "HD";
+    public static final String QUALITY_SD = "SD";
+    public static final String QUALITY_LD = "LD";
     @Override
     public void createLiveFinish(CreateBean createBean) {
-
+        PublishParam publishParam = new PublishParam();
+        publishParam.pushUrl = createBean.getPushurl();
+        publishParam.definition = QUALITY_SD;
+        publishParam.openVideo = true;
+        publishParam.openAudio = true;
+        publishParam.useFilter = true;
+        LiveRoomActivity.startLive(this,createBean.getRoomcode(),publishParam,createBean.getLid());
+        finish();
     }
 
     @Override
