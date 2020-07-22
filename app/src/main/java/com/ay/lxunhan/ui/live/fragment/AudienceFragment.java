@@ -121,7 +121,7 @@ public class AudienceFragment extends BaseFragment implements PlayerContract.Pla
         boolean isLive = intent.getBooleanExtra(IS_LIVE, true);
         boolean isSoftDecode = intent.getBooleanExtra(IS_SOFT_DECODE, true);
         liveActivity.initPresenter().liveSeeCount(liveActivity.liveId,true);
-        mediaPlayController = new LivePlayerController(getActivity(), this, mVideoView, null, mUrl, VideoConstant.VIDEO_SCALING_MODE_FILL_BLACK, isLive, !isSoftDecode);
+        mediaPlayController = new LivePlayerController(getActivity(), this, mVideoView, null, mUrl, VideoConstant.VIDEO_SCALING_MODE_FILL_SCALE, isLive, !isSoftDecode);
         mediaPlayController.initVideo();
     }
 

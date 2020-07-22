@@ -2,6 +2,7 @@ package com.ay.lxunhan.wyyim.liveuser;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -264,7 +265,8 @@ public class LiveBottomBar extends RelativeLayout {
         Map<String, Object> ext = new HashMap<>();
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, UserInfo.getInstance().getWyyAccount());
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-            ext.put("type", chatRoomMember.getMemberType().getValue());
+            Log.e("LIVE","type="+chatRoomMember.getMemberType().getValue());
+            ext.put("type", CustomAttachmentType.gift);
             message.setRemoteExtension(ext);
         }
     }

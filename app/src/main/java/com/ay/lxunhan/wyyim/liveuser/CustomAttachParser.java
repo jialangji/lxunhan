@@ -13,7 +13,6 @@ public class CustomAttachParser implements MsgAttachmentParser {
     public MsgAttachment parse(String json) {
         CustomAttachment attachment = null;
         try {
-
             JSONObject object =new JSONObject();
             object.getJSONObject(json);
             int type = object.getInteger(KEY_TYPE);

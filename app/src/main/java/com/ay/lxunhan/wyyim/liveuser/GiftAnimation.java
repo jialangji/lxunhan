@@ -3,6 +3,7 @@ package com.ay.lxunhan.wyyim.liveuser;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.bean.GiftBean;
+import com.ay.lxunhan.bean.WyGiftBean;
 import com.ay.lxunhan.utils.glide.GlideUtil;
+import com.google.gson.Gson;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
 import java.util.LinkedList;
@@ -149,14 +152,17 @@ public class GiftAnimation {
      */
 
     private void updateView(final ChatRoomMessage message, ViewGroup root) {
-        // senderName
+        Log.e("GIFT",message.getAttachStr());
+
+        Gson gson=new Gson();
+        WyGiftBean wyGiftBean= gson.fromJson(message.getAttachStr(), WyGiftBean.class);
+
         TextView audienceNameText = root.findViewById(R.id.audience_name);
         ImageView ivheadee = root.findViewById(R.id.iv_header);
         TextView giftText = root.findViewById(R.id.gift_name);
         TextView tvCount = root.findViewById(R.id.tv_count);
         ImageView giftImage = root.findViewById(R.id.gift_image);
-        GiftAttachment attachment = (GiftAttachment) message.getAttachment();
-        GiftBean bean = attachment.getGiftType();
+        GiftBean bean =wyGiftBean.getData().getPresent();
         // gift name & image
 
         audienceNameText.setText(bean.getUserName());

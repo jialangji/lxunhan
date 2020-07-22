@@ -21,8 +21,17 @@ public class ChatRoomMsgViewHolderFactory {
         if (message.getMsgType() == MsgTypeEnum.text) {
             return ChatRoomViewHolderText.class;
         } else {
-
-            return null;
+            Class<? extends MsgViewHolderBase> viewHolder = null;
+            if (message.getAttachment() != null) {
+                Class<? extends MsgAttachment> clazz = message.getAttachment().getClass();
+                while (viewHolder == null && clazz != null) {
+                    viewHolder = viewHolders.get(clazz);
+                    if (viewHolder == null) {
+                        clazz = MsgViewHolderFactory.getSuperClass(clazz);
+                    }
+                }
+            }
+            return viewHolder == null ? MsgViewHolderUnknown.class : viewHolder;
         }
     }
 

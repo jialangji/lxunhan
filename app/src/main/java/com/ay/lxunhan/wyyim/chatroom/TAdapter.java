@@ -37,8 +37,8 @@ public class TAdapter<T> extends BaseAdapter implements IViewReclaimer {
 		this.items = items;
 		this.delegate = delegate;
 		this.inflater = LayoutInflater.from(context);
-		this.viewTypes = new HashMap<Class<?>, Integer>(getViewTypeCount());
-        this.listeners = new HashSet<IScrollStateListener>();
+		this.viewTypes = new HashMap<>(getViewTypeCount());
+        this.listeners = new HashSet<>();
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class TAdapter<T> extends BaseAdapter implements IViewReclaimer {
         if (holder instanceof IScrollStateListener) {
             listeners.add(holder);
         }
-		
+
 		return convertView;
 	}
 

@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.ay.lxunhan.R;
-import com.ay.lxunhan.wyyim.liveuser.GiftAttachment;
-import com.ay.lxunhan.wyyim.liveuser.LikeAttachment;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -20,6 +18,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -97,34 +96,18 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         // adapter
         messageListView.setAdapter(adapter);
 
-        messageListView.setListViewEventListener(new MessageListView.OnListViewEventListener() {
-            @Override
-            public void onListViewStartScroll() {
-                container.proxy.shouldCollapseInputPanel();
-            }
-        });
+        messageListView.setListViewEventListener(() -> container.proxy.shouldCollapseInputPanel());
         //fixme 取消注释后可收取历史消息
         //messageListView.setOnRefreshListener(new MessageLoader());
     }
 
     // 刷新消息列表
     public void refreshMessageList() {
-        container.activity.runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
+        container.activity.runOnUiThread(() -> adapter.notifyDataSetChanged());
     }
 
     public void scrollToBottom() {
-        uiHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ListViewUtil.scrollToBottom(messageListView);
-            }
-        }, 200);
+        uiHandler.postDelayed(() -> ListViewUtil.scrollToBottom(messageListView), 200);
     }
 
     public void onIncomingMessage(List<ChatRoomMessage> messages) {
@@ -133,19 +116,20 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         List<ChatRoomMessage> addedListItems = new ArrayList<>(messages.size());
         for (ChatRoomMessage message : messages) {
             //点赞 与 礼物 信息不显示在聊天列表
-            if(message!=null && (message.getAttachment() instanceof LikeAttachment || message.getAttachment() instanceof GiftAttachment)){
-                if(extraDelegate !=null){
+            if (message != null && message.getMsgType()== MsgTypeEnum.custom) {
+                if (extraDelegate != null) {
                     extraDelegate.onReceivedCustomAttachment(message);
                 }
-            }//保证显示到界面上的消息，来自同一个聊天室
-            else if (isMyMessage(message)) {
+            } else if (isMyMessage(message)) {
                 saveMessage(message, false);
                 addedListItems.add(message);
                 needRefresh = true;
             }
+
+
             //对通知类信息再进行一次人员列表变更处理
-            if(message!=null && message.getAttachment() instanceof ChatRoomNotificationAttachment){
-                if(extraDelegate !=null){
+            if (message != null && message.getAttachment() instanceof ChatRoomNotificationAttachment) {
+                if (extraDelegate != null) {
                     extraDelegate.onReceivedCustomAttachment(message);
                 }
             }
@@ -319,24 +303,16 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     /**
      * 消息状态变化观察者
      */
-    Observer<ChatRoomMessage> messageStatusObserver = new Observer<ChatRoomMessage>() {
-        @Override
-        public void onEvent(ChatRoomMessage message) {
-            if (isMyMessage(message)) {
-                onMessageStatusChange(message);
-            }
+    Observer<ChatRoomMessage> messageStatusObserver = (Observer<ChatRoomMessage>) message -> {
+        if (isMyMessage(message)) {
+            onMessageStatusChange(message);
         }
     };
 
     /**
      * 消息附件上传/下载进度观察者
      */
-    Observer<AttachmentProgress> attachmentProgressObserver = new Observer<AttachmentProgress>() {
-        @Override
-        public void onEvent(AttachmentProgress progress) {
-            onAttachmentProgressChange(progress);
-        }
-    };
+    Observer<AttachmentProgress> attachmentProgressObserver = (Observer<AttachmentProgress>) progress -> onAttachmentProgressChange(progress);
 
     private void onMessageStatusChange(IMMessage message) {
         int index = getItemIndex(message.getUuid());
@@ -370,19 +346,15 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
      * @param index
      */
     private void refreshViewHolderByIndex(final int index) {
-        container.activity.runOnUiThread(new Runnable() {
+        container.activity.runOnUiThread(() -> {
+            if (index < 0) {
+                return;
+            }
 
-            @Override
-            public void run() {
-                if (index < 0) {
-                    return;
-                }
-
-                Object tag = ListViewUtil.getViewHolderByIndex(messageListView, index);
-                if (tag instanceof MsgViewHolderBase) {
-                    MsgViewHolderBase viewHolder = (MsgViewHolderBase) tag;
-                    viewHolder.refreshCurrentItem();
-                }
+            Object tag = ListViewUtil.getViewHolderByIndex(messageListView, index);
+            if (tag instanceof MsgViewHolderBase) {
+                MsgViewHolderBase viewHolder = (MsgViewHolderBase) tag;
+                viewHolder.refreshCurrentItem();
             }
         });
     }
@@ -424,7 +396,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
         @Override
         public void onMessageClick(IMMessage message) {
-           extraDelegate.onMessageClick(message);
+            extraDelegate.onMessageClick(message);
         }
 
         @Override

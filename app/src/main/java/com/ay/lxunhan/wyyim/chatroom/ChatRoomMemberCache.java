@@ -3,17 +3,13 @@ package com.ay.lxunhan.wyyim.chatroom;
 import android.text.TextUtils;
 
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
 import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.sina.weibo.sdk.utils.LogUtil;
@@ -173,27 +169,6 @@ public class ChatRoomMemberCache {
     /**
      * ********************************** 监听 ********************************
      */
-
-    public void registerObservers(boolean register) {
-        NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
-    }
-
-    private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = (Observer<List<ChatRoomMessage>>) messages -> {
-        if (messages == null || messages.isEmpty()) {
-            return;
-        }
-
-        for (IMMessage msg : messages) {
-            if (msg == null) {
-                LogUtil.e(TAG, "receive chat room message null");
-                continue;
-            }
-
-            if (msg.getMsgType() == MsgTypeEnum.notification) {
-                handleNotification(msg);
-            }
-        }
-    };
 
     private void handleNotification(IMMessage message) {
         if (message.getAttachment() == null) {

@@ -25,12 +25,12 @@ import com.ay.lxunhan.ui.live.fragment.AudienceFragment;
 import com.ay.lxunhan.ui.live.fragment.CaptureFragment;
 import com.ay.lxunhan.ui.live.fragment.LiveRoomInfoFragment;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ReplyDialog;
 import com.ay.lxunhan.wyyim.chatroom.ChatRoomMessageFragment;
 import com.ay.lxunhan.wyyim.chatroom.ChatRoomMsgListPanel;
 import com.ay.lxunhan.wyyim.chatroom.NimController;
 import com.ay.lxunhan.wyyim.liveuser.CapturePreviewController;
-import com.ay.lxunhan.wyyim.liveuser.GiftAttachment;
 import com.ay.lxunhan.wyyim.liveuser.LiveBottomBar;
 import com.ay.lxunhan.wyyim.liveuser.NimContract;
 import com.ay.lxunhan.wyyim.liveuser.PublishParam;
@@ -99,6 +99,10 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
         loadFragment(isAudience);
         initBottomBar();
         initFinishLiveLayout();
+        if(isAudience){
+            //观众 直接显示聊天列表与底部控制栏
+            onStartLivingFinished();
+        }
     }
 
     @Override
@@ -137,7 +141,7 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
 
             @Override
             public void onReceivedCustomAttachment(ChatRoomMessage msg) {
-                if (msg.getAttachment() instanceof GiftAttachment) {
+                if (msg.getMsgType()==MsgTypeEnum.custom) {
                     // 收到礼物消息
                     liveBottomBar.showGiftAnimation(msg);
                 } else if (msg.getAttachment() instanceof ChatRoomNotificationAttachment) {
@@ -356,7 +360,9 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
 
     @Override
     public void liveSeecountFinish(boolean isAdd) {
-
+        if (!isAdd){
+            finish();
+        }
     }
 
     @Override
@@ -381,6 +387,8 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
 
     @Override
     public void getLiveInfoFinish(LiveDetail liveDetail) {
+        tvOperateName.setText(liveDetail.getLname());
+        GlideUtil.loadCircleImgForHead(this,ivOperate,liveDetail.getAvatar());
         liveRoomInfoFragment.updateUserInfo(liveDetail);
     }
 

@@ -94,6 +94,7 @@ public class LiveRoomInfoFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
+        if (liveActivity!=null)
         liveActivity.initPresenter().getLiveInfo(liveActivity.liveId);
     }
 
@@ -120,18 +121,21 @@ public class LiveRoomInfoFragment extends BaseFragment {
 
 
     public void updateMember(List<ChatRoomMember> members) {
+        if (liveActivity!=null)
         liveActivity.initPresenter().getLiveInfo(liveActivity.liveId);
         onlineCount = members.size();
         tvPeopleCount.setText(onlineCount + "人");
     }
 
     public void refreshRoomInfo(ChatRoomInfo roomInfo) {
+        if (liveActivity!=null)
         liveActivity.initPresenter().getLiveInfo(liveActivity.liveId);
         onlineCount = roomInfo.getOnlineUserCount();
         tvPeopleCount.setText(onlineCount + "人");
     }
 
     public void updateUserInfo(LiveDetail liveDetail){
+        if (liveActivity!=null)
         GlideUtil.loadCircleImgForHead(getActivity(),ivHeader,liveDetail.getAvatar());
         tvName.setText(liveDetail.getLname());
         tvRd.setText(liveDetail.getRd()+"热度");
@@ -166,11 +170,13 @@ public class LiveRoomInfoFragment extends BaseFragment {
                 break;
             case ChatRoomMemberMuteAdd:
                 chatRoomMember.setMuted(true);
+                if (liveActivity!=null)
                 liveActivity.initPresenter().getLiveInfo(liveActivity.liveId);
 
                 break;
             case ChatRoomMemberMuteRemove:
                 chatRoomMember.setMuted(false);
+                if (liveActivity!=null)
                 liveActivity.initPresenter().getLiveInfo(liveActivity.liveId);
                 break;
         }
