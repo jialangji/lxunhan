@@ -11,6 +11,7 @@ import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.CreateBean;
+import com.ay.lxunhan.bean.FanyiBean;
 import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
@@ -540,7 +541,8 @@ public interface HttpApi {
      * 直播列表
      */
     @GET(UrlConfig.LIVE_LIST)
-    Flowable<HttpResult<List<LiveListBean>>> liveList(@Query("uqid") String uqid,@Query("type") String type,@Query("page") int page);
+    Flowable<HttpResult<List<LiveListBean>>> liveList(@Query("uqid") String uqid,@Query("type") String type,@Query("page") int page,
+                                                      @Query("name") String name);
 
     /**
      * 判断用户是否存在
@@ -636,6 +638,12 @@ public interface HttpApi {
      */
     @GET(UrlConfig.OPEN_LIVE)
     Flowable<HttpResult<Object>> openLive(@Query("uqid") String uqid,@Query("lid") String lid);
+
+    /**
+     * 翻译
+     */
+    @POST(UrlConfig.FANYI)
+    Flowable<HttpResult<FanyiBean>> fanyi(@Query("q") String q);
 }
 
 

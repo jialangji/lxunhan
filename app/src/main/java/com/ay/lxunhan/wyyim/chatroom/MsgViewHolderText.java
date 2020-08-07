@@ -6,8 +6,8 @@ import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
+import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.utils.MoonUtil;
-import com.netease.LSMediaCapture.util.NimUIKit;
 
 public class MsgViewHolderText extends MsgViewHolderBase {
 
@@ -26,7 +26,7 @@ public class MsgViewHolderText extends MsgViewHolderBase {
         TextView bodyTextView = findViewById(R.id.nim_message_item_text_body);
         bodyTextView.setTextColor(isReceivedMessage() ? Color.BLACK : Color.WHITE);
         bodyTextView.setOnClickListener(v -> onItemClick());
-        MoonUtil.identifyFaceExpression(NimUIKit.getContext(), bodyTextView, getDisplayText(), ImageSpan.ALIGN_BOTTOM);
+        MoonUtil.identifyFaceExpression(AppContext.context(), bodyTextView, getDisplayText(), ImageSpan.ALIGN_BOTTOM);
         bodyTextView.setMovementMethod(LinkMovementMethod.getInstance());
         bodyTextView.setOnLongClickListener(longClickListener);
     }

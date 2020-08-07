@@ -206,6 +206,7 @@ public abstract class BaseFragment<V, P extends BasePresenter<V>> extends Fragme
         }
     }
 
+
     protected void showConfirmDialog(String title, String message, DialogInterface.OnClickListener okEvent, DialogInterface.OnClickListener cancelEvent) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(title);

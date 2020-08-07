@@ -55,7 +55,6 @@ public abstract class BaseActivity<V, P extends BasePresenter<V>> extends AppCom
         if (isUserEvent()) {
             registerEvent();
         }
-
     }
 
     public boolean isUserEvent() {
@@ -72,6 +71,7 @@ public abstract class BaseActivity<V, P extends BasePresenter<V>> extends AppCom
     protected void onResume() {
         super.onResume();
         initBar();
+
         if (!NetworkUtils.isConnected()) {
             if (null != AppContext.context()) {
                 ToastUtil.makeShortText(AppContext.context(),"网络异常");

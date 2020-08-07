@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,8 +34,11 @@ import com.ay.lxunhan.presenter.CreateLivePresenter;
 import com.ay.lxunhan.utils.FileProvider7;
 import com.ay.lxunhan.utils.ImageUtil;
 import com.ay.lxunhan.utils.PermissionsUtils;
+import com.ay.lxunhan.utils.SketchLengthFilter;
+import com.ay.lxunhan.utils.SketchTextWatcher;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.SelectImageDialog;
 import com.ay.lxunhan.widget.SelectLiveTypeDialog;
@@ -145,6 +149,9 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
         super.initView();
         bPermission = checkPublishPermission();
         mainHandler = new Handler(Looper.getMainLooper());
+        InputFilter[] filters = {new SketchLengthFilter(18), Utils.notEnterEmoji(), new InputFilter.LengthFilter(18)};
+        etTitle.setFilters(filters);
+        etTitle.addTextChangedListener(new SketchTextWatcher(etTitle));
 //        lsMediaCapture.LsMediaCapturePara lsMediaCapturePara = new lsMediaCapture.LsMediaCapturePara();
 //        lsMediaCapturePara.setContext(getApplicationContext()); //设置SDK上下文（建议使用ApplicationContext）
 //        lsMediaCapturePara.setMessageHandler(this); //设置SDK消息回调

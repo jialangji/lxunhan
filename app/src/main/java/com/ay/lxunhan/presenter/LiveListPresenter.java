@@ -21,7 +21,7 @@ public class LiveListPresenter extends BasePresenter<LiveListContract.LiveListVi
     @Override
     public void getLiveList(String type, int page) {
 
-        addDisposable(HttpMethods.getInstance().getLiveList(type, page).subscribeWith(new BaseSubscriber<List<LiveListBean>>(){
+        addDisposable(HttpMethods.getInstance().getLiveList(type, page,"").subscribeWith(new BaseSubscriber<List<LiveListBean>>(){
             @Override
             public void onNext(List<LiveListBean> o) {
                 super.onNext(o);

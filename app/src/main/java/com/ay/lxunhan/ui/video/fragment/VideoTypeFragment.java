@@ -18,7 +18,6 @@ import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
-import com.ay.lxunhan.widget.RecyclerItemDecoration;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -76,17 +75,10 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         id=getArguments().getString("id");
         videoAdapter = PublicAdapterUtil.getVideoAdapter(videoBeanList, getActivity());
         rvVideo.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvVideo.addItemDecoration(new RecyclerItemDecoration(10,1));
         rvVideo.setAdapter(videoAdapter);
         showDialog();
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-        presenter.getVideoType(id,page);
-
-    }
     @Override
     public void onPause() {
         super.onPause();
@@ -97,6 +89,7 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
     public void onResume() {
         super.onResume();
         JzvdStd.goOnPlayOnResume();
+        presenter.getVideoType(id,page);
     }
     @Override
     protected void initListener() {
@@ -152,7 +145,6 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         if (shareDialog == null) {
             shareDialog = new ShareDialog(getActivity(), R.style.selectPicDialogstyle);
         }
-
         shareDialog.setItemClickListener(new ShareDialog.ItemClickListener() {
             @Override
             public void shareFriends() {
@@ -161,24 +153,30 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
 
             @Override
             public void shareQQ() {
+                presenter.share(2, String.valueOf(videoBeanList.get(mPosition).getId()));
                 ShareUtils.shareToQQ(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                presenter.share(2, String.valueOf(videoBeanList.get(mPosition).getId()));
                 ShareUtils.shareToQQRoom(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWx() {
+                presenter.share(2, String.valueOf(videoBeanList.get(mPosition).getId()));
+
                 ShareUtils.shareToWx(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                presenter.share(2, String.valueOf(videoBeanList.get(mPosition).getId()));
+
                 ShareUtils.shareToWxPyq(getActivity(),videoBeanList.get(mPosition).getShare_url());
 
             }
@@ -223,7 +221,15 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
         shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
             @Override
             public void shareQQ(String bitmap) {
+                presenter.share(2, String.valueOf(videoBeanList.get(mPosition).getId()));
+
                 ShareUtils.shareToQQImg(getActivity(),bitmap);
+
+            }
+
+            @Override
+            public void shareWx() {
+                presenter.share(2, String.valueOf(videoBeanList.get(mPosition).getId()));
 
             }
 
@@ -269,5 +275,16 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
     @Override
     public void addCollectFinish() {
         ToastUtil.makeShortText(getActivity(),"收藏成功");
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            JzvdStd.goOnPlayOnPause();
+        } else {
+            JzvdStd.goOnPlayOnResume();
+        }
     }
 }

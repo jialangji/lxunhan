@@ -12,6 +12,7 @@ import com.ay.lxunhan.bean.CoinBean;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.CountryBean;
 import com.ay.lxunhan.bean.CreateBean;
+import com.ay.lxunhan.bean.FanyiBean;
 import com.ay.lxunhan.bean.FriendBean;
 import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
@@ -78,6 +79,7 @@ public class HttpMethods {
     public static final int HTTP_SUCCESS = 0;
     public static final int HTTP_NOT_LOGIN = 4011;
     public static final int HTTP_LOGIN_BlACK = 4010;
+    public static final int HTTP_LOGIN_UNREGISTER=4004;
     private HttpApi httpService;
     private OkHttpClient okhttpclient;
 
@@ -738,8 +740,8 @@ public class HttpMethods {
     /**
      * 直播列表
      */
-    public Flowable<List<LiveListBean>> getLiveList(String type,int page){
-        Flowable<HttpResult<List<LiveListBean>>> flowable=httpService.liveList(UserInfo.getInstance().getUserId(),type,page);
+    public Flowable<List<LiveListBean>> getLiveList(String type,int page,String name){
+        Flowable<HttpResult<List<LiveListBean>>> flowable=httpService.liveList(UserInfo.getInstance().getUserId(),type,page,name);
         return compositeThread(flowable);
     }
 
@@ -856,6 +858,14 @@ public class HttpMethods {
      */
     public Flowable<Object> openLive(String lid){
         Flowable<HttpResult<Object>> flowable=httpService.openLive(UserInfo.getInstance().getUserId(),lid);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 翻译
+     */
+    public Flowable<FanyiBean> fanyi(String str){
+        Flowable<HttpResult<FanyiBean>> flowable=httpService.fanyi(str);
         return compositeThread(flowable);
     }
 

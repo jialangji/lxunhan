@@ -169,6 +169,6 @@ public class GiftAnimation {
         GlideUtil.loadCircleImgForHead(AppContext.instance,ivheadee,bean.getHeader());
         giftText.setText(bean.getName());
         tvCount.setText("x"+bean.getCount());
-        GlideUtil.loadRoundImg(AppContext.instance, giftImage, bean.getCover());
+        GlideUtil.loadImgNoChange(AppContext.instance, giftImage, bean.getCover());
     }
 }

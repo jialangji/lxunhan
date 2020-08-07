@@ -41,3 +41,8 @@
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
+
+-keep class com.youdao.sdk.ydtranslate.** { *;}
+-keep class com.youdao.sdk.chdict.** { *;}
+-keep class com.youdao.localtransengine.** { *;}
+-keep class com.youdao.sdk.ydonlinetranslate.** { *;}

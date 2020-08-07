@@ -91,7 +91,7 @@ public class LiveActivity extends BaseActivity<LiveTypeContract.LiveTypeView, Li
         tlLabel.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_search, R.id.iv_live})
+    @OnClick({R.id.rl_finish, R.id.rl_search, R.id.rl_live})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
@@ -100,7 +100,7 @@ public class LiveActivity extends BaseActivity<LiveTypeContract.LiveTypeView, Li
             case R.id.rl_search:
                 SearchActivity.startSearchActivity(this, Contacts.HISTORY_LIVE);
                 break;
-            case R.id.iv_live:
+            case R.id.rl_live:
                 CreateLiveActivity.startCreateLiveActivity(this);
                 break;
         }

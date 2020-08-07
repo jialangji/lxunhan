@@ -1,8 +1,6 @@
 package com.ay.lxunhan.contract;
 
 import com.ay.lxunhan.bean.CommentBean;
-import com.ay.lxunhan.bean.HomeDetailBean;
-import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 
@@ -26,6 +24,7 @@ public interface VideoDetailContract {
         void commentLike(SendCommentModel model);
 
         void attention(String uid);
+        void share(int type, String aid);
 
         void addCollect(String aid,int type);
     }

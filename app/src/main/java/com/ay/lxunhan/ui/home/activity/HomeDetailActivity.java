@@ -3,6 +3,8 @@ package com.ay.lxunhan.ui.home.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -12,18 +14,21 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.CommentBean;
+import com.ay.lxunhan.bean.FanyiBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.HomeDetailContract;
+import com.ay.lxunhan.http.HttpMethods;
+import com.ay.lxunhan.observer.BaseSubscriber;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
@@ -42,6 +47,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.shuyu.action.web.CustomActionWebView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -59,6 +65,8 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     ImageView ivHeader;
     @BindView(R.id.tv_name)
     TextView tvName;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     @BindView(R.id.iv_sex)
     ImageView ivSex;
     @BindView(R.id.tv_signature)
@@ -66,7 +74,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     @BindView(R.id.tv_attention)
     TextView tvAttention;
     @BindView(R.id.web)
-    WebView webview;
+    CustomActionWebView webview;
     @BindView(R.id.tv_type)
     TextView tvType;
     @BindView(R.id.tv_time)
@@ -81,6 +89,14 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     TextView tvLikeCount;
     @BindView(R.id.swipe_refresh)
     TwinklingRefreshLayout swipeRefresh;
+    @BindView(R.id.title_header)
+    ImageView titleHeader;
+    @BindView(R.id.title_name)
+    TextView titleName;
+    @BindView(R.id.rl_user)
+    LinearLayout rlUser;
+    @BindView(R.id.nestedScroll)
+    NestedScrollView nestedScroll;
     private List<CommentBean> commentBeans = new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
     private HomeDetailBean homeDetailBean;
@@ -91,6 +107,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     private int commentPostion;
     private ShareDialog shareDialog;
     private ShareImgDialog shareImgDialog;
+    private String ydStr = "翻译内容无效";
 
 
     @Override
@@ -115,11 +132,11 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                 helper.setText(R.id.tv_comment_count, item.getTwo_arr().getCount() + "");
                 helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
                 helper.setGone(R.id.tv_reply, item.getIs_two());
-                TextView tvReplay=helper.getView(R.id.tv_reply);
-                String str=item.getTwo_arr().getName()+"等人共"+item.getTwo_arr().getCount()+"条回复>";
-                SpannableString span=new SpannableString(str);
-                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), 0, item.getTwo_arr().getName().length() , SPAN_EXCLUSIVE_EXCLUSIVE);
-                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)),item.getTwo_arr().getName().length()+2,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                TextView tvReplay = helper.getView(R.id.tv_reply);
+                String str = item.getTwo_arr().getName() + "等人共" + item.getTwo_arr().getCount() + "条回复>";
+                SpannableString span = new SpannableString(str);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), 0, item.getTwo_arr().getName().length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_2A6CFF)), item.getTwo_arr().getName().length() + 2, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 tvReplay.setText(span);
                 helper.addOnClickListener(R.id.ll_like);
                 helper.addOnClickListener(R.id.ll_comment);
@@ -128,6 +145,15 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         };
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setAdapter(commentAdapter);
+        List<String> list = new ArrayList<>();
+        list.add("翻译");
+        webview.setActionList(list);
+        webview.linkJSInterface();
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.getSettings().setDisplayZoomControls(true);
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setDomStorageEnabled(true);
+
 
     }
 
@@ -159,13 +185,52 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     @Override
     protected void initListener() {
         super.initListener();
+        nestedScroll.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+
+            if (scrollY > oldScrollY) {
+                if (scrollY-oldScrollY>50){
+                    rlUser.setVisibility(View.VISIBLE);
+                }
+            }
+            if (scrollY < oldScrollY) {
+
+            }
+
+            if (scrollY == 0) {
+               rlUser.setVisibility(View.GONE);
+            }
+
+            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+
+            }
+        });
+        webview.setActionSelectListener((s, s1) -> {
+            HttpMethods.getInstance().fanyi(s1).subscribeWith(new BaseSubscriber<FanyiBean>() {
+                @Override
+                public void onNext(FanyiBean o) {
+                    super.onNext(o);
+                    if (o.getErrorCode().equals("0")) {
+                        runOnUiThread(() -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(HomeDetailActivity.this);
+                            builder.setTitle("翻译结果");
+                            builder.setMessage("原文：" + o.getQuery() + "\n 译文；" + o.getTranslation().get(0));
+                            builder.show();
+                        });
+                    } else {
+                        ToastUtil.makeShortText(HomeDetailActivity.this, "翻译失败");
+                    }
+
+
+                }
+            });
+        });
         commentAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             switch (view.getId()) {
                 case R.id.iv_header:
-                    FriendDetailActivity.startUserDetailActivity(this,commentBeans.get(position).getUid());
+                    FriendDetailActivity.startUserDetailActivity(this, commentBeans.get(position).getUid());
                     break;
                 case R.id.ll_like:
-                    if (isLogin()){
+                    if (isLogin()) {
                         commentPostion = position;
                         SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(commentBeans.get(commentPostion).getId()));
                         presenter.commentLike(sendCommentModel);
@@ -192,14 +257,14 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                     isRefresh = false;
                     page = page + 1;
                     presenter.getOneComment(String.valueOf(id), type, page);
-                }else {
+                } else {
                     swipeRefresh.finishLoadmore();
                 }
             }
         });
         etComment.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                if (isLogin()){
+                if (isLogin()) {
                     if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
                         SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(homeDetailBean.getId()), homeDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
                         presenter.sendOneComment(sendCommentModel);
@@ -209,6 +274,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
             return true;
         });
     }
+
 
     @Override
     protected int getLayoutId() {
@@ -230,7 +296,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_wechat,R.id.tv_attention})
+    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_wechat, R.id.tv_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_attention:
@@ -243,19 +309,19 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
                 finish();
                 break;
             case R.id.rl_more:
-                if (isLogin()){
+                if (isLogin()) {
                     showDialog();
                 }
                 break;
             case R.id.ll_moreLike:
-                if (isLogin()){
+                if (isLogin()) {
                     SendCommentModel sendCommentModel = new SendCommentModel(homeDetailBean.getId() + "", type);
                     presenter.addLike(sendCommentModel);
                 }
 
                 break;
             case R.id.tv_wechat:
-                ShareUtils.shareToWx(this,homeDetailBean.getShare_url());
+                ShareUtils.shareToWx(this, homeDetailBean.getShare_url());
                 break;
         }
     }
@@ -273,25 +339,29 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
             @Override
             public void shareQQ() {
-                ShareUtils.shareToQQ(HomeDetailActivity.this,homeDetailBean.getShare_url());
+                presenter.share(1, String.valueOf(homeDetailBean.getId()));
+                ShareUtils.shareToQQ(HomeDetailActivity.this, homeDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
-                ShareUtils.shareToQQRoom(HomeDetailActivity.this,homeDetailBean.getShare_url());
+                presenter.share(1, String.valueOf(homeDetailBean.getId()));
+                ShareUtils.shareToQQRoom(HomeDetailActivity.this, homeDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWx() {
-                ShareUtils.shareToWx(HomeDetailActivity.this,homeDetailBean.getShare_url());
+                presenter.share(1, String.valueOf(homeDetailBean.getId()));
+                ShareUtils.shareToWx(HomeDetailActivity.this, homeDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
-                ShareUtils.shareToWxPyq(HomeDetailActivity.this,homeDetailBean.getShare_url());
+                presenter.share(1, String.valueOf(homeDetailBean.getId()));
+                ShareUtils.shareToWxPyq(HomeDetailActivity.this, homeDetailBean.getShare_url());
 
             }
 
@@ -318,7 +388,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
             @Override
             public void collect() {
-                presenter.addCollect(String.valueOf(homeDetailBean.getId()),type);
+                presenter.addCollect(String.valueOf(homeDetailBean.getId()), type);
             }
 
             @Override
@@ -328,16 +398,22 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         });
     }
 
-    public void showImg(String url){
+    public void showImg(String url) {
         if (shareImgDialog == null) {
-            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle,url);
+            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle, url);
         }
         shareImgDialog.show();
         shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
             @Override
             public void shareQQ(String bitmap) {
-                ShareUtils.shareToQQImg(HomeDetailActivity.this,bitmap);
+                presenter.share(1, String.valueOf(homeDetailBean.getId()));
+                ShareUtils.shareToQQImg(HomeDetailActivity.this, bitmap);
 
+            }
+
+            @Override
+            public void shareWx() {
+                presenter.share(1, String.valueOf(homeDetailBean.getId()));
             }
 
             @Override
@@ -353,7 +429,10 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         presenter.getOneComment(String.valueOf(id), type, page);
         GlideUtil.loadCircleImgForHead(this, ivHeader, homeDetailBean.getAvatar());
         tvName.setText(homeDetailBean.getNickname());
+        GlideUtil.loadCircleImgForHead(this, titleHeader, homeDetailBean.getAvatar());
+        titleName.setText(homeDetailBean.getNickname());
         tvSignature.setText(homeDetailBean.getInto());
+        tvTitle.setText(homeDetailBean.getTitle());
         ivSex.setImageDrawable(homeDetailBean.getSex() ? getResources().getDrawable(R.drawable.ic_man) : getResources().getDrawable(R.drawable.ic_woman));
         if (homeDetailBean.getIs_fow() == 2) {
             tvAttention.setVisibility(View.GONE);
@@ -366,8 +445,8 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         tvLikeCount.setText(homeDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
 
-
     }
+
 
     @Override
     public void getHomeDetailQuizFinish(HomeQuizDetailBean homeQuizDetailBean) {
@@ -391,7 +470,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
     @Override
     public void addCollectFinish() {
-        ToastUtil.makeShortText(this,"收藏成功");
+        ToastUtil.makeShortText(this, "收藏成功");
     }
 
     @Override
@@ -441,9 +520,9 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
 
     @Override
     public void attentionFinish() {
-        if (homeDetailBean.getIs_fow()==1){
+        if (homeDetailBean.getIs_fow() == 1) {
             homeDetailBean.setIs_fow(0);
-        }else{
+        } else {
             homeDetailBean.setIs_fow(1);
         }
         tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
@@ -481,4 +560,5 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         intent.putExtra("id", id);
         context.startActivity(intent);
     }
+
 }

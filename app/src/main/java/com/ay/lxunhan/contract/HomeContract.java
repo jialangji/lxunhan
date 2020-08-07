@@ -14,6 +14,7 @@ public interface HomeContract {
         void getHomeListArticle(int page,String id);
         void attention(String uid);
         void quiz(SendCommentModel model);
+        void  addLike(SendCommentModel model);
         void getHomeType();
     }
     interface HomeView{
@@ -21,6 +22,7 @@ public interface HomeContract {
         void getHomeTypeFinish(List<TypeBean> typeBeans);
         void attentionFinish();
         void quziFinish();
+        void addLikeFinish();
         void showProgress();
         void hideProgress();
     }

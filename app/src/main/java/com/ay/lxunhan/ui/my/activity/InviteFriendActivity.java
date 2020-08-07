@@ -68,7 +68,7 @@ public class InviteFriendActivity extends BaseActivity<InviteContract.InviteView
                 break;
             case R.id.tv_invite:
                 if(code!=null){
-                    String url="http://sanyserver.51appdevelop.com/#/yaoqing?yaoqingma="+code;
+                    String url="http://sanyserver.51appdevelop.com/yaoqing?yaoqingma="+code;
                     showDialog(url);
                 }
                 break;

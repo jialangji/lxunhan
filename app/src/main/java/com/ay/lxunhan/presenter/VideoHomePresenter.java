@@ -3,6 +3,7 @@ package com.ay.lxunhan.presenter;
 import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.VideoBean;
+import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.VideoHomeContract;
 import com.ay.lxunhan.http.HttpMethods;
 import com.ay.lxunhan.observer.BaseSubscriber;
@@ -53,6 +54,16 @@ public class VideoHomePresenter extends BasePresenter<VideoHomeContract.VideoHom
     }
 
     @Override
+    public void share(int type, String aid) {
+        addDisposable(HttpMethods.getInstance().share(type,aid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+            }
+        }));
+    }
+
+    @Override
     public void addCollect(String aid, int type) {
         addDisposable(HttpMethods.getInstance().addCollect(aid, type).subscribeWith(new BaseSubscriber<Object>(){
             @Override
@@ -60,6 +71,18 @@ public class VideoHomePresenter extends BasePresenter<VideoHomeContract.VideoHom
                 super.onNext(o);
                 getView().addCollectFinish();
             }
+        }));
+    }
+
+    @Override
+    public void addLike(SendCommentModel model) {
+        addDisposable(HttpMethods.getInstance().addLike(model).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().addLikeFinish();
+            }
+
         }));
     }
 }

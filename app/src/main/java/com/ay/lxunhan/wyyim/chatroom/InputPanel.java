@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ay.lxunhan.R;
-import com.ay.lxunhan.utils.MoonUtil;
 import com.ay.lxunhan.wyyim.emoji.EmoticonPickerView;
 import com.ay.lxunhan.wyyim.emoji.IEmoticonSelectedListener;
 import com.netease.LSMediaCapture.util.NimUIKit;
@@ -175,7 +174,7 @@ public class InputPanel implements IEmoticonSelectedListener {
             public void afterTextChanged(Editable s) {
                 //todo 未输入时,显示更多按钮,则取消注释该行
                 //checkSendButtonEnable(messageEditText);
-                MoonUtil.replaceEmoticons(container.activity, s.toString(), start, count);
+//                MoonUtil.replaceEmoticons(container.activity, s.toString(), start, count);
 
                 if (watcher != null) {
                     watcher.afterTextChanged(s, start, count);

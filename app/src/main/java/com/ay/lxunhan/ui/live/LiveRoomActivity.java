@@ -25,6 +25,7 @@ import com.ay.lxunhan.ui.live.fragment.AudienceFragment;
 import com.ay.lxunhan.ui.live.fragment.CaptureFragment;
 import com.ay.lxunhan.ui.live.fragment.LiveRoomInfoFragment;
 import com.ay.lxunhan.utils.ToastUtil;
+import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ReplyDialog;
 import com.ay.lxunhan.wyyim.chatroom.ChatRoomMessageFragment;
@@ -138,12 +139,12 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
     private void initChatRoomFragment() {
         chatRoomFragment.init(roomId);
         chatRoomFragment.setMsgExtraDelegate(new ChatRoomMsgListPanel.ExtraDelegate() {
-
             @Override
             public void onReceivedCustomAttachment(ChatRoomMessage msg) {
                 if (msg.getMsgType()==MsgTypeEnum.custom) {
                     // 收到礼物消息
                     liveBottomBar.showGiftAnimation(msg);
+                    presenter.getLiveInfo(liveId);
                 } else if (msg.getAttachment() instanceof ChatRoomNotificationAttachment) {
                     liveRoomInfoFragment.onReceivedNotification((ChatRoomNotificationAttachment) msg.getAttachment());
                 }
@@ -155,6 +156,9 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
                 }
             }
         });
+        if(isAudience){
+            chatRoomFragment.onTextMessageSendButtonPressed(UserInfo.getInstance().getUserName()+"进入直播间");
+        }
     }
 
     /**
@@ -174,7 +178,7 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
         }
         replyDialog.setOnReplyClickListenr(() -> {
             if (!TextUtils.isEmpty(replyDialog.getContent())) {
-                chatRoomFragment.onTextMessageSendButtonPressed(replyDialog.getContent());
+                chatRoomFragment.onTextMessageSendButtonPressed(UserInfo.getInstance().getUserName()+"："+replyDialog.getContent());
                 replyDialog.setContext();
                 replyDialog.dismiss();
             }
@@ -297,7 +301,12 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
             super.onBackPressed();
             return;
         }
-        showConfirmDialog(null, "确定结束直播?", (dialog, which) -> normalFinishLive(), (dialog, which) -> dialog.cancel());
+        if (!isAudience){
+            showConfirmDialog(null, "确定结束直播?", (dialog, which) -> normalFinishLive(), (dialog, which) -> dialog.cancel());
+        }else {
+            normalFinishLive();
+        }
+
     }
 
 
@@ -378,6 +387,7 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
     @Override
     public void sendGiftFinish() {
         liveBottomBar.sendGift();
+        presenter.getLiveInfo(liveId);
         presenter.getGold();
     }
 
@@ -387,14 +397,22 @@ public class LiveRoomActivity extends BaseActivity<LiveContract.LiveView, LivePr
 
     @Override
     public void getLiveInfoFinish(LiveDetail liveDetail) {
-        tvOperateName.setText(liveDetail.getLname());
-        GlideUtil.loadCircleImgForHead(this,ivOperate,liveDetail.getAvatar());
-        liveRoomInfoFragment.updateUserInfo(liveDetail);
+        if (tvOperateName!=null){
+            tvOperateName.setText(liveDetail.getLname());
+            GlideUtil.loadCircleImgForHead(this,ivOperate,liveDetail.getAvatar());
+            liveRoomInfoFragment.updateUserInfo(liveDetail);
+        }
+
     }
 
     @Override
     public void openLiveFinish() {
 
+    }
+
+    @Override
+    public void attentionFinish() {
+        presenter.getLiveInfo(liveId);
     }
 
     @Override

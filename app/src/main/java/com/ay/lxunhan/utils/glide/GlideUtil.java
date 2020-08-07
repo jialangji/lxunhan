@@ -43,7 +43,16 @@ public class GlideUtil {
         }
         return relativePath;
     }
-
+    public static void loadImgNoChange(Context context, ImageView v, String url) {
+        GlideApp.with(context)
+                .load(getImgFullPath(url)) // 图片地址
+                .placeholder(DEFAULT_PIC)// 正在加载中的图片
+                .dontAnimate()
+                .error(DEFAULT_PIC) // 加载失败的图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL)// 磁盘缓存策略
+                .listener(requestListener)
+                .into(v); // 需要显示的ImageView控件
+    }
 
     public static void loadImg(Context context, ImageView v, String url) {
         GlideApp.with(context)

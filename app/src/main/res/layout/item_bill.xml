@@ -15,6 +15,7 @@
         android:background="@drawable/shape_white_bg"
         android:layout_height="@dimen/dp_72">
         <ImageView
+            android:id="@+id/iv_icon"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:src="@drawable/ic_big_coin"/>

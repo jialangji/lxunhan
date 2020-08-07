@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
+import com.ay.lxunhan.utils.ToastUtil;
 
 import java.util.Objects;
 
@@ -19,11 +20,13 @@ import java.util.Objects;
 public class ShareDialog extends Dialog implements
         View.OnClickListener {
 
+    private Context context;
     private ItemClickListener itemClickListener;
 
 
     public ShareDialog(Context context, int themeResId) {
         super(context, themeResId);
+        this.context=context;
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -108,6 +111,7 @@ public class ShareDialog extends Dialog implements
                 if (itemClickListener!=null){
                     itemClickListener.copyUrl();
                 }
+                ToastUtil.makeShortText(context,"链接已复制");
                 dismiss();
                 break;
             case R.id.tv_share_img:

@@ -64,7 +64,7 @@ public class SmallVideoFragment extends BaseFragment<SmallVideoContract.SmallVid
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_public_refresh;
+        return R.layout.fragment_home_smallvideo;
     }
 
     @Override

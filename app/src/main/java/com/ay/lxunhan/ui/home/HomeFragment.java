@@ -82,7 +82,7 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvType.setLayoutManager(linearLayoutManager);
         rvType.setAdapter(typeAdapter);
-        homeAdapter = PublicAdapterUtil.getAdapter(homeList, getActivity());
+        homeAdapter = PublicAdapterUtil.getAdapter(homeList, getActivity(),true);
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.setAdapter(homeAdapter);
 
@@ -92,17 +92,16 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     public void onResume() {
         super.onResume();
         GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
-
+        if (!UserInfo.getInstance().isLogin()){
+            typeId=2;
+        }
+        setRefresh();
     }
 
     @Override
     protected void initData() {
         super.initData();
         presenter.getHomeType();
-        if (!UserInfo.getInstance().isLogin()){
-            typeId=2;
-        }
-        setRefresh();
     }
 
     @Override
@@ -160,6 +159,13 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
                         case 4:
                             HomeQuziDetailActivity.startHomeQuizDetailActivity(getActivity(), homeList.get(position).getId());
                             break;
+                    }
+                    break;
+                case R.id.ll_like:
+                    if (isLogin()){
+                        mPosition=position;
+                        SendCommentModel sendCommentModel = new SendCommentModel(homeList.get(position).getId() + "", homeList.get(position).getType());
+                        presenter.addLike(sendCommentModel);
                     }
                     break;
                 case R.id.tv_attention:
@@ -318,6 +324,7 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
         }
     }
 
+
     @Override
     public void getHomeListFinish(List<MultiItemBaseBean> homeListBeans) {
         if (isRefresh) {
@@ -363,6 +370,18 @@ public class HomeFragment extends BaseFragment<HomeContract.HomeView, HomePresen
     @Override
     public void quziFinish() {
         setRefresh();
+    }
+
+    @Override
+    public void addLikeFinish() {
+        if (homeList.get(mPosition).getIs_like()) {
+            homeList.get(mPosition).setIs_like(0);
+            homeList.get(mPosition).setLike_count(homeList.get(mPosition).getLike_count()-1);
+        }else {
+            homeList.get(mPosition).setIs_like(1);
+            homeList.get(mPosition).setLike_count(homeList.get(mPosition).getLike_count()+1);
+        }
+        homeAdapter.notifyDataSetChanged();
     }
 
     @Override

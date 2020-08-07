@@ -137,5 +137,6 @@ public class InviteListActivity extends BaseActivity<InviteContract.InviteView, 
 
     @OnClick(R.id.rl_finish)
     public void onViewClicked() {
+        finish();
     }
 }

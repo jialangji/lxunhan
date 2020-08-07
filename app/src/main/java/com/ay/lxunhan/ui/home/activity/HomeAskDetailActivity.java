@@ -3,9 +3,14 @@ package com.ay.lxunhan.ui.home.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -25,11 +30,13 @@ import com.ay.lxunhan.presenter.HomeDetailPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.DisplayUtil;
 import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
+import com.ay.lxunhan.widget.MyImageSpan;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.ay.lxunhan.widget.ShareImgDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -44,6 +51,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeDetailView, HomeDetailPresenter> implements HomeDetailContract.HomeDetailView {
 
@@ -135,9 +144,10 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         return R.layout.activity_home_ask_detail;
     }
 
+
     @Override
-    protected void initData() {
-        super.initData();
+    protected void onResume() {
+        super.onResume();
         presenter.getHomeDetail(type, id);
     }
 
@@ -280,22 +290,26 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
 
             @Override
             public void shareQQ() {
+                presenter.share(3, String.valueOf(homeDetailBean.getId()));
                 ShareUtils.shareToQQ(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
             }
 
             @Override
             public void shareQQRoom() {
+                presenter.share(3, String.valueOf(homeDetailBean.getId()));
                 ShareUtils.shareToQQRoom(HomeAskDetailActivity.this,homeDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWx() {
+                presenter.share(3, String.valueOf(homeDetailBean.getId()));
                 ShareUtils.shareToWx(HomeAskDetailActivity.this, homeDetailBean.getShare_url());
             }
 
             @Override
             public void shareWxPyq() {
+                presenter.share(3, String.valueOf(homeDetailBean.getId()));
                 ShareUtils.shareToWxPyq(HomeAskDetailActivity.this, homeDetailBean.getShare_url());
             }
 
@@ -341,8 +355,14 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
             @Override
             public void shareQQ(String bitmap) {
+                presenter.share(3, String.valueOf(homeDetailBean.getId()));
                 ShareUtils.shareToQQImg(HomeAskDetailActivity.this,bitmap);
 
+            }
+
+            @Override
+            public void shareWx() {
+                presenter.share(3, String.valueOf(homeDetailBean.getId()));
             }
 
             @Override
@@ -357,7 +377,7 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     public void getHomeDetailFinish(HomeDetailBean homeDetailBean) {
         this.homeDetailBean = homeDetailBean;
         presenter.getOneComment(String.valueOf(id), type, page);
-        tvTitle.setText(homeDetailBean.getTitle());
+        tvTitle.setText(setSpan(this, String.valueOf(homeDetailBean.getBounty_gold()),homeDetailBean.getTitle()));
         GlideUtil.loadCircleImgForHead(this, ivHeader, homeDetailBean.getAvatar());
         tvName.setText(homeDetailBean.getNickname());
         tvSignature.setText(homeDetailBean.getInto());
@@ -371,6 +391,18 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         webview.setText(homeDetailBean.getContent());
         tvLikeCount.setText(homeDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
+    }
+    private static SpannableString setSpan(Context context, String price, String title) {
+        String str = "0" + price + "  " + title;
+        SpannableString spstr = new SpannableString(str);
+        spstr.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.color_ff8b02)), 1, price.length() + 1, SPAN_EXCLUSIVE_EXCLUSIVE);
+        spstr.setSpan(new AbsoluteSizeSpan(DisplayUtil.sp2px(context, 10)), 1, price.length() + 1, SPAN_EXCLUSIVE_EXCLUSIVE);
+        spstr.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.color_161824)), price.length() + 2, str.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        spstr.setSpan(new AbsoluteSizeSpan(DisplayUtil.sp2px(context, 14)), price.length() + 2, str.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        Drawable rightDrawable = context.getResources().getDrawable(R.drawable.ic_small_coin);
+        rightDrawable.setBounds(0, 0, rightDrawable.getIntrinsicWidth(), rightDrawable.getIntrinsicHeight());
+        spstr.setSpan(new MyImageSpan(rightDrawable), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spstr;
     }
 
     @Override

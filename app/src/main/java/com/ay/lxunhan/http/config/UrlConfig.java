@@ -4,7 +4,7 @@ public class UrlConfig {
     /**
      * 域名
      */
-    public static final String BASE_URL = "http://hlx.51appdevelop.com";
+    public static final String BASE_URL = "https://hlx.51appdevelop.com";
 
     /**
      * 登录
@@ -440,5 +440,10 @@ public class UrlConfig {
      * 开启直播
      */
     public static final String OPEN_LIVE="api/live/start_live";
+
+    /**
+     * 翻译
+     */
+    public static final String FANYI="api/you_dao/texts";
 
 }

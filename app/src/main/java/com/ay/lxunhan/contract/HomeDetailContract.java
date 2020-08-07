@@ -18,6 +18,7 @@ public interface HomeDetailContract {
         void  commentLike(SendCommentModel model);
         void  quiz(SendCommentModel model);
         void  accept(AcceptModel model);
+        void  share(int type,String aid);
         void  attention(String uid);
         void  addCollect(String aid,int type);
     }

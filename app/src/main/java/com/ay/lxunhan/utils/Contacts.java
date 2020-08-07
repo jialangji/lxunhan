@@ -18,6 +18,7 @@ public class Contacts {
     public static final String QQ_APP_ID="101891062";
     public static final String WX_APP_ID="wx08cbd3a5db2809a2";
     public static final String WB_APP_ID="";
+    public static final String YOUDAO_APP_ID="2b5c3e4a75f4ba9f";
 
     /**
      * 当前 DEMO 应用的回调页，第三方应用可以使用自己的回调页。
@@ -44,6 +45,7 @@ public class Contacts {
     final static String USERID = "userId";
     final static String UID="uid";
     final static String USERNAME="userName";
+    final static String ISNIGHT="isNight";
 
     final static String ISLOGIN = "isLogin";
     final static String ISFIRSTOPEN = "isFirstOpen";

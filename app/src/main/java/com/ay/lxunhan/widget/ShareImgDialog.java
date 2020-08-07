@@ -134,6 +134,9 @@ public class ShareImgDialog extends Dialog implements View.OnClickListener {
 
                 break;
             case R.id.tv_share_wx:
+                if (itemClickListener!=null){
+                    itemClickListener.shareWx();
+                }
                 ShareUtils.shareImgToWx(bitmap);
                 dismiss();
                 break;
@@ -148,7 +151,7 @@ public class ShareImgDialog extends Dialog implements View.OnClickListener {
 
     public interface ItemClickListener {
         void shareQQ(String bitmap);
-
+        void shareWx();
         void shareWb(Bitmap bitmap);
     }
 }

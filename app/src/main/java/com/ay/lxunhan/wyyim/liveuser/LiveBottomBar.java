@@ -164,7 +164,7 @@ public class LiveBottomBar extends RelativeLayout {
         adapter = new BaseQuickAdapter<GiftBean, BaseViewHolder>(R.layout.item_gift, giftList) {
             @Override
             protected void convert(BaseViewHolder helper, GiftBean item) {
-                GlideUtil.loadImg(getContext(),helper.getView(R.id.iv_gift),item.getCover());
+                GlideUtil.loadImgNoChange(getContext(),helper.getView(R.id.iv_gift),item.getCover());
                 helper.setText(R.id.tv_gift_name,item.getName());
                 helper.setText(R.id.tv_gift_coin,item.getGold()+"乐币");
                 RelativeLayout llyout=helper.getView(R.id.ll_layout);

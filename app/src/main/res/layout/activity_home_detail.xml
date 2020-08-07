@@ -11,8 +11,9 @@
         android:id="@+id/view_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
-        android:background="@drawable/bg_gradient"
-        android:padding="@dimen/dp_15">
+        android:paddingStart="@dimen/dp_15"
+        android:paddingEnd="@dimen/dp_15"
+        android:background="@drawable/bg_gradient">
 
         <RelativeLayout
             android:id="@+id/rl_finish"
@@ -22,9 +23,37 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_write_finish" />
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/rl_user"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_toEndOf="@id/rl_finish"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/title_header"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_vertical"
+                />
+            <TextView
+                android:id="@+id/title_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_13"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_gravity="center_vertical"
+                />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/rl_more"
@@ -45,10 +74,12 @@
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_below="@id/view_title"
+        android:layout_above="@id/bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
             android:fillViewport="true"
             android:layout_height="match_parent">
@@ -71,8 +102,17 @@
                     android:paddingEnd="@dimen/dp_15"
                     android:paddingBottom="@dimen/dp_20">
 
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_20"
+                        />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/dp_15"
                         android:layout_height="@dimen/dp_38">
 
                         <RelativeLayout
@@ -111,9 +151,9 @@
                                     android:id="@+id/tv_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    tools:text="张三"
                                     android:textColor="@color/color_303133"
-                                    android:textSize="@dimen/sp_16" />
+                                    android:textSize="@dimen/sp_16"
+                                    tools:text="낯설다" />
 
                                 <ImageView
                                     android:id="@+id/iv_sex"
@@ -149,14 +189,15 @@
 
                     </RelativeLayout>
 
-                    <WebView
+                    <com.shuyu.action.web.CustomActionWebView
                         android:id="@+id/web"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
+                        android:scrollbars="vertical"
                         tools:ignore="WebViewLayout">
 
-                    </WebView>
+                    </com.shuyu.action.web.CustomActionWebView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -226,6 +267,7 @@
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
     <include layout="@layout/layout_bottom_comment"
         android:layout_alignParentBottom="true"
+        android:id="@+id/bottom"
         android:layout_height="@dimen/dp_50"
         android:layout_width="match_parent"/>
 </RelativeLayout>

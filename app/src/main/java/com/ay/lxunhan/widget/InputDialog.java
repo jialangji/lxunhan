@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
+import com.ay.lxunhan.utils.SketchLengthFilter;
+import com.ay.lxunhan.utils.SketchTextWatcher;
 import com.ay.lxunhan.utils.Utils;
 import com.blankj.utilcode.util.StringUtils;
 

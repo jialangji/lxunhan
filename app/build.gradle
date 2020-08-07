@@ -18,6 +18,11 @@ android {
         }
         multiDexEnabled true
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -123,4 +128,10 @@ dependencies {
     api 'com.github.Justson:Downloader:v4.0.3'
     implementation files('libs/NELivePlayer-1.3.0.jar')
     implementation files('libs/fastjson-1.1.34.android.jar')
+    implementation 'com.github.CarGuo:CustomActionWebView:v1.0.1'
+    implementation files('libs/YoudaoBase_v2.0.0.jar')
+    implementation files('libs/YoudaoCnDictOffline.jar')
+    implementation files('libs/YoudaoTranslateOnline_v2.0.0.jar')
+    implementation files('libs/YoudaoTranslateOffline.jar')
+    implementation (name: 'alipaySdk-15.7.7-20200702160044', ext: 'aar')
 }

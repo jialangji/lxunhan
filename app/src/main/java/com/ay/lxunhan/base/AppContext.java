@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -29,10 +30,13 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.Tencent;
 import com.wanjian.cockroach.Cockroach;
+import com.youdao.sdk.app.YouDaoApplication;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import static android.app.UiModeManager.MODE_NIGHT_YES;
 
 public class AppContext extends MultiDexApplication {
     public static AppContext instance;
@@ -46,6 +50,11 @@ public class AppContext extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        if (UserInfo.getInstance().isNight()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }else{
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+        }
         //logger初始化
         Logger.addLogAdapter(new AndroidLogAdapter() {
             @Override
@@ -54,6 +63,8 @@ public class AppContext extends MultiDexApplication {
             }
         });
         closeAndroidPDialog();
+
+        YouDaoApplication.init(this, Contacts.YOUDAO_APP_ID);
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(this, loginInfo(), options());
 //        // ... your codes

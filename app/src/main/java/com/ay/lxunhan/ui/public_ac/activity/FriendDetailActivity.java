@@ -206,7 +206,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
             llChat.setVisibility(View.VISIBLE);
         }
         isMedia = bean.getIs_media();
-        if (bean.getIs_media()) {
+        if (bean.getIs_media()&&!bean.getIsMine()) {
             arr.add("主页");
         } else {
             tvMedia.setVisibility(View.GONE);

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="@color/bg_color"
     android:layout_height="match_parent"
     tools:context=".ui.my.activity.WithDrawActivity">
     <RelativeLayout
@@ -131,7 +132,6 @@
             android:id="@+id/ll_alipay"
             android:layout_width="match_parent"
             android:layout_marginTop="@dimen/dp_20"
-            android:visibility="gone"
             android:orientation="horizontal"
             android:layout_height="wrap_content">
             <ImageView
@@ -192,7 +192,6 @@
                 android:button="@drawable/selector_check_two"
                 android:enabled="false"
                 android:clickable="false"
-                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

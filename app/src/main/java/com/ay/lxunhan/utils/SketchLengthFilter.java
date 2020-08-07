@@ -1,8 +1,9 @@
-package com.ay.lxunhan.widget;
+package com.ay.lxunhan.utils;
 
-import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.Spanned;
+
+import io.reactivex.annotations.NonNull;
 
 public class SketchLengthFilter implements InputFilter {//限制输入内容
     private final int LENGTH_ENGLISH;

@@ -133,6 +133,16 @@ public class HomeDetailPresenter extends BasePresenter<HomeDetailContract.HomeDe
     }
 
     @Override
+    public void share(int type, String aid) {
+        addDisposable(HttpMethods.getInstance().share(type,aid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+            }
+        }));
+    }
+
+    @Override
     public void attention(String uid) {
         addDisposable(HttpMethods.getInstance().attention(uid).subscribeWith(new BaseSubscriber<Object>(){
             @Override

@@ -15,6 +15,7 @@
     
     <RelativeLayout
         android:id="@+id/rl_user"
+        android:layout_marginBottom="@dimen/dp_12"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_38">
         <RelativeLayout
@@ -79,6 +80,7 @@
             android:id="@+id/tv_attention"
             android:layout_width="@dimen/dp_56"
             android:layout_height="@dimen/dp_28"
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/shape_line"
@@ -91,7 +93,6 @@
 
     <TextView
         android:id="@+id/tv_content"
-        android:layout_marginTop="@dimen/dp_12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_14"
@@ -102,12 +103,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <TextView
             android:id="@+id/iv_time"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_time"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_b2"
+            android:layout_centerVertical="true" />
         <TextView
             android:id="@+id/tv_time"
             android:layout_toEndOf="@id/iv_time"
@@ -125,6 +127,7 @@
             android:layout_width="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:layout_marginEnd="@dimen/dp_26"
             android:layout_height="wrap_content">
             <ImageView
@@ -146,6 +149,7 @@
             android:id="@+id/line1"
             android:layout_width="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:layout_alignParentEnd="true"
             android:layout_height="wrap_content">
@@ -161,7 +165,7 @@
                 android:textSize="@dimen/sp_14"
                 android:textColor="@color/color_b2"
                 android:layout_marginStart="@dimen/dp_10"
-                android:text="@string/my_come_answer"
+                android:text="777"
                 />
         </LinearLayout>
     </RelativeLayout>

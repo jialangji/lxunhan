@@ -45,7 +45,7 @@
                     android:layout_height="@dimen/dp_110"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dp_40"
-                    android:src="@mipmap/ic_logo" />
+                    android:src="@drawable/ic_logo" />
 
                 <EditText
                     android:id="@+id/et_phone"
@@ -202,12 +202,14 @@
                         android:id="@+id/iv_wx"
                         android:layout_width="@dimen/dp_40"
                         android:layout_height="@dimen/dp_40"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerHorizontal="true"
                         android:src="@drawable/ic_wx"/>
                     <ImageView
                         android:id="@+id/iv_wb"
                         android:layout_width="@dimen/dp_40"
                         android:layout_height="@dimen/dp_40"
+                        android:visibility="gone"
                         android:layout_alignParentEnd="true"
                         android:src="@drawable/ic_wb"/>
 

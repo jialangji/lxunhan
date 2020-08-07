@@ -65,8 +65,8 @@ public class BillBean {
             this.id = id;
         }
 
-        public int getType() {
-            return type;
+        public boolean getType() {
+            return type==1;
         }
 
         public void setType(int type) {

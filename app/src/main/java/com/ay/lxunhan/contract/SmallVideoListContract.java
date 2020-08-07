@@ -17,6 +17,8 @@ public interface SmallVideoListContract {
 
         void getSmallWatch(int id);
 
+        void share(int type, String aid);
+
         void getOneComment(String id, int type, int page);
 
         void sendOneComment(SendCommentModel model);

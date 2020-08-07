@@ -25,7 +25,25 @@ public class ChatImBean {
     private String user_avatar;
     private String user_nickname;
     private int user_sex;
+    private String uid;
     private List<MessageListBean> message_list;
+    private String user_id;
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getUser_autograph() {
         return user_autograph;

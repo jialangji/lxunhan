@@ -94,7 +94,7 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
                 super.onRefresh(refreshLayout);
                 isRefresh = true;
                 page = 1;
-                presenter.collect(page);
+                presenter.history(page);
             }
 
             @Override
@@ -103,7 +103,7 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
                 if (page * Contacts.LIMIT == historyList.size()) {
                     isRefresh = false;
                     page = page + 1;
-                    presenter.collect(page);
+                    presenter.history(page);
                 } else {
                     swipeRefresh.finishLoadmore();
                 }

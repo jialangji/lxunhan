@@ -26,6 +26,8 @@ public interface LiveContract {
         void openLive(String openLive);
 
         void getGold();
+
+        void attention(String uid);
     }
 
     interface LiveView{
@@ -35,6 +37,7 @@ public interface LiveContract {
         void sendGiftFinish();
         void getLiveInfoFinish(LiveDetail liveDetail);
         void openLiveFinish();
+        void attentionFinish();
         void getShowFinish(LbBean lbBean);
         void showProgress();
         void hideProgress();

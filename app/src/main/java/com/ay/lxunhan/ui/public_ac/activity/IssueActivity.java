@@ -37,7 +37,7 @@ import butterknife.OnClick;
 public class IssueActivity extends BaseActivity<IssueContract.IssueView, IssuePresenter> implements IssueContract.IssueView {
 
     private static final int MAX_NUM = 500;
-    private static final int CHOSE_IMG=-101;
+    private static final int CHOSE_IMG = -101;
     @BindView(R.id.et_content)
     EditText etContent;
     @BindView(R.id.tv_et_num)
@@ -57,14 +57,18 @@ public class IssueActivity extends BaseActivity<IssueContract.IssueView, IssuePr
     protected void initView() {
         super.initView();
         pathList.add("0");
-        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, pathList) {
+        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_issue_img, pathList) {
             @Override
             protected void convert(BaseViewHolder helper, String item) {
                 if (item.equals("0")) {
+                    helper.setGone(R.id.iv_del, false);
                     GlideUtil.loadImgLocal(IssueActivity.this, helper.getView(R.id.iv_img), R.drawable.ic_add_img);
                 } else {
+                    helper.setGone(R.id.iv_del, true);
                     GlideUtil.loadImg(IssueActivity.this, helper.getView(R.id.iv_img), item);
                 }
+                helper.addOnClickListener(R.id.iv_del);
+                helper.addOnClickListener(R.id.iv_img);
             }
         };
         rvImg.setLayoutManager(new GridLayoutManager(this, 3));
@@ -94,9 +98,28 @@ public class IssueActivity extends BaseActivity<IssueContract.IssueView, IssuePr
                 tvEtNum.setText(String.format("%s/%d", String.valueOf(editable.length()), MAX_NUM));
             }
         });
-        imgAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (pathList.get(position).equals("0")) {
-                SelectPicUtil.selectPic(this,PictureConfig.CHOOSE_REQUEST,selectList);
+
+        imgAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            switch (view.getId()) {
+                case R.id.iv_img:
+                    if (pathList.get(position).equals("0")) {
+                        SelectPicUtil.selectPic(IssueActivity.this, PictureConfig.CHOOSE_REQUEST, selectList);
+                    }
+                    break;
+                case R.id.iv_del:
+                    if (!pathList.get(position).equals("0")) {
+                        selectList.remove(position);
+                    }
+                    pathList.clear();
+                    for (LocalMedia localMedia : selectList) {
+                        pathList.add(localMedia.getCompressPath());
+                    }
+                    pathList.size();
+                    if (pathList.size() < 9) {
+                        pathList.add("0");
+                    }
+                    imgAdapter.setNewData(pathList);
+                    break;
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.ay.lxunhan.widget;
+package com.ay.lxunhan.utils;
 
 import android.text.Editable;
 import android.text.TextUtils;
@@ -8,7 +8,7 @@ import android.widget.EditText;
 public class SketchTextWatcher implements TextWatcher {//限制输入长度
     private int editStart;
     private int editEnd;
-    private int maxLen = 25; // 6 个汉字 12 个英文字符 (表情 2 个字符)
+    private int maxLen = 18; // 6 个汉字 12 个英文字符 (表情 2 个字符)
 
     private EditText editText;
 

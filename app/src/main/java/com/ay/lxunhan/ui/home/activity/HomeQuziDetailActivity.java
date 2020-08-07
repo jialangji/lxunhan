@@ -274,24 +274,32 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
 
             @Override
             public void shareQQ() {
+                presenter.share(4, String.valueOf(homeQuizDetailBean.getId()));
+
                 ShareUtils.shareToQQ(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                presenter.share(4, String.valueOf(homeQuizDetailBean.getId()));
+
                 ShareUtils.shareToQQRoom(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWx() {
+                presenter.share(4, String.valueOf(homeQuizDetailBean.getId()));
+
                 ShareUtils.shareToWx(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                presenter.share(4, String.valueOf(homeQuizDetailBean.getId()));
+
                 ShareUtils.shareToWxPyq(HomeQuziDetailActivity.this,homeQuizDetailBean.getShare_url());
 
             }
@@ -338,8 +346,14 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
         shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
             @Override
             public void shareQQ(String bitmap) {
+                presenter.share(4, String.valueOf(homeQuizDetailBean.getId()));
                 ShareUtils.shareToQQImg(HomeQuziDetailActivity.this,bitmap);
 
+            }
+
+            @Override
+            public void shareWx() {
+                presenter.share(4, String.valueOf(homeQuizDetailBean.getId()));
             }
 
             @Override
@@ -385,7 +399,7 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
             tvAttention.setText(homeQuizDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
         }
         tvQuiz.setText(homeQuizDetailBean.getIs_pate() ? StringUtil.getString(R.string.quiz_to) : StringUtil.getString(R.string.quiz));
-        tvTagText.setContentAndTag(R.layout.item_lable_quiz, homeQuizDetailBean.getTitle(), "投票", R.color.color_fc5a8e);
+        tvTagText.setContentAndTag(R.layout.item_lable_quiz, homeQuizDetailBean.getTitle(), "投票", R.color.color_49b114);
         tvTime.setText(homeQuizDetailBean.getTimeText());
         tvDesc.setText(homeQuizDetailBean.getDesc());
         tvLikeCount.setText(String.format("%d", homeQuizDetailBean.getLike_count()));

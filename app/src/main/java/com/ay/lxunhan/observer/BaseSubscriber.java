@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.NetworkUtils;
 import io.reactivex.subscribers.DisposableSubscriber;
 
 import static com.ay.lxunhan.http.HttpMethods.HTTP_LOGIN_BlACK;
+import static com.ay.lxunhan.http.HttpMethods.HTTP_LOGIN_UNREGISTER;
 import static com.ay.lxunhan.http.HttpMethods.HTTP_NOT_LOGIN;
 import static com.ay.lxunhan.http.HttpMethods.HTTP_SUCCESS;
 
@@ -55,7 +56,11 @@ public class BaseSubscriber<T> extends DisposableSubscriber<T> {
                         ToastUtil.makeShortText(AppContext.context(), R.string.account_black);
                         UserInfo.getInstance().clearAccess();
                         LoginActivity.startLoginActivity2(AppContext.context());
-                    } {
+                    }else if (apiException.getErrCode()==HTTP_LOGIN_UNREGISTER){
+                        ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
+                        UserInfo.getInstance().clearAccess();
+                        LoginActivity.startLoginActivity2(AppContext.context());
+                    }else {
                         ToastUtil.makeShortText(AppContext.instance, apiException.getErrMessage());
                     }
                 }

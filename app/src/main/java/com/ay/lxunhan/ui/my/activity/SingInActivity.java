@@ -78,7 +78,7 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
         taskAdapter = new BaseQuickAdapter<TaskBean, BaseViewHolder>(R.layout.item_task, taskBeanList) {
             @Override
             protected void convert(BaseViewHolder helper, TaskBean item) {
-                GlideUtil.loadCircleImg(SingInActivity.this,helper.getView(R.id.iv_type_img),item.getIcon());
+                GlideUtil.loadImg(SingInActivity.this,helper.getView(R.id.iv_type_img),item.getIcon());
                 helper.setText(R.id.tv_type_title,item.getName());
                 helper.setText(R.id.tv_type_lb,item.getGold()+"乐讯币");
                 ProgressBar progressBar=helper.getView(R.id.progressBarSmall);
@@ -86,6 +86,9 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
                 progressBar.setProgress(item.getTaskCount());
                 helper.setText(R.id.tv_success_count,item.getTaskCount()+"");
                 helper.setText(R.id.tv_all_count,"/"+item.getNumber());
+                TextView tvGet=helper.getView(R.id.tv_get);
+                tvGet.setText(StringUtil.getString(item.getTaskFlg()?R.string.get:R.string.to_get));
+                tvGet.setBackground(getResources().getDrawable(item.getTaskFlg()?R.drawable.shape_gray_bg_15:R.drawable.shape_radiu_ff9813));
             }
         };
         rvTask.setLayoutManager(new LinearLayoutManager(this));

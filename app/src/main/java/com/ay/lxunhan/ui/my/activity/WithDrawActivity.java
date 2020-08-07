@@ -115,7 +115,6 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
                 }
                 break;
             case R.id.ll_wx:
-
                 if (!checkWx.isChecked()) {
                     llAccount.setVisibility(View.VISIBLE);
                     tvAccountInfo.setText(StringUtil.getString(R.string.wx_account));
@@ -127,12 +126,15 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
             case R.id.tv_withdraw:
                 if (!TextUtils.isEmpty(StringUtil.getFromEdit(etPrice))) {
                     if (BigDecimalUtils.compareIsBig(balance, StringUtil.getFromEdit(etPrice))) {
-
-                        if (!TextUtils.isEmpty(StringUtil.getFromEdit(etAccount))) {
-                            WithdrawModel withdrawModel = new WithdrawModel(withdrawType, StringUtil.getFromEdit(etPrice), StringUtil.getFromEdit(etAccount));
-                            presenter.withdraw(withdrawModel);
-                        } else {
-                            ToastUtil.makeShortText(this, "请输入提现账号");
+                        if (checkAlipay.isChecked()||checkWx.isChecked()) {
+                            if (!TextUtils.isEmpty(StringUtil.getFromEdit(etAccount))) {
+                                WithdrawModel withdrawModel = new WithdrawModel(withdrawType, StringUtil.getFromEdit(etPrice), StringUtil.getFromEdit(etAccount));
+                                presenter.withdraw(withdrawModel);
+                            } else {
+                                ToastUtil.makeShortText(this, "请输入提现账号");
+                            }
+                        }else {
+                            ToastUtil.makeShortText(this, "请选择提现方式");
                         }
 
                     } else {

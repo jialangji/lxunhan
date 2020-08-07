@@ -285,24 +285,28 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
 
             @Override
             public void shareQQ() {
+                presenter.share(2, String.valueOf(videoDetailBean.getId()));
                 ShareUtils.shareToQQ(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
+                presenter.share(2, String.valueOf(videoDetailBean.getId()));
                 ShareUtils.shareToQQRoom(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWx() {
+                presenter.share(2, String.valueOf(videoDetailBean.getId()));
                 ShareUtils.shareToWx(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
+                presenter.share(2, String.valueOf(videoDetailBean.getId()));
                 ShareUtils.shareToWxPyq(VideoDetailActivity.this,videoDetailBean.getShare_url());
 
             }
@@ -347,8 +351,14 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
             @Override
             public void shareQQ(String bitmap) {
+                presenter.share(2, String.valueOf(videoDetailBean.getId()));
                 ShareUtils.shareToQQImg(VideoDetailActivity.this,bitmap);
 
+            }
+
+            @Override
+            public void shareWx() {
+                presenter.share(2, String.valueOf(videoDetailBean.getId()));
             }
 
             @Override

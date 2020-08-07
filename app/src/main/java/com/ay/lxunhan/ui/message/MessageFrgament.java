@@ -212,7 +212,9 @@ public class MessageFrgament extends BaseFragment<MessageContract.MessageView, M
     @Override
     public void onResume() {
         super.onResume();
-        presenter.getChatList(page);
+        if (UserInfo.getInstance().isLogin()){
+            presenter.getChatList(page);
+        }
         GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
 
     }

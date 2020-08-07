@@ -22,12 +22,24 @@ public class UserInfo {
     private String wxCode;
     private boolean isWxLogin;
     private String userName;
+    private boolean isNight;
 
 
     private UserInfo(Context context) {
         userSp = context.getSharedPreferences(Contacts.USERINFO, Context.MODE_PRIVATE);
         editor = userSp.edit();
     }
+
+    public boolean isNight() {
+        return userSp.getBoolean(Contacts.ISNIGHT,false);
+    }
+
+    public void setNight(boolean night) {
+        isNight = night;
+        editor.putBoolean(Contacts.ISNIGHT, night);
+        editor.commit();
+    }
+
 
     public String getWyyAccount() {
         return userSp.getString(Contacts.WYY_ACCOUNT,"");

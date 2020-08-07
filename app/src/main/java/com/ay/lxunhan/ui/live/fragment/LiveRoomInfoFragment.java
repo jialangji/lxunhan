@@ -13,6 +13,7 @@ import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.bean.LiveDetail;
 import com.ay.lxunhan.ui.live.LiveRoomActivity;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.wyyim.chatroom.NimController;
@@ -48,6 +49,7 @@ public class LiveRoomInfoFragment extends BaseFragment {
     private LiveRoomActivity liveActivity;
     private List<LiveDetail.UserListBean> userListBeans=new ArrayList<>();
     private BaseQuickAdapter adapter;
+    private LiveDetail liveDetail;
 
     @Override
     public void onAttach(Context context) {
@@ -99,6 +101,12 @@ public class LiveRoomInfoFragment extends BaseFragment {
     }
 
     @Override
+    protected void initListener() {
+        super.initListener();
+        ivHeader.setOnClickListener(v -> FriendDetailActivity.startUserDetailActivity(getActivity(),liveDetail.getId()));
+    }
+
+    @Override
     public BasePresenter initPresenter() {
         return null;
     }
@@ -136,6 +144,7 @@ public class LiveRoomInfoFragment extends BaseFragment {
 
     public void updateUserInfo(LiveDetail liveDetail){
         if (liveActivity!=null)
+            this.liveDetail=liveDetail;
         GlideUtil.loadCircleImgForHead(getActivity(),ivHeader,liveDetail.getAvatar());
         tvName.setText(liveDetail.getLname());
         tvRd.setText(liveDetail.getRd()+"热度");
@@ -184,5 +193,7 @@ public class LiveRoomInfoFragment extends BaseFragment {
 
     @OnClick(R.id.tv_attention)
     public void onViewClicked() {
+        if (liveActivity!=null)
+            liveActivity.initPresenter().attention(liveDetail.getId());
     }
 }

@@ -15,6 +15,8 @@ import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.contract.LbContract;
 import com.ay.lxunhan.presenter.LbPresenter;
+import com.ay.lxunhan.ui.video.activity.LiveActivity;
+import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -73,7 +75,7 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
         taskAdapter = new BaseQuickAdapter<TaskBean, BaseViewHolder>(R.layout.item_task, taskBeanList) {
             @Override
             protected void convert(BaseViewHolder helper, TaskBean item) {
-                GlideUtil.loadCircleImg(LCoinActivity.this,helper.getView(R.id.iv_type_img),item.getIcon());
+                GlideUtil.loadImg(LCoinActivity.this,helper.getView(R.id.iv_type_img),item.getIcon());
                 helper.setText(R.id.tv_type_title,item.getName());
                 helper.setText(R.id.tv_type_lb,item.getGold()+"乐讯币");
                 ProgressBar progressBar=helper.getView(R.id.progressBarSmall);
@@ -91,8 +93,12 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
     protected void initListener() {
         super.initListener();
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (position == 0 || position == 1) {
-
+            if (position == 0 ) {
+                SingInActivity.startSingInActivity(this);
+            }else if (position==1){
+                rvTask.scrollToPosition(taskBeanList.size()/2);
+            }else{
+                ToastUtil.makeShortText(LCoinActivity.this,"待开发");
             }
         });
         taskAdapter.setOnItemClickListener((adapter, view, position) -> {
@@ -135,8 +141,10 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
                 LCoinDetailActivity.startLCoinDetailActivity(this);
                 break;
             case R.id.iv_shop:
+                ToastUtil.makeShortText(this,"待开发");
                 break;
             case R.id.iv_anchor:
+                LiveActivity.startLiveActivity(this);
                 break;
         }
     }

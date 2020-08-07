@@ -20,6 +20,7 @@ import com.ay.lxunhan.adapter.PublicAdapterUtil;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.FriendBean;
+import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
@@ -28,6 +29,7 @@ import com.ay.lxunhan.presenter.SearchPresenter;
 import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
+import com.ay.lxunhan.ui.live.LiveRoomActivity;
 import com.ay.lxunhan.ui.message.activity.ChatP2PActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
@@ -73,6 +75,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
     private List<AddFriendBean.FollowsListBean> addFriendsBean = new ArrayList<>();
     private List<FriendBean> friendBeans=new ArrayList<>();
     private List<VideoBean> videoBeanList = new ArrayList<>();
+    private List<LiveListBean> liveListBeans = new ArrayList<>();
     private BaseQuickAdapter searchHomeAdapter;
     private BaseQuickAdapter searchVideoAdapter;
     private BaseQuickAdapter searchLiveAdapter;
@@ -136,7 +139,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
                 presenter.getVideoSearch(content,page);
                 break;
             case Contacts.HISTORY_LIVE:
-
+                presenter.getLiveSearch("0",page,content);
                 break;
             case Contacts.HISTORY_FRIEND:
                 presenter.getFriendSearch(content);
@@ -158,7 +161,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
     private void initAdapter() {
         switch (type) {
             case Contacts.HISTORY_HOME:
-                searchHomeAdapter = PublicAdapterUtil.getAdapter(homeList, this);
+                searchHomeAdapter = PublicAdapterUtil.getAdapter(homeList, this,true);
                 rvSearch.setLayoutManager(new LinearLayoutManager(this));
                 rvSearch.setAdapter(searchHomeAdapter);
                 break;
@@ -180,6 +183,18 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
                 });
                 break;
             case Contacts.HISTORY_LIVE:
+                searchLiveAdapter = new BaseQuickAdapter<LiveListBean,BaseViewHolder>(R.layout.item_live,liveListBeans) {
+
+                    @Override
+                    protected void convert(BaseViewHolder helper, LiveListBean item) {
+                        GlideUtil.loadRoundImg(SearchActivity.this,helper.getView(R.id.iv_cover),item.getCover());
+                        helper.setText(R.id.tv_title,item.getLname());
+                        helper.setText(R.id.tv_see_count,item.getPeople()+"");
+                    }
+                };
+                rvSearch.setLayoutManager(new GridLayoutManager(SearchActivity.this,2));
+                rvSearch.addItemDecoration(new GridSpacingItemDecoration(2,10,false));
+                rvSearch.setAdapter(searchLiveAdapter);
                 break;
             case Contacts.HISTORY_FRIEND:
                 searchFriendAdapter =new BaseQuickAdapter<FriendBean,BaseViewHolder>(R.layout.item_friend_list,friendBeans) {
@@ -344,6 +359,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
                 });
                 break;
             case Contacts.HISTORY_LIVE:
+                searchLiveAdapter.setOnItemClickListener((adapter, view, position) -> LiveRoomActivity.startAudience(SearchActivity.this,liveListBeans.get(position).getRoomcode(),liveListBeans.get(position).getHttpPullUrl(),true,liveListBeans.get(position).getLid()));
 
                 break;
             case Contacts.HISTORY_FRIEND:
@@ -452,6 +468,11 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
             @Override
             public void shareQQ(String bitmap) {
                 ShareUtils.shareToQQImg(SearchActivity.this,bitmap);
+
+            }
+
+            @Override
+            public void shareWx() {
 
             }
 
@@ -567,6 +588,24 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
         friendBeans.addAll(list);
         searchFriendAdapter.notifyDataSetChanged();
         refreshHistory();
+    }
+
+    @Override
+    public void getLiveSearchFinish(List<LiveListBean> beans) {
+        llLinearHistory.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.VISIBLE);
+        if (isRefresh) {
+            swipeRefresh.finishRefreshing();
+            liveListBeans.clear();
+            liveListBeans.addAll(beans);
+            searchLiveAdapter.setNewData(addFriendsBean);
+        } else {
+            swipeRefresh.finishLoadmore();
+            liveListBeans.addAll(beans);
+            searchLiveAdapter.setNewData(addFriendsBean);
+        }
+        refreshHistory();
+
     }
 
     @Override

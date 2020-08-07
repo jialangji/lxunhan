@@ -119,4 +119,13 @@ public class SmallVideoListPresenter extends BasePresenter<SmallVideoListContrac
             }
         }));
     }
+    @Override
+    public void share(int type, String aid) {
+        addDisposable(HttpMethods.getInstance().share(type,aid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+            }
+        }));
+    }
 }

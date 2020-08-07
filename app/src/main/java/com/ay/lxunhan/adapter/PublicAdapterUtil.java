@@ -39,7 +39,7 @@ import static android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 public class PublicAdapterUtil {
 
-    public static BaseQuickAdapter getAdapter(List<MultiItemBaseBean> datas, Context context) {
+    public static BaseQuickAdapter getAdapter(List<MultiItemBaseBean> datas, Context context, boolean isAttention) {
         return new MultipleItemQuickAdapter<MultiItemBaseBean>(datas) {
             private BaseQuickAdapter imgAdapter;
             private BaseQuickAdapter baseQuickAdapter;
@@ -57,39 +57,41 @@ public class PublicAdapterUtil {
             @Override
             protected void convert(BaseViewHolder helper, MultiItemBaseBean item) {
                 super.convert(helper, item);
+                helper.setGone(R.id.rl_user, isAttention);
                 GlideUtil.loadCircleImgForHead(context, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
-                if (item.getIs_fol() == 2) {
-                    helper.setGone(R.id.tv_attention, false);
-                } else {
-                    helper.setGone(R.id.tv_attention, true);
-                    helper.setText(R.id.tv_attention, item.getIs_fol() != 2 && item.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
-                }
-
                 helper.setText(R.id.tv_signature, item.getInto());
                 helper.setImageResource(R.id.iv_sex, item.getSex() ? R.drawable.ic_man : R.drawable.ic_woman);
-                helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
-                helper.setImageResource(R.id.iv_comment, R.drawable.ic_comment_normal);
-                helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
-                helper.setText(R.id.tv_like_count, item.getLike_count() + "");
+
+//                if (item.getIs_fol() == 2) {
+//                    helper.setGone(R.id.tv_attention, false);
+//                } else {
+//                    helper.setGone(R.id.tv_attention, true);
+//                    helper.setText(R.id.tv_attention, item.getIs_fol() != 2 && item.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
+//                }
+
+
+//                helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
+//                helper.setImageResource(R.id.iv_comment, R.drawable.ic_comment_normal);
+//                helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
+//                helper.setText(R.id.tv_like_count, item.getLike_count() + "");
+                helper.setText(R.id.iv_time, item.getComment_count() + "评论");
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.addOnClickListener(R.id.iv_header);
-                helper.addOnClickListener(R.id.tv_attention);
                 helper.addOnClickListener(R.id.ll_linear);
-                helper.addOnClickListener(R.id.ll_like);
                 switch (item.getItemType()) {
                     case 0:
                         helper.setText(R.id.tv_content, item.getTitle());
-                        helper.setText(R.id.tv_type, item.getPlate_name());
+//                        helper.setText(R.id.tv_type, item.getPlate_name());
                         break;
                     case 1:
                         helper.setText(R.id.tv_content, item.getTitle());
                         GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_comment_img), item.getCover().get(0));
-                        helper.setText(R.id.tv_type, item.getPlate_name());
+//                        helper.setText(R.id.tv_type, item.getPlate_name());
                         break;
                     case 2:
                         helper.setText(R.id.tv_content, item.getTitle());
-                        helper.setText(R.id.tv_type, item.getPlate_name());
+//                        helper.setText(R.id.tv_type, item.getPlate_name());
                         RecyclerView rvImg = helper.getView(R.id.rv_img);
                         imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getCover()) {
                             @Override
@@ -111,7 +113,6 @@ public class PublicAdapterUtil {
                         tvTagquiz.setContentAndTag(R.layout.item_lable_quiz, item.getTitle(), "投票", R.color.color_49b114);
                         RecyclerView rvQuiz = helper.getView(R.id.rv_quiz);
                         helper.setText(R.id.tv_quiz, item.getIs_pate() ? StringUtil.getString(R.string.quiz_to) : StringUtil.getString(R.string.quiz));
-
                         baseQuickAdapter = new BaseQuickAdapter<MultiItemBaseBean.OptionListBean, BaseViewHolder>(R.layout.item_quiz, item.getOption_list()) {
                             @Override
                             protected void convert(BaseViewHolder helperChild, MultiItemBaseBean.OptionListBean itemChild) {
@@ -217,6 +218,7 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         helper.addOnClickListener(R.id.tv_attention);
+                        helper.addOnClickListener(R.id.ll_like);
                         if (item.getIs_fol() == 2) {
                             helper.setGone(R.id.tv_attention, false);
                         } else {
@@ -256,7 +258,7 @@ public class PublicAdapterUtil {
                 GlideUtil.loadCircleImgForHead(context, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
                 if (item.getItemType() != 5) {
-                    if (item.getItemType()!=2){
+                    if (item.getItemType() != 2) {
                         helper.setText(R.id.tv_time, item.getTimeText());
                         helper.setText(R.id.tv_signature, item.getInto());
                         helper.setImageResource(R.id.iv_sex, item.getSex() ? R.drawable.ic_man : R.drawable.ic_woman);
@@ -278,12 +280,14 @@ public class PublicAdapterUtil {
 
                 switch (item.getItemType()) {
                     case 0:
+                        helper.setGone(R.id.rl_user, false);
                         helper.setText(R.id.tv_content, item.getTitle());
                         helper.setText(R.id.tv_type, item.getPlate_name());
                         helper.addOnClickListener(R.id.tv_attention);
                         helper.addOnClickListener(R.id.ll_like);
                         break;
                     case 1:
+                        helper.setGone(R.id.rl_user, false);
                         helper.setText(R.id.tv_content, item.getTitle());
                         GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_comment_img), item.getCover().get(0));
                         helper.setText(R.id.tv_type, item.getPlate_name());
@@ -291,6 +295,7 @@ public class PublicAdapterUtil {
                         helper.addOnClickListener(R.id.ll_like);
                         break;
                     case 6:
+                        helper.setGone(R.id.rl_user, false);
                         helper.setText(R.id.tv_content, item.getTitle());
                         helper.setText(R.id.tv_type, item.getPlate_name());
                         RecyclerView rvImg = helper.getView(R.id.rv_img);
@@ -307,12 +312,14 @@ public class PublicAdapterUtil {
                         helper.addOnClickListener(R.id.ll_like);
                         break;
                     case 3:
+                        helper.setGone(R.id.rl_user, false);
                         TextView tvTagAsk = helper.getView(R.id.tv_content);
                         tvTagAsk.setText(setSpan(context, item.getBounty_gold(), item.getTitle()));
                         helper.addOnClickListener(R.id.tv_attention);
                         helper.addOnClickListener(R.id.ll_like);
                         break;
                     case 4:
+                        helper.setGone(R.id.rl_user, false);
                         helper.addOnClickListener(R.id.tv_attention);
                         helper.addOnClickListener(R.id.ll_like);
                         TagTextView tvTagquiz = helper.getView(R.id.tv_content);
@@ -445,7 +452,7 @@ public class PublicAdapterUtil {
                 helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.setText(R.id.tv_content, item.getTitle());
-                helper.setGone(R.id.tv_del, item.getIs_my());
+                helper.setGone(R.id.tv_del, item.getIs_mine());
                 helper.addOnClickListener(R.id.tv_del);
                 helper.addOnClickListener(R.id.ll_line);
                 helper.addOnClickListener(R.id.iv_header);
@@ -504,7 +511,7 @@ public class PublicAdapterUtil {
                         break;
                     case 2:
                         RecyclerView rvImg = helper.getView(R.id.rv_img);
-                        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getImage_arr()) {
+                        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img_90, item.getImage_arr()) {
                             @Override
                             protected void convert(BaseViewHolder helper, String itemchild) {
                                 GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild, 10);

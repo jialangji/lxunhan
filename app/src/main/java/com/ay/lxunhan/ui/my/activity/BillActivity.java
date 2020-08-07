@@ -57,6 +57,7 @@ public class BillActivity extends BaseActivity<BillContract.BillView, BillPresen
         billAdapter = new BaseQuickAdapter<BillBean.BalanceLogBean,BaseViewHolder>(R.layout.item_bill,billBeans) {
             @Override
             protected void convert(BaseViewHolder helper, BillBean.BalanceLogBean item) {
+                helper.setImageResource(R.id.iv_icon,item.getType()?R.drawable.ic_big_coin:R.drawable.ic_withdraw_icon);
                 helper.setText(R.id.tv_title,item.getDesc());
                 helper.setText(R.id.tv_date,item.getCreated_at());
                 helper.setText(R.id.tv_money,item.getBalance());
@@ -123,7 +124,8 @@ public class BillActivity extends BaseActivity<BillContract.BillView, BillPresen
         List<String> typeList=new ArrayList<>();
         typeList.add("全部");
         typeList.add("本月");
-        typeList.add("近七天");
+        typeList.add("三个月");
+        typeList.add("六个月");
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, (options1, options2, options3, v) -> {
             tvSelect.setText(typeList.get(options1));
             timeType=options1;

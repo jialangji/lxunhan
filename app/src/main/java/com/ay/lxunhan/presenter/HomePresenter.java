@@ -85,6 +85,18 @@ public class HomePresenter extends BasePresenter<HomeContract.HomeView> implemen
     }
 
     @Override
+    public void addLike(SendCommentModel model) {
+        addDisposable(HttpMethods.getInstance().addLike(model).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().addLikeFinish();
+            }
+
+        }));
+    }
+
+    @Override
     public void getHomeType() {
        addDisposable(HttpMethods.getInstance().getHomeType().subscribeWith(new BaseSubscriber<List<TypeBean>>(){
            @Override

@@ -3,6 +3,7 @@ package com.ay.lxunhan.presenter;
 import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.bean.AddFriendBean;
 import com.ay.lxunhan.bean.FriendBean;
+import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.bean.MultiItemBaseBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
@@ -49,6 +50,7 @@ public class SearchPresenter extends BasePresenter<SearchContract.SearchView> im
             @Override
             public void onNext(List<VideoBean> o) {
                 super.onNext(o);
+                getView().hideProgress();
                 getView().getVideoHomeListFinish(o);
             }
             @Override
@@ -93,6 +95,17 @@ public class SearchPresenter extends BasePresenter<SearchContract.SearchView> im
             public void onError(Throwable t) {
                 super.onError(t);
                 getView().hideProgress();
+            }
+        }));
+    }
+
+    @Override
+    public void getLiveSearch(String type, int page, String name) {
+        addDisposable(HttpMethods.getInstance().getLiveList(type, page,name).subscribeWith(new BaseSubscriber<List<LiveListBean>>(){
+            @Override
+            public void onNext(List<LiveListBean> o) {
+                super.onNext(o);
+                getView().getLiveSearchFinish(o);
             }
         }));
     }

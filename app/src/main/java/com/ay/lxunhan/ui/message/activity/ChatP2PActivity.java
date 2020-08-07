@@ -27,6 +27,7 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.ChatImBean;
 import com.ay.lxunhan.contract.ChatImContract;
 import com.ay.lxunhan.presenter.ChatImPresenter;
+import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.MoonUtil;
 import com.ay.lxunhan.utils.StringUtil;
@@ -92,6 +93,7 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
     private BaseQuickAdapter adapter;
     private int page = 1;
     private boolean isNewMessage = false;
+    private ChatImBean chatImBean;
 
 
     @Override
@@ -355,11 +357,14 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
         });
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.emoji_button, R.id.buttonSendMessage})
+    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.emoji_button, R.id.buttonSendMessage,R.id.iv_header})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
                 finish();
+                break;
+            case R.id.iv_header:
+                FriendDetailActivity.startUserDetailActivity(this,chatImBean.getUser_id());
                 break;
             case R.id.rl_more:
                 break;
@@ -444,6 +449,8 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
 
     @Override
     public void getChatImShowFinish(ChatImBean imBean) {
+
+        chatImBean=imBean;
         GlideUtil.loadCircleImgForHead(this, ivHeader, imBean.getUser_avatar());
         tvName.setText(imBean.getUser_nickname());
         tvSignature.setText(imBean.getUser_autograph());

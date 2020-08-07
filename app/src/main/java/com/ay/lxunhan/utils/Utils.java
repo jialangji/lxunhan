@@ -163,6 +163,7 @@ public class Utils {
         String head = "<head >" +
                 "<link rel=\"stylesheet\" href=\"file:///android_asset/content-styles.css\" type=\"text/css\">"+
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">"+
+                "<style>* img{max-width: 100%; width:auto; height:auto!important;}</style>"+
                 "</head>";
         return "<html>" + head + "<body class=\"ck-content\">" + bodyHTML + "</body></html>";
     }
@@ -394,5 +395,7 @@ public class Utils {
             }
         };
     }
+
+
 
 }

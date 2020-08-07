@@ -54,15 +54,14 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
     private JZVideoPlayerStandardLoopVideo jzvdStd;
     private BaseQuickAdapter videoAdapter;
     private int videoId;
-    private int page=1;
-    private boolean isRefresh=true;
+    private int page = 1;
+    private boolean isRefresh = true;
     private int mPosition;
     private ShareDialog shareDialog;
     private ShareImgDialog shareImgDialog;
-    private int commentPage=1;
-    private boolean commentIsRefresh=true;
+    private int commentPage = 1;
+    private boolean commentIsRefresh = true;
     private HomeCommentPopWindow popWindow;
-
 
     @Override
     public SmallVideoListPresenter initPresenter() {
@@ -72,7 +71,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
     @Override
     protected void initView() {
         super.initView();
-        videoId=getIntent().getIntExtra("id",0);
+        videoId = getIntent().getIntExtra("id", 0);
         videoAdapter = new BaseQuickAdapter<VideoBean, BaseViewHolder>(R.layout.item_small_video, videoBeanList) {
             @Override
             protected void convert(BaseViewHolder helper, VideoBean item) {
@@ -94,6 +93,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 jzvideo.startVideo();
                 GlideUtil.loadCircleImgForHead(SmallVideoActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
+                helper.setText(R.id.tv_title, item.getTitle());
                 if (item.getIs_fol() == 2) {
                     helper.setGone(R.id.tv_attention, false);
                 } else {
@@ -127,8 +127,8 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
             @Override
             public void onPageSelected(int position, boolean isBottom, View view) {
                 playVideo(position, view);
-                commentPage=1;
-                commentIsRefresh=true;
+                commentPage = 1;
+                commentIsRefresh = true;
                 presenter.getSmallWatch(videoBeanList.get(position).getId());
 
             }
@@ -138,7 +138,6 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 releaseVideo(view);
             }
         });
-
     }
 
     @Override
@@ -148,9 +147,9 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
-                isRefresh=true;
-                page=1;
-                presenter.getSmallVideo(page,0);
+                isRefresh = true;
+                page = 1;
+                presenter.getSmallVideo(page, 0);
             }
 
             @Override
@@ -159,25 +158,25 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 if (page * Contacts.LIMIT == videoBeanList.size()) {
                     isRefresh = false;
                     page = page + 1;
-                    presenter.getSmallVideo(page,0);
+                    presenter.getSmallVideo(page, 0);
 
-                }else {
+                } else {
                     swipeRefresh.finishLoadmore();
                 }
             }
         });
         videoAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            mPosition=position;
-            switch (view.getId()){
+            mPosition = position;
+            switch (view.getId()) {
                 case R.id.tv_attention:
                     presenter.attention(videoBeanList.get(mPosition).getUid());
                     break;
                 case R.id.ll_like:
-                    SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(videoBeanList.get(mPosition).getId()),5);
+                    SendCommentModel sendCommentModel = new SendCommentModel(String.valueOf(videoBeanList.get(mPosition).getId()), 5);
                     presenter.addLike(sendCommentModel);
                     break;
                 case R.id.ll_comment:
-                    presenter.getOneComment(String.valueOf(videoBeanList.get(mPosition).getId()),5,commentPage);
+                    presenter.getOneComment(String.valueOf(videoBeanList.get(mPosition).getId()), 5, commentPage);
                     break;
                 case R.id.iv_header:
                     FriendDetailActivity.startUserDetailActivity(SmallVideoActivity.this, videoBeanList.get(position).getUid());
@@ -186,7 +185,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                     showDialog();
                     break;
                 case R.id.ll_wx_share:
-                    ShareUtils.shareToWx(this,videoBeanList.get(mPosition).getShare_url());
+                    ShareUtils.shareToWx(this, videoBeanList.get(mPosition).getShare_url());
                     break;
             }
         });
@@ -196,7 +195,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
     @Override
     protected void initData() {
         super.initData();
-        presenter.getSmallVideo(page,videoId);
+        presenter.getSmallVideo(page, videoId);
     }
 
     public void showDialog() {
@@ -212,25 +211,32 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
             @Override
             public void shareQQ() {
-                ShareUtils.shareToQQ(SmallVideoActivity.this,videoBeanList.get(mPosition).getShare_url());
+                presenter.share(5, String.valueOf(videoBeanList.get(mPosition).getId()));
+                ShareUtils.shareToQQ(SmallVideoActivity.this, videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareQQRoom() {
-                ShareUtils.shareToQQRoom(SmallVideoActivity.this,videoBeanList.get(mPosition).getShare_url());
+                presenter.share(5, String.valueOf(videoBeanList.get(mPosition).getId()));
+
+                ShareUtils.shareToQQRoom(SmallVideoActivity.this, videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWx() {
-                ShareUtils.shareToWx(SmallVideoActivity.this,videoBeanList.get(mPosition).getShare_url());
+                presenter.share(5, String.valueOf(videoBeanList.get(mPosition).getId()));
+
+                ShareUtils.shareToWx(SmallVideoActivity.this, videoBeanList.get(mPosition).getShare_url());
 
             }
 
             @Override
             public void shareWxPyq() {
-                ShareUtils.shareToWxPyq(SmallVideoActivity.this,videoBeanList.get(mPosition).getShare_url());
+                presenter.share(5, String.valueOf(videoBeanList.get(mPosition).getId()));
+
+                ShareUtils.shareToWxPyq(SmallVideoActivity.this, videoBeanList.get(mPosition).getShare_url());
 
             }
 
@@ -257,7 +263,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
             @Override
             public void collect() {
-                presenter.addCollect(String.valueOf(videoBeanList.get(mPosition).getId()),5);
+                presenter.addCollect(String.valueOf(videoBeanList.get(mPosition).getId()), 5);
             }
 
             @Override
@@ -267,15 +273,23 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
         });
     }
 
-    public void showImg(String url){
+    public void showImg(String url) {
         if (shareImgDialog == null) {
-            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle,url);
+            shareImgDialog = new ShareImgDialog(this, R.style.selectPicDialogstyle, url);
         }
         shareImgDialog.show();
         shareImgDialog.setItemClickListener(new ShareImgDialog.ItemClickListener() {
             @Override
             public void shareQQ(String bitmap) {
-                ShareUtils.shareToQQImg(SmallVideoActivity.this,bitmap);
+                presenter.share(5, String.valueOf(videoBeanList.get(mPosition).getId()));
+
+                ShareUtils.shareToQQImg(SmallVideoActivity.this, bitmap);
+
+            }
+
+            @Override
+            public void shareWx() {
+                presenter.share(5, String.valueOf(videoBeanList.get(mPosition).getId()));
 
             }
 
@@ -351,7 +365,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
     public static void startSmallVideoActivity(Context context, int id) {
         Intent intent = new Intent(context, SmallVideoActivity.class);
-        intent.putExtra("id",id);
+        intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
@@ -362,15 +376,15 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
     @Override
     public void getSmallVideoFinish(List<VideoBean> list) {
-        if (isRefresh){
+        if (isRefresh) {
             swipeRefresh.finishRefreshing();
             videoBeanList.clear();
-        }else{
+        } else {
             swipeRefresh.finishLoadmore();
         }
         videoBeanList.addAll(list);
         videoAdapter.setNewData(videoBeanList);
-        if (videoBeanList.size()>0){
+        if (videoBeanList.size() > 0) {
             showPopWindow();
         }
 
@@ -378,30 +392,30 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
     @Override
     public void getOneCommentFinsh(List<CommentBean> commentBeans) {
-        if (commentIsRefresh){
+        if (commentIsRefresh) {
             popWindow.showAtLocation(this.findViewById(R.id.view_title), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         }
-        popWindow.updateData(commentBeans,commentPage,commentIsRefresh);
+        popWindow.updateData(commentBeans, commentPage, commentIsRefresh);
         popWindow.setCount(String.valueOf(videoBeanList.get(mPosition).getComment_count()));
 
     }
 
     @Override
     public void addCollectFinish() {
-        ToastUtil.makeShortText(this,"收藏成功");
+        ToastUtil.makeShortText(this, "收藏成功");
     }
 
     @Override
     public void sendCommentFinish() {
-        videoBeanList.get(mPosition).setComment_count(videoBeanList.get(mPosition).getComment_count()+1);
+        videoBeanList.get(mPosition).setComment_count(videoBeanList.get(mPosition).getComment_count() + 1);
         popWindow.sendSuccess();
-        commentPage=1;
-        commentIsRefresh=true;
-        presenter.getOneComment(String.valueOf(videoBeanList.get(mPosition).getId()),5,commentPage);
+        commentPage = 1;
+        commentIsRefresh = true;
+        presenter.getOneComment(String.valueOf(videoBeanList.get(mPosition).getId()), 5, commentPage);
     }
 
     public void showPopWindow() {
-        popWindow = new HomeCommentPopWindow(this,page);
+        popWindow = new HomeCommentPopWindow(this, page);
         popWindow.setOnSendCommentListener(new HomeCommentPopWindow.onSendCommentListener() {
             @Override
             public void onSend(String comment) {
@@ -411,9 +425,9 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
             @Override
             public void loadMore() {
-                commentPage=commentPage+1;
-                commentIsRefresh=false;
-                presenter.getOneComment(String.valueOf(videoBeanList.get(mPosition).getId()),5,commentPage);
+                commentPage = commentPage + 1;
+                commentIsRefresh = false;
+                presenter.getOneComment(String.valueOf(videoBeanList.get(mPosition).getId()), 5, commentPage);
 
             }
 
@@ -436,7 +450,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
             videoBeanList.get(mPosition).setIs_like(1);
             videoBeanList.get(mPosition).setLike_count(videoBeanList.get(mPosition).getLike_count() + 1);
         }
-        videoAdapter.notifyDataSetChanged();
+        videoAdapter.notifyItemChanged(mPosition, videoBeanList.get(mPosition));
     }
 
     @Override
@@ -446,12 +460,12 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
 
     @Override
     public void attentionFinish() {
-        if (videoBeanList.get(mPosition).getIs_fol()==1){
+        if (videoBeanList.get(mPosition).getIs_fol() == 1) {
             videoBeanList.get(mPosition).setIs_fol(0);
-        }else{
+        } else {
             videoBeanList.get(mPosition).setIs_fol(1);
         }
-        videoAdapter.notifyDataSetChanged();
+        videoAdapter.notifyItemChanged(mPosition, videoBeanList.get(mPosition));
     }
 
     @Override

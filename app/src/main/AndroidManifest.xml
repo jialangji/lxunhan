@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" /> <!-- 声明程序使用camera和自动对焦功能 -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <!-- 往SDCard读写数据权限   storage group -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <permission
@@ -220,14 +220,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.login.BootPageActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:configChanges="keyboardHidden|orientation|uiMode"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -250,9 +244,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:configChanges="keyboardHidden|screenSize|orientation|uiMode"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -281,11 +281,6 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <receiver android:name="com.ay.lxunhan.demo.receiver.IncomingCallReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
@@ -300,6 +295,13 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            tools:replace="android:configChanges"
+            android:screenOrientation="behind">
+        </activity>
     </application>
 
 </manifest>

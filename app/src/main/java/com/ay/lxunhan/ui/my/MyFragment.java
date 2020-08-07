@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +43,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> implements MyContract.MyView {
 
-    @BindView(R.id.tv_money)
-    TextView tvMoney;
     @BindView(R.id.iv_header)
     ImageView ivHeader;
     @BindView(R.id.tv_name)
@@ -63,6 +59,10 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
     TextView tvAttentionCount;
     @BindView(R.id.tv_lb_bfb)
     TextView tvLbBfb;
+    @BindView(R.id.rl_user)
+    LinearLayout rlUser;
+    @BindView(R.id.tv_lb_count)
+    TextView tvLbCount;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -74,19 +74,7 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
     @Override
     protected void initView() {
         super.initView();
-        GlideUtil.loadCircleImgForHead(getActivity(),ivHeader, UserInfo.getInstance().getAvatar());
-    }
-
-
-    public void setTextSize(String str){
-        String[] strings = str.split("\\.");
-        SpannableString span = new SpannableString(str);
-        AbsoluteSizeSpan absoluteSizeSpan = new AbsoluteSizeSpan(24, false);
-        span.setSpan(absoluteSizeSpan, 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        AbsoluteSizeSpan absoluteSizeSpanBig = new AbsoluteSizeSpan(52, false);
-        span.setSpan(absoluteSizeSpanBig, 1, strings[0].length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        span.setSpan(absoluteSizeSpan, strings[0].length(), str.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        tvMoney.setText(span);
+        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
     }
 
     @Override
@@ -112,16 +100,16 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
     @Override
     public void onResume() {
         super.onResume();
-        GlideUtil.loadCircleImgForHead(getActivity(),ivHeader, UserInfo.getInstance().getAvatar());
-        if (UserInfo.getInstance().isLogin()){
+        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
+        if (UserInfo.getInstance().isLogin()) {
             presenter.myinfo();
         }
     }
 
-    @OnClick({R.id.iv_header,R.id.iv_scan, R.id.ll_like, R.id.ll_fans, R.id.ll_attention, R.id.iv_setting, R.id.iv_time_change, R.id.iv_language, R.id.ll_sing, R.id.ll_invite, R.id.rl_lb, R.id.rl_wallet, R.id.rl_notification, R.id.rl_history, R.id.rl_collect})
+    @OnClick({R.id.iv_header, R.id.iv_scan,R.id.rl_user, R.id.ll_like, R.id.ll_fans, R.id.ll_attention, R.id.iv_setting, R.id.iv_time_change, R.id.iv_language, R.id.ll_sing, R.id.ll_invite, R.id.rl_lb, R.id.rl_wallet, R.id.rl_notification, R.id.rl_history, R.id.rl_collect})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_header:
+            case R.id.rl_user:
                 UserInfoActivity.startUserInfoActivity(getActivity());
                 break;
             case R.id.iv_scan://扫一扫
@@ -131,7 +119,15 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
                 SettingActivity.startSettingActivity(getActivity());
                 break;
             case R.id.iv_time_change://日夜间切换
-                WebActivity.startWebActivity(getActivity());
+//                if (UserInfo.getInstance().isNight()) {
+//                    UserInfo.getInstance().setNight(false);
+//                } else {
+//                    UserInfo.getInstance().setNight(true);
+//                }
+//
+//                getActivity().finish();
+//                startActivity(new Intent(getActivity(), getActivity().getClass()));
+//                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 break;
             case R.id.iv_language://语言切换
                 break;
@@ -159,10 +155,10 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
             case R.id.ll_like://点赞
                 break;
             case R.id.ll_fans://粉丝
-                FansActivity.startFansActivity(getActivity(),"",true);
+                FansActivity.startFansActivity(getActivity(), "", true);
                 break;
             case R.id.ll_attention://关注
-                AttentionActivity.startAttentionActivity(getActivity(),"",true);
+                AttentionActivity.startAttentionActivity(getActivity(), "", true);
                 break;
         }
     }
@@ -172,18 +168,18 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 new PermissionsUtils.IPermissionsResult() {
-            @Override
-            public void passPermissons() {
-                // 二维码扫码
-                Intent intent = new Intent(getActivity(), CaptureActivity.class);
-                startActivityForResult(intent, Contacts.REQ_QR_CODE);
-            }
+                    @Override
+                    public void passPermissons() {
+                        // 二维码扫码
+                        Intent intent = new Intent(getActivity(), CaptureActivity.class);
+                        startActivityForResult(intent, Contacts.REQ_QR_CODE);
+                    }
 
-            @Override
-            public void forbitPermissons() {
+                    @Override
+                    public void forbitPermissons() {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override
@@ -194,14 +190,15 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
             Bundle bundle = data.getExtras();
             assert bundle != null;
             String scanResult = bundle.getString(Contacts.INTENT_EXTRA_KEY_QR_SCAN);
-            if (Utils.isUrl(scanResult)){
-                WebActivity.startWebActivity(getActivity(),scanResult);
-            }else {
+            if (Utils.isUrl(scanResult)) {
+                WebActivity.startWebActivity(getActivity(), scanResult);
+            } else {
                 presenter.userIsVail(scanResult);
             }
 
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -231,19 +228,20 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
 
     @Override
     public void myInfoFinish(LoginBean bean) {
-        GlideUtil.loadCircleImgForHead(getActivity(),ivHeader,bean.getAvatar());
+        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, bean.getAvatar());
         tvName.setText(bean.getNickname());
-        ivSex.setImageDrawable(getActivity().getResources().getDrawable(bean.getSex()?R.drawable.ic_man:R.drawable.ic_woman));
+        ivSex.setImageDrawable(getActivity().getResources().getDrawable(bean.getSex() ? R.drawable.ic_man : R.drawable.ic_woman));
         tvIntro.setText(bean.getAutograph());
         tvLikeCount.setText(String.valueOf(bean.getLikeCount()));
         tvAttentionCount.setText(String.valueOf(bean.getBeFolCount()));
         tvFansCount.setText(String.valueOf(bean.getFolCount()));
         tvLbBfb.setText(String.format("%s%%", bean.getProportion()));
-        tvMoney.setText(String.valueOf(bean.getGold()));
+        tvLbCount.setText(bean.getGold()+"");
     }
 
     @Override
     public void userIsVailFinish(String id) {
-        FriendDetailActivity.startUserDetailActivity(getActivity(),id);
+        FriendDetailActivity.startUserDetailActivity(getActivity(), id);
     }
+
 }

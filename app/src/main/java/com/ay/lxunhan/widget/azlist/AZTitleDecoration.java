@@ -53,7 +53,11 @@ public class AZTitleDecoration extends RecyclerView.ItemDecoration {
 				}
 				drawTitleItem(c, parent, child, adapter.getSortLetters(position));
 			}else{//显示当前item底边线
-				child.findViewById(R.id.line_country).setVisibility(View.VISIBLE);
+				View view=child.findViewById(R.id.line_country);
+				if (view!=null){
+					view.setVisibility(View.VISIBLE);
+				}
+
 			}
 		}
 	}

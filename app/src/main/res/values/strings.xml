@@ -169,7 +169,7 @@
     <string name="hot_people">热门人物</string>
     <string name="attention_all">+ 关注以上全部</string>
     <string name="issue_pyq">发表动态</string>
-    <string name="issue">发表</string>
+    <string name="issue">发布</string>
     <string name="shape_my_app_pyq">分享我的韩乐讯动态</string>
     <string name="user_im">私信</string>
     <string name="account_info">账号信息</string>
@@ -180,6 +180,7 @@
     <string name="select_look_type">选择查看类型</string>
     <string name="del">删除</string>
     <string name="get">领取</string>
+    <string name="to_get">已领取</string>
     <string name="exchange_lb">兑换乐讯币</string>
     <string name="please_enter">请输入</string>
     <string name="exchange_now">立即兑换</string>
@@ -234,4 +235,6 @@
     <string name="buffering">缓冲中</string>
     <string name="send_gift">送了</string>
     <string name="gift">礼物</string>
+    <string name="hot_new">热门新闻</string>
+    <string name="get_like">获赞</string>
 </resources>

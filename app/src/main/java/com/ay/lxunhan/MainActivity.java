@@ -21,9 +21,9 @@ import com.ay.lxunhan.bean.UserInfoBean;
 import com.ay.lxunhan.contract.MainContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.MainPresenter;
-import com.ay.lxunhan.ui.home.HomeFragment;
+import com.ay.lxunhan.ui.home.fragment.HomeFrgament2;
 import com.ay.lxunhan.ui.login.BootPageActivity;
-import com.ay.lxunhan.ui.message.MessageFrgament;
+import com.ay.lxunhan.ui.message.MessageFragment2;
 import com.ay.lxunhan.ui.my.MyFragment;
 import com.ay.lxunhan.ui.video.fragment.VideoFragment;
 import com.ay.lxunhan.utils.AppManager;
@@ -201,13 +201,13 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = HomeFragment.newInstance();
+                fragment = HomeFrgament2.newInstance();
                 break;
             case 1:
                 fragment = VideoFragment.newInstance();
                 break;
             case 2:
-                fragment = MessageFrgament.newInstance();
+                fragment = MessageFragment2.newInstance();
                 break;
             case 3:
                 fragment = MyFragment.newInstance();

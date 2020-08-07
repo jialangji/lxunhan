@@ -16,7 +16,9 @@
             android:id="@+id/et_comment"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="@dimen/dp_30"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@drawable/shape_white_bg"
             android:hint="@string/write_comment"
@@ -62,7 +64,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:drawablePadding="@dimen/dp_4"
             android:drawableStart="@drawable/ic_wechat_black"
-            android:text="@string/wechat_share"/>
+            />
     </LinearLayout>
 
 </LinearLayout>

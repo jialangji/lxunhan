@@ -2,7 +2,6 @@ package com.ay.lxunhan.utils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
@@ -13,6 +12,8 @@ import android.widget.TextView;
 import com.ay.lxunhan.wyyim.emoji.EmojiManager;
 
 import java.util.regex.Matcher;
+
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 
 /**
  * @author ${jlj}
@@ -61,7 +62,7 @@ public class MoonUtil {
             Drawable d = getEmotDrawable(context, emot, scale);
             if (d != null) {
                 ImageSpan span = new ImageSpan(d, align);
-                mSpannableString.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mSpannableString.setSpan(span, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
         return mSpannableString;

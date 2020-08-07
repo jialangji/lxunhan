@@ -9,6 +9,7 @@ import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.contract.LiveListContract;
 import com.ay.lxunhan.presenter.LiveListPresenter;
+import com.ay.lxunhan.ui.live.CreateLiveActivity;
 import com.ay.lxunhan.ui.live.LiveRoomActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.glide.GlideUtil;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * @author ${jlj}
@@ -34,10 +37,11 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
     RecyclerView rvVideo;
     @BindView(R.id.swipe_refresh)
     TwinklingRefreshLayout swipeRefresh;
+    Unbinder unbinder;
     private String id;
-    private List<LiveListBean> liveListBeans=new ArrayList<>();
-    private int page=1;
-    private boolean isRefresh=true;
+    private List<LiveListBean> liveListBeans = new ArrayList<>();
+    private int page = 1;
+    private boolean isRefresh = true;
     private BaseQuickAdapter liveAdapter;
 
     public static LiveFragment newInstance(String typeId) {
@@ -52,23 +56,23 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
     protected void initData() {
         super.initData();
         id = getArguments().getString("id");
-        presenter.getLiveList(id,page);
+        presenter.getLiveList(id, page);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        liveAdapter = new BaseQuickAdapter<LiveListBean,BaseViewHolder>(R.layout.item_live,liveListBeans) {
+        liveAdapter = new BaseQuickAdapter<LiveListBean, BaseViewHolder>(R.layout.item_live, liveListBeans) {
 
             @Override
             protected void convert(BaseViewHolder helper, LiveListBean item) {
-                GlideUtil.loadRoundImg(getActivity(),helper.getView(R.id.iv_cover),item.getCover());
-                helper.setText(R.id.tv_title,item.getLname());
-                helper.setText(R.id.tv_see_count,item.getPeople()+"");
+                GlideUtil.loadRoundImg(getActivity(), helper.getView(R.id.iv_cover), item.getCover());
+                helper.setText(R.id.tv_title, item.getLname());
+                helper.setText(R.id.tv_see_count, item.getPeople() + "");
             }
         };
-        rvVideo.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        rvVideo.addItemDecoration(new GridSpacingItemDecoration(2,10,false));
+        rvVideo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        rvVideo.addItemDecoration(new GridSpacingItemDecoration(2, 10, false));
         rvVideo.setAdapter(liveAdapter);
     }
 
@@ -79,24 +83,24 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
-                page=1;
-                isRefresh=true;
-                presenter.getLiveList(id,page);
+                page = 1;
+                isRefresh = true;
+                presenter.getLiveList(id, page);
             }
 
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                if (page* Contacts.LIMIT==liveListBeans.size()){
-                    page=page+1;
-                    isRefresh=false;
-                    presenter.getLiveList(id,page);
-                }else{
+                if (page * Contacts.LIMIT == liveListBeans.size()) {
+                    page = page + 1;
+                    isRefresh = false;
+                    presenter.getLiveList(id, page);
+                } else {
                     swipeRefresh.finishLoadmore();
                 }
             }
         });
-        liveAdapter.setOnItemClickListener((adapter, view, position) -> LiveRoomActivity.startAudience(getActivity(),liveListBeans.get(position).getRoomcode(),liveListBeans.get(position).getHttpPullUrl(),true,liveListBeans.get(position).getLid()));
+        liveAdapter.setOnItemClickListener((adapter, view, position) -> LiveRoomActivity.startAudience(getActivity(), liveListBeans.get(position).getRoomcode(), liveListBeans.get(position).getHttpPullUrl(), true, liveListBeans.get(position).getLid()));
     }
 
     @Override
@@ -121,14 +125,19 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
 
     @Override
     public void getLiveListFinish(List<LiveListBean> list) {
-        if (isRefresh){
+        if (isRefresh) {
             swipeRefresh.finishRefreshing();
             liveListBeans.clear();
-        }else{
+        } else {
             swipeRefresh.finishLoadmore();
         }
         liveListBeans.addAll(list);
         liveAdapter.notifyDataSetChanged();
 
+    }
+
+    @OnClick(R.id.iv_open_live)
+    public void onViewClicked() {
+        CreateLiveActivity.startCreateLiveActivity(getActivity());
     }
 }

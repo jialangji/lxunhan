@@ -50,6 +50,7 @@
     <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
+        android:layout_above="@id/bottom"
         android:layout_height="match_parent"
         android:layout_below="@id/view_title">
 
@@ -190,6 +191,7 @@
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
     <include
+        android:id="@+id/bottom"
         layout="@layout/layout_bottom_comment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"

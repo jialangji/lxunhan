@@ -17,6 +17,7 @@
     <RelativeLayout
         android:id="@+id/rl_user"
         android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/dp_12"
         android:layout_height="@dimen/dp_38">
         <RelativeLayout
             android:id="@+id/rl_iv"
@@ -82,6 +83,7 @@
             android:id="@+id/tv_attention"
             android:layout_width="@dimen/dp_56"
             android:layout_height="@dimen/dp_28"
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/shape_line"
@@ -94,87 +96,15 @@
 
     <com.ay.lxunhan.widget.TagTextView
         android:id="@+id/tv_content"
-        android:layout_marginTop="@dimen/dp_12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_14"
         android:textColor="@color/color_303133"
         />
-
-    <RelativeLayout
-        android:layout_marginTop="@dimen/dp_14"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_time"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_time"/>
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_toEndOf="@id/iv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_14"
-            android:textColor="@color/color_b2"
-            android:layout_marginStart="@dimen/dp_10"
-            android:layout_centerVertical="true"
-            android:text="1分钟"
-            />
-        <LinearLayout
-            android:id="@+id/ll_like"
-            android:layout_toStartOf="@id/line1"
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginEnd="@dimen/dp_26"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/iv_like"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:src="@drawable/ic_unlike_hand"/>
-            <TextView
-                android:id="@+id/tv_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_14"
-                android:textColor="@color/color_b2"
-                android:layout_marginStart="@dimen/dp_10"
-                android:text="666"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/line1"
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_alignParentEnd="true"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/iv_comment"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:src="@drawable/ic_uncomment_two"/>
-            <TextView
-                android:id="@+id/tv_comment_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_14"
-                android:textColor="@color/color_b2"
-                android:layout_marginStart="@dimen/dp_10"
-                android:text="777"
-                />
-        </LinearLayout>
-    </RelativeLayout>
-
-
     <TextView
         android:id="@+id/tv_quiz_title"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/dp_25"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_16"
         android:textColor="@color/color_161824"
@@ -221,5 +151,76 @@
         android:text="@string/quiz"
         android:layout_height="@dimen/dp_38"
         />
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dp_14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/iv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_b2"
+            android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_toEndOf="@id/iv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_b2"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_centerVertical="true"
+            android:text="1分钟"
+            />
+        <LinearLayout
+            android:id="@+id/ll_like"
+            android:layout_toStartOf="@id/line1"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/dp_26"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_like"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:src="@drawable/ic_unlike_hand"/>
+            <TextView
+                android:id="@+id/tv_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_b2"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="666"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/line1"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_comment"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:src="@drawable/ic_uncomment_two"/>
+            <TextView
+                android:id="@+id/tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_b2"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="777"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
