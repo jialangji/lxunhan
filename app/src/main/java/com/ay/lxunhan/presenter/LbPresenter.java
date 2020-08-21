@@ -48,4 +48,15 @@ public class LbPresenter extends BasePresenter<LbContract.LbView> implements LbC
             }
         }));
     }
+
+    @Override
+    public void lbComplete(String lid) {
+        addDisposable(HttpMethods.getInstance().lbDayTaskComplete(lid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().lbCompleteFinish();
+            }
+        }));
+    }
 }

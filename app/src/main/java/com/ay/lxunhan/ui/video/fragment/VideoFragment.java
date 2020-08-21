@@ -2,10 +2,9 @@ package com.ay.lxunhan.ui.video.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,9 +14,10 @@ import com.ay.lxunhan.bean.TypeBean;
 import com.ay.lxunhan.contract.VideoMainContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoMainPresenter;
-import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
-import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.ui.public_ac.activity.Search2Activity;
 import com.ay.lxunhan.widget.NoScrollViewPager;
+import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +29,13 @@ import cn.jzvd.JzvdStd;
 
 public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView, VideoMainPresenter> implements VideoMainContract.VideoMainView {
     @BindView(R.id.tl_label_video)
-    TabLayout tlLabel;
+    SlidingTabLayout tlLabel;
     @BindView(R.id.view_page_video)
     NoScrollViewPager viewPage;
 
     private List<TypeBean> arr = new ArrayList<>();
     private FragmentPagerAdapter vpAdapter;
+    private int prePosition;
 
 
     public static VideoFragment newInstance() {
@@ -47,7 +48,7 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
     @Override
     protected void initView() {
         super.initView();
-        loadVp();
+
     }
 
     public void loadVp() {
@@ -60,7 +61,8 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
                     return SmallVideoFragment.newInstance();
                 } else if (arr.get(position).getId() == 3) {
                     return VideoTypeFragment.newInstance("");
-                } if (arr.get(position).getId() == 4) {//直播
+                }
+                if (arr.get(position).getId() == 4) {//直播
                     return LiveFragment.newInstance("4");
                 } else {
                     return VideoTypeFragment.newInstance(String.valueOf(arr.get(position).getId()));
@@ -78,38 +80,48 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
                 return arr.get(position).getName();
             }
         };
-        viewPage.setAdapter(vpAdapter);
         viewPage.setNoScroll(false);
-        tlLabel.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
-        tlLabel.setupWithViewPager(viewPage);
-        tlLabel.setTabMode(TabLayout.MODE_SCROLLABLE);
+        viewPage.setAdapter(vpAdapter);
+        tlLabel.setViewPager(viewPage);
+        TextView tvTitle = tlLabel.getTitleView(prePosition);
+        tvTitle.setTextSize(20);
+
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        tlLabel.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tlLabel.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                //tabLayout选中状态
-                View inflate = LayoutInflater.from(getContext()).inflate(R.layout.tab_text, null);
-                TextView tv_tab = inflate.findViewById(R.id.tv_tab);
-                //设置选中字体大小
-                tv_tab.setTextSize(18);
-                tv_tab.setTextColor(getResources().getColor(R.color.white));
-                //替换字体大小
-                tv_tab.setText(tab.getText());
-                tab.setCustomView(tv_tab);
+            public void onTabSelect(int position) {
+                TextView tvTitle = tlLabel.getTitleView(position);
+                tvTitle.setTextSize(20);
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                //tabLayout未选中状态
-                tab.setCustomView(null);
+            public void onTabReselect(int position) {
+
+            }
+        });
+        viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onPageSelected(int i) {
+                if (prePosition != i) {
+                    TextView tvTitle = tlLabel.getTitleView(prePosition);
+                    tvTitle.setTextSize(16);
+                }
+                TextView tvTitle = tlLabel.getTitleView(i);
+                tvTitle.setTextSize(20);
+                prePosition = i;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
 
             }
         });
@@ -120,6 +132,7 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
         super.initData();
         presenter.getVideoType();
     }
+
     @Override
     public boolean isUserEvent() {
         return true;
@@ -137,6 +150,12 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
             case EventModel.LOGIN:
             case EventModel.LOGIN_OUT:
                 presenter.getVideoType();
+                break;
+            case EventModel.OPEN_LIVE:
+                viewPage.setCurrentItem(1);
+                break;
+            case EventModel.OPEN_Video:
+                viewPage.setCurrentItem(0);
                 break;
         }
     }
@@ -165,9 +184,7 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_more:
-                if(isLogin()){
-                    SearchActivity.startSearchActivity(getActivity(), Contacts.HISTORY_VIDEO);
-                }
+                Search2Activity.startSearch2Activity(getActivity());
                 break;
         }
     }
@@ -180,8 +197,9 @@ public class VideoFragment extends BaseFragment<VideoMainContract.VideoMainView,
                 arr.add(typeBean);
             }
         }
-        vpAdapter.notifyDataSetChanged();
+        loadVp();
     }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);

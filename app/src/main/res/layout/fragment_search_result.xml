@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_video"
+                android:layout_width="match_parent"
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+        <LinearLayout
+            android:id="@+id/ll_nosearch"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/dp_100"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/dp_145"
+                android:layout_height="@dimen/dp_145"
+                android:src="@drawable/ic_no_search"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_13"
+                android:layout_marginTop="@dimen/dp_12"
+                android:layout_gravity="center"
+                android:textColor="@color/color_9"
+                android:text="糟糕！没有搜索到"/>
+        </LinearLayout>
+    </RelativeLayout>
+  
+</LinearLayout>

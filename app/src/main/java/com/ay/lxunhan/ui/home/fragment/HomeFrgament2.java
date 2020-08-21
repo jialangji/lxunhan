@@ -2,10 +2,9 @@ package com.ay.lxunhan.ui.home.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,9 +16,10 @@ import com.ay.lxunhan.contract.HomeContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HomePresenter;
 import com.ay.lxunhan.ui.home.activity.ChannelManageActivity;
-import com.ay.lxunhan.ui.public_ac.activity.SearchActivity;
-import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.ui.public_ac.activity.Search2Activity;
 import com.ay.lxunhan.widget.NoScrollViewPager;
+import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +35,12 @@ import butterknife.OnClick;
  */
 public class HomeFrgament2 extends BaseFragment<HomeContract.HomeView, HomePresenter> implements HomeContract.HomeView  {
     @BindView(R.id.tl_label)
-    TabLayout tlLabel;
+    SlidingTabLayout tlLabel;
     @BindView(R.id.view_page)
     NoScrollViewPager viewPage;
     private FragmentPagerAdapter vpAdapter;
     private List<TypeBean> arr = new ArrayList<>();
+    private int prePosition;
 
     @Override
     public HomePresenter initPresenter() {
@@ -71,7 +72,7 @@ public class HomeFrgament2 extends BaseFragment<HomeContract.HomeView, HomePrese
     @Override
     protected void initView() {
         super.initView();
-        loadVp();
+
     }
 
     @Override
@@ -111,35 +112,46 @@ public class HomeFrgament2 extends BaseFragment<HomeContract.HomeView, HomePrese
         };
         viewPage.setAdapter(vpAdapter);
         viewPage.setNoScroll(false);
-        tlLabel.setSelectedTabIndicatorColor(getResources().getColor(R.color.color_fc5a8e));
-        tlLabel.setupWithViewPager(viewPage);
-        tlLabel.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tlLabel.setViewPager(viewPage);
+        TextView tvTitle = tlLabel.getTitleView(prePosition);
+        tvTitle.setTextSize(20);
+
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        tlLabel.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tlLabel.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                //tabLayout选中状态
-                View inflate = LayoutInflater.from(getContext()).inflate(R.layout.tab_text, null);
-                TextView tv_tab = inflate.findViewById(R.id.tv_tab);
-                //设置选中字体大小
-                tv_tab.setTextSize(18);
-                //替换字体大小
-                tv_tab.setText(tab.getText());
-                tab.setCustomView(tv_tab);
+            public void onTabSelect(int position) {
+                TextView tvTitle = tlLabel.getTitleView(position);
+                tvTitle.setTextSize(20);
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                //tabLayout未选中状态
-                tab.setCustomView(null);
+            public void onTabReselect(int position) {
+
+            }
+        });
+        viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onPageSelected(int i) {
+                if (prePosition != i) {
+                    TextView tvTitle = tlLabel.getTitleView(prePosition);
+                    tvTitle.setTextSize(16);
+                }
+                TextView tvTitle = tlLabel.getTitleView(i);
+                tvTitle.setTextSize(20);
+                prePosition = i;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
 
             }
         });
@@ -149,14 +161,11 @@ public class HomeFrgament2 extends BaseFragment<HomeContract.HomeView, HomePrese
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_search:
-                if(isLogin()){
-                    SearchActivity.startSearchActivity(getActivity(), Contacts.HISTORY_HOME);
-                }
+                Search2Activity.startSearch2Activity(getActivity());
                 break;
             case R.id.iv_more:
                 if (isLogin()){
                     ChannelManageActivity.stratChannelManageActivity(getActivity(), false);
-
                 }
                 break;
         }
@@ -175,9 +184,9 @@ public class HomeFrgament2 extends BaseFragment<HomeContract.HomeView, HomePrese
                 arr.add(typeBean);
             }
         }
-        vpAdapter.notifyDataSetChanged();
-
+        loadVp();
         viewPage.setCurrentItem(1);
+
 
     }
 
@@ -193,9 +202,6 @@ public class HomeFrgament2 extends BaseFragment<HomeContract.HomeView, HomePrese
         switch (model.getMessageType()) {
             case EventModel.CHANGECHANNEL:
                 presenter.getHomeType();
-                break;
-            case EventModel.ARTICLELIKE:
-            case EventModel.SENDCOMMENT:
                 break;
             case EventModel.LOGIN:
             case EventModel.LOGIN_OUT:

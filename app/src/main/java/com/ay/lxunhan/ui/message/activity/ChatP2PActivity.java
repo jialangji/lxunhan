@@ -163,6 +163,7 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
                     page = page + 1;
                     presenter.getChatImShow(sessionId, page);
                 }else {
+                    swipeRefresh.finishRefreshing();
                     ToastUtil.makeShortText(ChatP2PActivity.this,"暂无更多记录");
                 }
             }
@@ -419,13 +420,10 @@ public class ChatP2PActivity extends BaseActivity<ChatImContract.ChatImView, Cha
         if (clearText) {
             messageEditText.setText("");
         }
-        uiHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                page = 1;
-                isNewMessage = true;
-                presenter.getChatImShow(sessionId, page);
-            }
+        uiHandler.postDelayed(() -> {
+            page = 1;
+            isNewMessage = true;
+            presenter.getChatImShow(sessionId, page);
         },SHOW_LAYOUT_DELAY);
     }
 

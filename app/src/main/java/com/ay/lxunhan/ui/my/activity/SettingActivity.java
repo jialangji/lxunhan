@@ -13,8 +13,12 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.base.BasePresenter;
+import com.ay.lxunhan.http.HttpMethods;
+import com.ay.lxunhan.observer.BaseSubscriber;
 import com.ay.lxunhan.observer.EventModel;
+import com.ay.lxunhan.ui.public_ac.activity.WebH5Activity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideCacheUtil;
@@ -85,6 +89,13 @@ public class SettingActivity extends BaseActivity {
                 }
                 break;
             case R.id.ll_agreement:
+                HttpMethods.getInstance().getConfigShow("privacy").subscribeWith(new BaseSubscriber<String>(){
+                    @Override
+                    public void onNext(String o) {
+                        super.onNext(o);
+                        WebH5Activity.startWebActivity(SettingActivity.this,o, StringUtil.getString(R.string.privacy_agreement));
+                    }
+                });
                 break;
             case R.id.ll_clear_cache:
                 tvCache.setText("0.0MB");
@@ -93,6 +104,13 @@ public class SettingActivity extends BaseActivity {
             case R.id.ll_video_load:
                 break;
             case R.id.ll_about_app:
+                HttpMethods.getInstance().getConfigShow("about").subscribeWith(new BaseSubscriber<String>(){
+                    @Override
+                    public void onNext(String o) {
+                        super.onNext(o);
+                        WebH5Activity.startWebActivity(SettingActivity.this,o, StringUtil.getString(R.string.about_ours));
+                    }
+                });
                 break;
             case R.id.tv_login_out:
                 switch (UserInfo.getInstance().getLoginType()){
@@ -110,7 +128,8 @@ public class SettingActivity extends BaseActivity {
                 UserInfo.getInstance().clearAccess();
                 NIMClient.getService(AuthService.class).logout();
                 EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
-                MainActivity.startMainActivity(this,0);
+                MainActivity.startMainActivity(this);
+                finish();
                 break;
         }
     }

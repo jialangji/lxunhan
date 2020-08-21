@@ -9,31 +9,32 @@ import java.util.List;
  */
 public class NotationBean {
 
+
     /**
-     * tz : 自媒体申请已通过
+     * news_list : [{"aid":23,"avatar":"","content":"6666","cover":"","created_at":"2020-08-07 10:14:49","descs":"评论了你的朋友圈","genre":6,"id":34,"is_media":"","is_read":1,"nickname":"","sex":"","timeText":"2020-08-07","title":"啦啦啦啦"}]
+     * tz_content :
      * tz_count : 0
-     * news_list : [{"id":2,"content":"hahaha","created_at":"2020-06-09 11:38:43","aid":34,"genre":3,"is_read":1,"avatar":"http://www.hlx.com/storage/avatar/TfGFKohSirPSPDV0Q9M0nn6TNr7t0nNCQARFnZJX.png","nickname":"卡卡","is_media":1,"sex":1,"timeText":"9分钟前","title":"有效的治疗方案。有效的治疗方案。有效的治疗方案。有效的治疗方案。","cover":""}]
      * tz_timeText :
      */
 
-    private String tz;
-    private int tz_count;
+    private String tz_content;
+    private String tz_count;
     private String tz_timeText;
     private List<NewsListBean> news_list;
 
-    public String getTz() {
-        return tz;
+    public String getTz_content() {
+        return tz_content;
     }
 
-    public void setTz(String tz) {
-        this.tz = tz;
+    public void setTz_content(String tz_content) {
+        this.tz_content = tz_content;
     }
 
-    public int getTz_count() {
+    public String getTz_count() {
         return tz_count;
     }
 
-    public void setTz_count(int tz_count) {
+    public void setTz_count(String tz_count) {
         this.tz_count = tz_count;
     }
 
@@ -55,90 +56,43 @@ public class NotationBean {
 
     public static class NewsListBean {
         /**
-         * id : 2
-         * content : hahaha
-         * created_at : 2020-06-09 11:38:43
-         * aid : 34
-         * genre : 3
-         * is_read : 1
-         * avatar : http://www.hlx.com/storage/avatar/TfGFKohSirPSPDV0Q9M0nn6TNr7t0nNCQARFnZJX.png
-         * nickname : 卡卡
-         * is_media : 1
-         * sex : 1
-         * timeText : 9分钟前
-         * title : 有效的治疗方案。有效的治疗方案。有效的治疗方案。有效的治疗方案。
+         * aid : 23
+         * avatar :
+         * content : 6666
          * cover :
+         * created_at : 2020-08-07 10:14:49
+         * descs : 评论了你的朋友圈
+         * genre : 6
+         * id : 34
+         * is_media :
+         * is_read : 1
+         * nickname :
+         * sex :
+         * timeText : 2020-08-07
+         * title : 啦啦啦啦
          */
 
-        private int id;
-        private String content;
-        private String created_at;
-        private int aid;
-        private int genre;
-        private int is_read;
+        private String aid;
         private String avatar;
+        private String content;
+        private String cover;
+        private String created_at;
+        private String descs;
+        private String genre;
+        private String id;
+        private String is_media;
+        private int is_read;
         private String nickname;
-        private int is_media;
-        private int sex;
+        private String sex;
         private String timeText;
         private String title;
-        private String cover;
-        private String descs;
 
-        public String getDescs() {
-            return descs;
-        }
-
-        public void setDescs(String descs) {
-            this.descs = descs;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public String getCreated_at() {
-            return created_at;
-        }
-
-        public void setCreated_at(String created_at) {
-            this.created_at = created_at;
-        }
-
-        public int getAid() {
+        public String getAid() {
             return aid;
         }
 
-        public void setAid(int aid) {
+        public void setAid(String aid) {
             this.aid = aid;
-        }
-
-        public int getGenre() {
-            return genre;
-        }
-
-        public void setGenre(int genre) {
-            this.genre = genre;
-        }
-
-        public int getIs_read() {
-            return is_read;
-        }
-
-        public void setIs_read(int is_read) {
-            this.is_read = is_read;
         }
 
         public String getAvatar() {
@@ -149,6 +103,70 @@ public class NotationBean {
             this.avatar = avatar;
         }
 
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getCover() {
+            return cover;
+        }
+
+        public void setCover(String cover) {
+            this.cover = cover;
+        }
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public void setCreated_at(String created_at) {
+            this.created_at = created_at;
+        }
+
+        public String getDescs() {
+            return descs;
+        }
+
+        public void setDescs(String descs) {
+            this.descs = descs;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public boolean getIs_media() {
+            return is_media.equals("1");
+        }
+
+        public void setIs_media(String is_media) {
+            this.is_media = is_media;
+        }
+
+        public int getIs_read() {
+            return is_read;
+        }
+
+        public void setIs_read(int is_read) {
+            this.is_read = is_read;
+        }
+
         public String getNickname() {
             return nickname;
         }
@@ -157,19 +175,11 @@ public class NotationBean {
             this.nickname = nickname;
         }
 
-        public boolean getIs_media() {
-            return is_media==1;
-        }
-
-        public void setIs_media(int is_media) {
-            this.is_media = is_media;
-        }
-
-        public int getSex() {
+        public String getSex() {
             return sex;
         }
 
-        public void setSex(int sex) {
+        public void setSex(String sex) {
             this.sex = sex;
         }
 
@@ -187,14 +197,6 @@ public class NotationBean {
 
         public void setTitle(String title) {
             this.title = title;
-        }
-
-        public String getCover() {
-            return cover;
-        }
-
-        public void setCover(String cover) {
-            this.cover = cover;
         }
     }
 }

@@ -13,13 +13,20 @@
         android:padding="@dimen/dp_56"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layout_webview"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/mScroll"
             android:layout_width="match_parent"
-            android:orientation="vertical"
+            android:fillViewport="true"
             android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout_webview"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
 
-        </LinearLayout>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
 
     </LinearLayout>
 

@@ -3,6 +3,8 @@ package com.ay.lxunhan.ui.home.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.adapter.PublicAdapterUtil;
@@ -16,6 +18,7 @@ import com.ay.lxunhan.presenter.HomePresenter;
 import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
+import com.ay.lxunhan.ui.login.LoginActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.UserInfo;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author ${jlj}
@@ -38,6 +42,8 @@ public class HomeAttentionFragment extends BaseFragment<HomeContract.HomeView, H
     RecyclerView rvList;
     @BindView(R.id.swipe_refresh)
     TwinklingRefreshLayout swipeRefresh;
+    @BindView(R.id.ll_login)
+    LinearLayout llLogin;
     private List<MultiItemBaseBean> homeList = new ArrayList<>();
     private BaseQuickAdapter homeAdapter;
     private int page = 1;
@@ -52,11 +58,21 @@ public class HomeAttentionFragment extends BaseFragment<HomeContract.HomeView, H
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (UserInfo.getInstance().isLogin()) {
+            swipeRefresh.setVisibility(View.VISIBLE);
+            llLogin.setVisibility(View.GONE);
+            presenter.getHomeList(1, "", page);
+        }else{
+            llLogin.setVisibility(View.VISIBLE);
+            swipeRefresh.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void initData() {
         super.initData();
-        if (UserInfo.getInstance().isLogin()){
-            presenter.getHomeList(1, "", page);
-        }
     }
 
     @Override
@@ -74,7 +90,7 @@ public class HomeAttentionFragment extends BaseFragment<HomeContract.HomeView, H
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
-                if (UserInfo.getInstance().isLogin()){
+                if (UserInfo.getInstance().isLogin()) {
                     isRefresh = true;
                     page = 1;
                     presenter.getHomeList(1, "", page);
@@ -168,6 +184,7 @@ public class HomeAttentionFragment extends BaseFragment<HomeContract.HomeView, H
             homeAdapter.setNewData(homeList);
         }
     }
+
     @Override
     public boolean isUserEvent() {
         return true;
@@ -180,8 +197,10 @@ public class HomeAttentionFragment extends BaseFragment<HomeContract.HomeView, H
         switch (model.getMessageType()) {
             case EventModel.ARTICLELIKE:
             case EventModel.SENDCOMMENT:
-                if (UserInfo.getInstance().isLogin()){
-                    isRefresh=true;
+            case EventModel.REFRESH:
+                if (UserInfo.getInstance().isLogin()) {
+                    page=1;
+                    isRefresh = true;
                     presenter.getHomeList(1, "", page);
                 }
                 break;
@@ -216,5 +235,11 @@ public class HomeAttentionFragment extends BaseFragment<HomeContract.HomeView, H
     @Override
     public void hideProgress() {
         hudLoader.dismiss();
+    }
+
+
+    @OnClick(R.id.tv_login)
+    public void onViewClicked() {
+        LoginActivity.startLoginActivity(getActivity());
     }
 }

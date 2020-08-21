@@ -4,10 +4,15 @@ public class EventModel<T> {
     public static final int CHANGECHANNEL=1;
     public static final int ARTICLELIKE=2;
     public static final int TWOCOMMENTLIKE=3;
+    public static final int REFRESH=101;
     public static final int SENDCOMMENT=4;
     public static final int LOGIN_OUT=10000;
     public static final int LOGIN=10001;
     public static final int WX_LOGIN=5;
+    public static final int OPEN_LIVE=6;
+    public static final int OPEN_Video=8;
+    public static final int OPEN_PYQ=9;
+    public static final int SEARCH=7;
     private int messageType;
     private int data2;
     private T data;

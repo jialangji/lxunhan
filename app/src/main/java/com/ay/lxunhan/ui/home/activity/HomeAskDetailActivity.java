@@ -22,6 +22,7 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.model.AcceptModel;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.HomeDetailContract;
@@ -82,12 +83,14 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     ImageView ivLike;
     @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
+    @BindView(R.id.tv_comment_count)
+    TextView tvCommentCount;
     private BaseQuickAdapter commentAdapter;
     private int page = 1;
     private int type;
     private int id;
     private boolean isRefresh = true;
-    private List<CommentBean> commentBeans = new ArrayList<>();
+    private List<CommentBean.CommentListBean> commentBeans = new ArrayList<>();
     private HomeDetailBean homeDetailBean;
     private int commentPostion;
     private ShareDialog shareDialog;
@@ -104,9 +107,9 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
         type = getIntent().getIntExtra("type", 0);
         id = getIntent().getIntExtra("id", 0);
         etComment.setHint(getResources().getString(R.string.iam_answer));
-        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment_ask, commentBeans) {
+        commentAdapter = new BaseQuickAdapter<CommentBean.CommentListBean, BaseViewHolder>(R.layout.item_comment_ask, commentBeans) {
             @Override
-            protected void convert(BaseViewHolder helper, CommentBean item) {
+            protected void convert(BaseViewHolder helper, CommentBean.CommentListBean item) {
                 GlideUtil.loadCircleImgForHead(HomeAskDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
                 helper.setText(R.id.tv_signature, item.getContent());
@@ -411,14 +414,15 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     }
 
     @Override
-    public void getOneCommentFinsh(List<CommentBean> list) {
+    public void getOneCommentFinsh(CommentBean list) {
+        tvCommentCount.setText("("+list.getCount_num()+")");
         if (isRefresh) {
             commentBeans.clear();
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishRefreshing();
         } else {
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
@@ -427,6 +431,11 @@ public class HomeAskDetailActivity extends BaseActivity<HomeDetailContract.HomeD
     @Override
     public void addCollectFinish() {
         ToastUtil.makeShortText(this, "收藏成功");
+    }
+
+    @Override
+    public void recommendFinish(List<RecommendBean> beans) {
+
     }
 
     @Override

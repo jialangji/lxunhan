@@ -12,12 +12,12 @@ import com.ay.lxunhan.bean.PeopleBean;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.VideoHomeContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoHomePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
-import com.ay.lxunhan.utils.Contacts;
 import com.ay.lxunhan.utils.ShareUtils;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
@@ -115,7 +115,7 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
-                if (page * Contacts.LIMIT == videoBeanList.size()) {
+                if (page *7== videoBeanList.size()) {
                     isRefresh = false;
                     page = page + 1;
                     presenter.getVideoHomeList("", page);
@@ -157,6 +157,26 @@ public class VideoHomeFrgament extends BaseFragment<VideoHomeContract.VideoHomeV
                     break;
             }
         });
+    }
+
+    @Override
+    public boolean isUserEvent() {
+        return true;
+    }
+
+    @Override
+    protected void getStickyEvent(Object eventModel) {
+        super.getStickyEvent(eventModel);
+        EventModel model = (EventModel) eventModel;
+        switch (model.getMessageType()) {
+            case EventModel.ARTICLELIKE:
+            case EventModel.SENDCOMMENT:
+            case EventModel.REFRESH:
+                isRefresh=true;
+                page=1;
+                presenter.getVideoHomeList("", page);
+                break;
+        }
     }
 
     public void showDialog() {

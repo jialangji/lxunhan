@@ -22,6 +22,7 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.HomeDetailContract;
 import com.ay.lxunhan.observer.EventModel;
@@ -84,8 +85,10 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     ImageView ivLike;
     @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
+    @BindView(R.id.tv_comment_count)
+    TextView tvCommentCount;
 
-    private List<CommentBean> commentBeans = new ArrayList<>();
+    private List<CommentBean.CommentListBean> commentBeans = new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
     private int page = 1;
     private int id;
@@ -111,9 +114,9 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     protected void initView() {
         super.initView();
         id = getIntent().getIntExtra("id", 0);
-        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
+        commentAdapter = new BaseQuickAdapter<CommentBean.CommentListBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
             @Override
-            protected void convert(BaseViewHolder helper, CommentBean item) {
+            protected void convert(BaseViewHolder helper, CommentBean.CommentListBean item) {
                 GlideUtil.loadCircleImgForHead(HomeQuziDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
                 helper.setText(R.id.tv_comment, item.getContent());
@@ -470,14 +473,15 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     }
 
     @Override
-    public void getOneCommentFinsh(List<CommentBean> list) {
+    public void getOneCommentFinsh(CommentBean list) {
+        tvCommentCount.setText("("+list.getCount_num()+")");
         if (isRefresh) {
             commentBeans.clear();
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishRefreshing();
         } else {
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
@@ -486,6 +490,11 @@ public class HomeQuziDetailActivity extends BaseActivity<HomeDetailContract.Home
     @Override
     public void addCollectFinish() {
         ToastUtil.makeShortText(this,"收藏成功");
+    }
+
+    @Override
+    public void recommendFinish(List<RecommendBean> beans) {
+
     }
 
     @Override

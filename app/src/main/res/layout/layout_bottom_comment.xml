@@ -54,6 +54,7 @@
                 />
         </LinearLayout>
 
+
         <TextView
             android:id="@+id/tv_wechat"
             android:layout_width="wrap_content"

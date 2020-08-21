@@ -14,10 +14,12 @@ public interface LbContract {
     interface LbPresenter{
         void getShow();
         void getLbTask();
+        void lbComplete(String lid);
     }
     interface LbView{
         void getShowFinish(LbBean lbBean);
         void getLbTask(List<TaskBean> list);
+        void lbCompleteFinish();
         void showProgress();
         void hideProgress();
     }

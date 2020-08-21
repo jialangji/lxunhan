@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_303133"
                     android:text="张三"
-                    android:textSize="@dimen/sp_16"
+                    android:textSize="@dimen/sp_12"
                     />
                 <ImageView
                     android:id="@+id/iv_sex"
@@ -96,7 +96,7 @@
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_14"
+        android:textSize="@dimen/sp_16"
         android:textColor="@color/color_303133"
         android:text="Finally A Top Secret Way You Can Get Google Awards Pay Per Clicks Free"
         />
@@ -133,77 +133,34 @@
     </LinearLayout>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_marginTop="@dimen/dp_14"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:orientation="horizontal"
+        android:layout_height="@dimen/dp_22">
         <TextView
-            android:id="@+id/iv_time"
+            android:id="@+id/title_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_14"
-            android:textColor="@color/color_b2"
-            android:layout_centerVertical="true" />
+            android:textColor="@color/color_b2" />
+        <TextView
+            android:id="@+id/tv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_b2" />
         <TextView
             android:id="@+id/tv_time"
-            android:layout_toEndOf="@id/iv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/color_b2"
-            android:layout_marginStart="@dimen/dp_10"
-            android:layout_centerVertical="true"
             android:text="1分钟"
             />
-        <LinearLayout
-            android:id="@+id/ll_like"
-            android:layout_toStartOf="@id/line1"
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            android:layout_marginEnd="@dimen/dp_26"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/iv_like"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:src="@drawable/ic_unlike_hand"/>
-            <TextView
-                android:id="@+id/tv_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_14"
-                android:textColor="@color/color_b2"
-                android:layout_marginStart="@dimen/dp_10"
-                android:text="666"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/line1"
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:gravity="center_vertical"
-            android:layout_alignParentEnd="true"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/iv_comment"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:src="@drawable/ic_uncomment_two"/>
-            <TextView
-                android:id="@+id/tv_comment_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_14"
-                android:textColor="@color/color_b2"
-                android:layout_marginStart="@dimen/dp_10"
-                android:text="777"
-                />
-        </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

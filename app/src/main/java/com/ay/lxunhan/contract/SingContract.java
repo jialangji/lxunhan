@@ -15,11 +15,13 @@ public interface SingContract {
         void singInfo();
         void userSing();
         void getLbTask();
+        void lbComplete(String lid);
 
     }
     interface SingView{
         void singInfoFinish(SingBean singBean);
         void userInfo(String str);
         void getLbTask(List<TaskBean> list);
+        void lbCompleteFinish();
     }
 }

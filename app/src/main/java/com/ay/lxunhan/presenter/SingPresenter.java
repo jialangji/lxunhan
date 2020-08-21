@@ -43,11 +43,22 @@ public class SingPresenter extends BasePresenter<SingContract.SingView> implemen
 
     @Override
     public void getLbTask() {
-        addDisposable(HttpMethods.getInstance().lbTask().subscribeWith(new BaseSubscriber<List<TaskBean>>(){
+        addDisposable(HttpMethods.getInstance().lbDayTask().subscribeWith(new BaseSubscriber<List<TaskBean>>(){
             @Override
             public void onNext(List<TaskBean> o) {
                 super.onNext(o);
                 getView().getLbTask(o);
+            }
+        }));
+    }
+
+    @Override
+    public void lbComplete(String lid) {
+        addDisposable(HttpMethods.getInstance().lbTaskComplete(lid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().lbCompleteFinish();
             }
         }));
     }

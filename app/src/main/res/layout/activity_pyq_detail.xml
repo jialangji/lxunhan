@@ -194,14 +194,22 @@
                         android:layout_marginStart="@dimen/dp_15"
                         android:layout_marginEnd="@dimen/dp_15"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/iv_hand"
-                            android:layout_width="@dimen/dp_16"
-                            android:layout_height="@dimen/dp_16"
-                            android:src="@drawable/ic_like_hand"/>
+                        <RelativeLayout
+                            android:id="@+id/rl_hand"
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="@dimen/dp_36">
+                            <ImageView
+                                android:id="@+id/iv_hand"
+                                android:layout_centerVertical="true"
+                                android:layout_width="@dimen/dp_16"
+                                android:layout_height="@dimen/dp_16"
+                                android:src="@drawable/ic_like_hand"/>
+                        </RelativeLayout>
+
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_header"
-                            android:layout_toEndOf="@id/iv_hand"
+                            android:layout_toEndOf="@id/rl_hand"
                             android:layout_marginStart="@dimen/dp_10"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -214,11 +222,42 @@
                         android:layout_marginStart="@dimen/dp_15"
                         android:layout_marginEnd="@dimen/dp_15"
                         android:background="@color/color_f2"/>
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_comment"
+                    <LinearLayout
                         android:layout_width="match_parent"
+                        android:background="@drawable/shape_white_bg"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginTop="@dimen/dp_12"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        android:orientation="vertical"
                         android:layout_height="wrap_content">
-                    </android.support.v7.widget.RecyclerView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sp_12"
+                                android:layout_marginStart="@dimen/dp_15"
+                                android:textColor="@color/color_303133"
+                                android:text="@string/all_comment"/>
+                            <TextView
+                                android:id="@+id/tv_comment_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/sp_12"
+                                android:textColor="@color/color_fc5a8e"/>
+                        </LinearLayout>
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_comment"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="@dimen/dp_20"
+                            android:layout_height="wrap_content"
+                            >
+                        </android.support.v7.widget.RecyclerView>
+                    </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>
@@ -226,6 +265,7 @@
     </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
     <include layout="@layout/layout_bottom_comment"
         android:layout_alignParentBottom="true"
+
         android:layout_height="@dimen/dp_50"
         android:layout_width="match_parent"/>
 </RelativeLayout>

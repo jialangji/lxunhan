@@ -56,7 +56,7 @@ public class ChannelManageActivity extends BaseActivity<ChannelContract.ChannelV
             @Override
             protected void convert(BaseViewHolder helper, ChannelBean.MyChanneBean item) {
 
-                helper.setGone(R.id.iv_icon,!isVideo);
+                helper.setGone(R.id.iv_icon,false);
                 GlideUtil.loadImg(ChannelManageActivity.this, helper.getView(R.id.iv_icon), item.getIcon());
                 helper.setText(R.id.tv_name, item.getName());
                 helper.setGone(R.id.iv_del, item.isShowIcon());
@@ -69,7 +69,7 @@ public class ChannelManageActivity extends BaseActivity<ChannelContract.ChannelV
         normalAdapter = new BaseQuickAdapter<ChannelBean.MyChanneBean, BaseViewHolder>(R.layout.item_channel_my, noChannelList) {
             @Override
             protected void convert(BaseViewHolder helper, ChannelBean.MyChanneBean item) {
-                helper.setGone(R.id.iv_icon,!isVideo);
+                helper.setGone(R.id.iv_icon,false);
                 GlideUtil.loadImg(ChannelManageActivity.this, helper.getView(R.id.iv_icon), item.getIcon());
                 helper.setText(R.id.tv_name, item.getName());
                 helper.setGone(R.id.iv_add, item.isShowIcon());

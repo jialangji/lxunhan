@@ -9,18 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.contract.HeUserInfoContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.HeUserInfoPresenter;
-import com.ay.lxunhan.ui.message.activity.ChatP2PActivity;
 import com.ay.lxunhan.ui.my.activity.AttentionActivity;
 import com.ay.lxunhan.ui.my.activity.FansActivity;
 import com.ay.lxunhan.ui.public_ac.fragment.UserDataFragment;
@@ -29,6 +28,9 @@ import com.ay.lxunhan.ui.public_ac.fragment.UserHomePageFrgament;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.NoScrollViewPager;
+import com.ay.lxunhan.widget.SelectImageDialog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,26 +44,22 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
 
     @BindView(R.id.tv_attention)
     TextView tvAttention;
-    @BindView(R.id.ll_chat)
-    LinearLayout llChat;
     @BindView(R.id.tv_name)
     TextView tvName;
-    @BindView(R.id.iv_sex)
-    ImageView ivSex;
-    @BindView(R.id.tv_age)
-    TextView tvAge;
-    @BindView(R.id.tv_media)
-    TextView tvMedia;
-    @BindView(R.id.tv_address)
-    TextView tvAddress;
     @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
     @BindView(R.id.tv_fans_count)
     TextView tvFansCount;
     @BindView(R.id.tv_attention_count)
     TextView tvAttentionCount;
+    @BindView(R.id.tv_info)
+    TextView tvInfo;
+    @BindView(R.id.rl_more)
+    RelativeLayout rlMore;
     @BindView(R.id.iv_header)
     ImageView ivHeader;
+    @BindView(R.id.iv_v)
+    ImageView ivV;
     @BindView(R.id.tl_label)
     TabLayout tlLabel;
     @BindView(R.id.view_page)
@@ -73,16 +71,11 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
     private FragmentPagerAdapter vpAdapter;
     private boolean isMedia = true;
     private HeUserBean heUserBean;
+    private SelectImageDialog selectImageDialog;
 
     @Override
     public HeUserInfoPresenter initPresenter() {
         return new HeUserInfoPresenter(this);
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-        presenter.getHeUserInfo(userID);
     }
 
     @Override
@@ -145,7 +138,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.iv_header, R.id.tv_attention, R.id.ll_chat, R.id.ll_fans, R.id.ll_attention})
+    @OnClick({R.id.rl_finish,R.id.rl_more, R.id.iv_header, R.id.tv_attention,R.id.ll_fans, R.id.ll_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_fans:
@@ -157,18 +150,51 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
             case R.id.rl_finish:
                 finish();
                 break;
-            case R.id.iv_header:
-                UserInfoActivity.startUserInfoActivity(this);
+            case R.id.rl_more:
+                showTakePhotoDialog();
                 break;
-            case R.id.tv_attention:
-                if (isLogin()) {
-                    presenter.attention(userID);
+            case R.id.iv_header:
+                if (userID.equals("")){
+                    UserInfoActivity.startUserInfoActivity(this);
                 }
                 break;
-            case R.id.ll_chat:
-                ChatP2PActivity.startChat(this,heUserBean.getUqid());
+            case R.id.tv_attention:
+                if (heUserBean.getIsMine()){
+                    UserInfoActivity.startUserInfoActivity(this);
+                }else{
+                    if (isLogin()) {
+                        presenter.attention(userID);
+                    }
+                }
                 break;
         }
+    }
+
+
+    // 弹出选择图片弹窗
+    public void showTakePhotoDialog() {
+        if (selectImageDialog == null) {
+            selectImageDialog = new SelectImageDialog(this, R.style.selectPicDialogstyle, StringUtil.getString(R.string.complain),StringUtil.getString(R.string.lahei));
+        }
+        selectImageDialog.show();
+        selectImageDialog.setItemClickListener(new SelectImageDialog.ItemClickListener() {
+            @Override
+            public void album() {
+                presenter.pullBlack(userID);
+
+            }
+
+            @Override
+            public void takephoto() {
+                ComplaintActivity.startComplaintActivity(FriendDetailActivity.this, userID, 7);
+
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        });
     }
 
     public static void startUserDetailActivity(Context context, String uid) {
@@ -182,40 +208,33 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
         heUserBean = bean;
         GlideUtil.loadCircleImgForHead(this, ivHeader, bean.getAvatar());
         tvName.setText(bean.getNickname());
-        ivSex.setImageDrawable(getResources().getDrawable(bean.getSex() ? R.drawable.ic_man : R.drawable.ic_woman));
-        tvAge.setText(bean.getDate_birth());
         tvLikeCount.setText(String.valueOf(bean.getLikeCount()));
         tvAttentionCount.setText(String.valueOf(bean.getBeFolCount()));
         tvFansCount.setText(String.valueOf(bean.getFolCount()));
-        if (!TextUtils.isEmpty(bean.getProvince())&&!TextUtils.isEmpty(bean.getCity())){
-            tvAddress.setText(String.format("%s·%s", bean.getProvince(), bean.getCity()));
-        }else if (!TextUtils.isEmpty(bean.getProvince())){
-            tvAddress.setText( bean.getProvince());
-        }else if (!TextUtils.isEmpty(bean.getCity())){
-            tvAddress.setText( bean.getCity());
-        }else {
-            tvAddress.setVisibility(View.GONE);
 
-        }
-        if (bean.getIs_fol() == 0) {
-            tvAttention.setText(StringUtil.getString(R.string.add_attention));
-        } else if (bean.getIs_fol() == 1) {
-            tvAttention.setText(StringUtil.getString(R.string.attention_to));
-        } else if (bean.getIs_fol() == 2) {
-            tvAttention.setText(StringUtil.getString(R.string.attention_each_other));
-            llChat.setVisibility(View.VISIBLE);
-        }
         isMedia = bean.getIs_media();
         if (bean.getIs_media()&&!bean.getIsMine()) {
+            tvInfo.setText("娱乐自媒体人"+"\n简介："+bean.getMedia_into());
+            ivV.setVisibility(View.VISIBLE);
+            rlMore.setVisibility(View.VISIBLE);
             arr.add("主页");
         } else {
-            tvMedia.setVisibility(View.GONE);
+            tvInfo.setText("简介："+bean.getMedia_into());
+            ivV.setVisibility(View.GONE);
+            rlMore.setVisibility(View.GONE);
             arr.add("动态");
         }
         arr.add("资料");
         if (bean.getIsMine()) {
-            tvAttention.setVisibility(View.GONE);
-            llChat.setVisibility(View.INVISIBLE);
+            tvAttention.setText("编辑资料");
+        }else {
+            if (bean.getIs_fol() == 0) {
+                tvAttention.setText(StringUtil.getString(R.string.add_attention));
+            } else if (bean.getIs_fol() == 1) {
+                tvAttention.setText(StringUtil.getString(R.string.attention_to));
+            } else if (bean.getIs_fol() == 2) {
+                tvAttention.setText(StringUtil.getString(R.string.attention_each_other));
+            }
         }
         vpAdapter.notifyDataSetChanged();
 
@@ -225,6 +244,12 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
     @Override
     public void getHeUserInfoDataFinish(HeUserBean bean) {
 
+    }
+
+    @Override
+    public void pullBlackFinish() {
+        EventBus.getDefault().postSticky(new EventModel<>(EventModel.REFRESH));
+        finish();
     }
 
     @Override
@@ -243,6 +268,7 @@ public class FriendDetailActivity extends BaseActivity<HeUserInfoContract.HeUser
     protected void onResume() {
         super.onResume();
         //播放器重力感应
+        presenter.getHeUserInfo(userID);
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         JzvdStd.goOnPlayOnResume();

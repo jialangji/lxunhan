@@ -43,9 +43,11 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
     CheckBox checkGirl;
     @BindView(R.id.check_boy)
     CheckBox checkBoy;
+    @BindView(R.id.et_invite_code)
+    EditText etInviteCode;
     private OptionsPickerView pvBirthday;
     private String date;
-    private int sexType=0;
+    private int sexType = 0;
 
     @Override
     public CompleteInfoPresenter initPresenter() {
@@ -78,20 +80,20 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
         return false;
     }
 
-    @OnClick({R.id.et_date, R.id.tv_sure,R.id.ll_boy,R.id.ll_girl})
+    @OnClick({R.id.et_date, R.id.tv_sure, R.id.ll_boy, R.id.ll_girl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_boy:
-                if (!checkBoy.isChecked()){
+                if (!checkBoy.isChecked()) {
                     checkBoy.setChecked(true);
-                    sexType=1;
+                    sexType = 1;
                     checkGirl.setChecked(false);
                 }
                 break;
             case R.id.ll_girl:
-                if (!checkGirl.isChecked()){
+                if (!checkGirl.isChecked()) {
                     checkBoy.setChecked(false);
-                    sexType=2;
+                    sexType = 2;
                     checkGirl.setChecked(true);
                 }
                 break;
@@ -100,12 +102,12 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
                 break;
             case R.id.tv_sure:
                 if (!TextUtils.isEmpty(StringUtil.getFromEdit(etName)))
-                if (!TextUtils.isEmpty(date)){
-                    if (checkBoy.isChecked()||checkGirl.isChecked()){
-                        CompleteInfoModel completeInfoModel=new CompleteInfoModel(StringUtil.getFromEdit(etName),date,sexType);
-                        presenter.completeInfo(completeInfoModel);
+                    if (!TextUtils.isEmpty(date)) {
+                        if (checkBoy.isChecked() || checkGirl.isChecked()) {
+                            CompleteInfoModel completeInfoModel = new CompleteInfoModel(StringUtil.getFromEdit(etName), date, sexType);
+                            presenter.completeInfo(completeInfoModel);
+                        }
                     }
-                }
                 break;
         }
     }
@@ -135,11 +137,11 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
     @Override
     public void dateTimeResult(boolean dateOrTime, int type, String result, String result1) {
         etDate.setText(result1);
-        date=result1;
+        date = result1;
     }
 
-    public static void startCompleteInfoActivity(Context context){
-        Intent intent=new Intent(context,CompleteInfoActivity.class);
+    public static void startCompleteInfoActivity(Context context) {
+        Intent intent = new Intent(context, CompleteInfoActivity.class);
         context.startActivity(intent);
     }
 
@@ -154,7 +156,7 @@ public class CompleteInfoActivity extends BaseActivity<CompleteInfoContract.Comp
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             //do something.
             return true;
         } else {

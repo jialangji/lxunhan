@@ -20,9 +20,9 @@ public class CorHpRresenter extends BasePresenter<COrHContract.CorHView> impleme
     }
 
     @Override
-    public void collect(int page) {
+    public void collect(int status,int page) {
         getView().showProgress();
-        addDisposable(HttpMethods.getInstance().collect(page).subscribeWith(new BaseSubscriber<List<UserMediaListBean>>(){
+        addDisposable(HttpMethods.getInstance().collect(status,page).subscribeWith(new BaseSubscriber<List<UserMediaListBean>>(){
             @Override
             public void onNext(List<UserMediaListBean> o) {
                 super.onNext(o);
@@ -53,6 +53,28 @@ public class CorHpRresenter extends BasePresenter<COrHContract.CorHView> impleme
             public void onError(Throwable t) {
                 super.onError(t);
                 getView().hideProgress();
+            }
+        }));
+    }
+
+    @Override
+    public void clearHistory() {
+        addDisposable(HttpMethods.getInstance().clearHistory().subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().clearFinish();
+            }
+        }));
+    }
+
+    @Override
+    public void deleteCollect(String aid, String type) {
+        addDisposable(HttpMethods.getInstance().deleteCollect(aid, type).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().clearFinish();
             }
         }));
     }

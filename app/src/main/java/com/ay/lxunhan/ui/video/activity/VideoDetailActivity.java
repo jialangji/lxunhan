@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.CommentBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.VideoDetailContract;
@@ -82,6 +83,8 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     TwinklingRefreshLayout swipeRefresh;
     @BindView(R.id.et_comment)
     EditText etComment;
+    @BindView(R.id.rv_recommend)
+    RecyclerView rvRecommend;
     @BindView(R.id.iv_like)
     ImageView ivLike;
     @BindView(R.id.tv_like_count)
@@ -93,13 +96,17 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     private ShareDialog shareDialog;
     private String id;
     private VideoDetailBean videoDetailBean;
-    private List<CommentBean> commentBeans = new ArrayList<>();
+    private List<CommentBean.CommentListBean> commentBeans = new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
     private int page = 1;
     private int type = 2;
+    @BindView(R.id.tv_comment_count)
+    TextView tvCommentCount;
     private boolean isRefresh = true;
     private int commentPostion;
     private ShareImgDialog shareImgDialog;
+    private BaseQuickAdapter recommendAdapter;
+    private List<RecommendBean> recommendBeanList=new ArrayList<>();
 
     @Override
     public VideoDetailPresenter initPresenter() {
@@ -122,9 +129,19 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         //设置全屏播放
         Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
         Jzvd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向\
-        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
+        recommendAdapter = new BaseQuickAdapter<RecommendBean,BaseViewHolder>(R.layout.item_recommend_video,recommendBeanList) {
             @Override
-            protected void convert(BaseViewHolder helper, CommentBean item) {
+            protected void convert(BaseViewHolder helper, RecommendBean item) {
+                helper.setText(R.id.tv_content,item.getTitle());
+                GlideUtil.loadImg(VideoDetailActivity.this,helper.getView(R.id.iv_video_cover),item.getCover_arr().get(0));
+            }
+
+        };
+        rvRecommend.setLayoutManager(new LinearLayoutManager(this));
+        rvRecommend.setAdapter(recommendAdapter);
+        commentAdapter = new BaseQuickAdapter<CommentBean.CommentListBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
+            @Override
+            protected void convert(BaseViewHolder helper, CommentBean.CommentListBean item) {
                 GlideUtil.loadCircleImgForHead(VideoDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
                 helper.setText(R.id.tv_comment, item.getContent());
@@ -219,7 +236,13 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
                 }
             }
         });
-        etComment.setOnEditorActionListener((v, actionId, event) -> {
+        recommendAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                VideoDetailActivity.startVideoDetailActivity(VideoDetailActivity.this, String.valueOf(recommendBeanList.get(position).getId()));
+                finish();
+            }
+        });        etComment.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 if (!TextUtils.isEmpty(StringUtil.getFromEdit(etComment))) {//评论
                     SendCommentModel sendCommentModel = new SendCommentModel(UserInfo.getInstance().getUserId(), String.valueOf(videoDetailBean.getId()), videoDetailBean.getUid(), type, StringUtil.getFromEdit(etComment));
@@ -404,18 +427,19 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
         tvContent.setText(videoDetailBean.getTitle());
         tvLikeCount.setText(videoDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(videoDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
-
+        presenter.recommend(videoDetailBean.getPlate_id(),"2", String.valueOf(videoDetailBean.getId()));
     }
 
     @Override
-    public void getOneCommentFinsh(List<CommentBean> list) {
+    public void getOneCommentFinsh(CommentBean list) {
+        tvCommentCount.setText("("+list.getCount_num()+")");
         if (isRefresh) {
             commentBeans.clear();
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishRefreshing();
         } else {
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
@@ -446,6 +470,13 @@ public class VideoDetailActivity extends BaseActivity<VideoDetailContract.VideoD
     @Override
     public void addCollect() {
         ToastUtil.makeShortText(this,"收藏成功");
+    }
+
+    @Override
+    public void recommendFinish(List<RecommendBean> beans) {
+        recommendBeanList.clear();
+        recommendBeanList.addAll(beans);
+        recommendAdapter.notifyDataSetChanged();
     }
 
     @Override

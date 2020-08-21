@@ -4,6 +4,7 @@ import com.ay.lxunhan.base.BasePresenter;
 import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.model.AcceptModel;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.HomeDetailContract;
@@ -57,9 +58,9 @@ public class HomeDetailPresenter extends BasePresenter<HomeDetailContract.HomeDe
 
     @Override
     public void getOneComment(String id, int type, int page) {
-        addDisposable(HttpMethods.getInstance().getOneComment(id, type, page).subscribeWith(new BaseSubscriber<List<CommentBean>>(){
+        addDisposable(HttpMethods.getInstance().getOneComment(id, type, page).subscribeWith(new BaseSubscriber<CommentBean>(){
             @Override
-            public void onNext(List<CommentBean> o) {
+            public void onNext(CommentBean o) {
                 super.onNext(o);
 
                 getView().getOneCommentFinsh(o);
@@ -160,6 +161,17 @@ public class HomeDetailPresenter extends BasePresenter<HomeDetailContract.HomeDe
             public void onNext(Object o) {
                 super.onNext(o);
                 getView().addCollectFinish();
+            }
+        }));
+    }
+
+    @Override
+    public void recommend(String plateid, String type, String aid) {
+        addDisposable(HttpMethods.getInstance().recommend(plateid, type, aid).subscribeWith(new BaseSubscriber<List<RecommendBean>>(){
+            @Override
+            public void onNext(List<RecommendBean> o) {
+                super.onNext(o);
+                getView().recommendFinish(o);
             }
         }));
     }

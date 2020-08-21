@@ -17,7 +17,7 @@ import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.contract.MyContract;
 import com.ay.lxunhan.presenter.MyPresenter;
 import com.ay.lxunhan.ui.my.activity.AttentionActivity;
-import com.ay.lxunhan.ui.my.activity.CollectActivity;
+import com.ay.lxunhan.ui.my.activity.Collect2Activity;
 import com.ay.lxunhan.ui.my.activity.FansActivity;
 import com.ay.lxunhan.ui.my.activity.HistoryActivity;
 import com.ay.lxunhan.ui.my.activity.InviteFriendActivity;
@@ -72,12 +72,6 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
     }
 
     @Override
-    protected void initView() {
-        super.initView();
-        GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, UserInfo.getInstance().getAvatar());
-    }
-
-    @Override
     public MyPresenter initPresenter() {
         return new MyPresenter(this);
     }
@@ -110,6 +104,9 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_user:
+                FriendDetailActivity.startUserDetailActivity(getActivity(), "");
+                break;
+            case R.id.iv_header:
                 UserInfoActivity.startUserInfoActivity(getActivity());
                 break;
             case R.id.iv_scan://扫一扫
@@ -150,7 +147,7 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
                 HistoryActivity.startHistoryActivity(getActivity());
                 break;
             case R.id.rl_collect://收藏
-                CollectActivity.startCollectActivity(getActivity());
+                Collect2Activity.startCollectActivity(getActivity());
                 break;
             case R.id.ll_like://点赞
                 break;
@@ -231,7 +228,7 @@ public class MyFragment extends BaseFragment<MyContract.MyView, MyPresenter> imp
         GlideUtil.loadCircleImgForHead(getActivity(), ivHeader, bean.getAvatar());
         tvName.setText(bean.getNickname());
         ivSex.setImageDrawable(getActivity().getResources().getDrawable(bean.getSex() ? R.drawable.ic_man : R.drawable.ic_woman));
-        tvIntro.setText(bean.getAutograph());
+        tvIntro.setText("简介："+bean.getAutograph());
         tvLikeCount.setText(String.valueOf(bean.getLikeCount()));
         tvAttentionCount.setText(String.valueOf(bean.getBeFolCount()));
         tvFansCount.setText(String.valueOf(bean.getFolCount()));

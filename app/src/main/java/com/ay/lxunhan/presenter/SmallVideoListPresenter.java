@@ -45,9 +45,9 @@ public class SmallVideoListPresenter extends BasePresenter<SmallVideoListContrac
 
     @Override
     public void getOneComment(String id, int type, int page) {
-        addDisposable(HttpMethods.getInstance().getOneComment(id, type, page).subscribeWith(new BaseSubscriber<List<CommentBean>>(){
+        addDisposable(HttpMethods.getInstance().getOneComment(id, type, page).subscribeWith(new BaseSubscriber<CommentBean>(){
             @Override
-            public void onNext(List<CommentBean> o) {
+            public void onNext(CommentBean o) {
                 super.onNext(o);
 
                 getView().getOneCommentFinsh(o);

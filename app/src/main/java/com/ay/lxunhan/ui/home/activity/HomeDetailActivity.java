@@ -25,6 +25,7 @@ import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.FanyiBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.HomeDetailContract;
 import com.ay.lxunhan.http.HttpMethods;
@@ -43,6 +44,7 @@ import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.ay.lxunhan.widget.ShareDialog;
 import com.ay.lxunhan.widget.ShareImgDialog;
+import com.ay.lxunhan.widget.UnLikeDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -73,6 +75,8 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     TextView tvSignature;
     @BindView(R.id.tv_attention)
     TextView tvAttention;
+    @BindView(R.id.title_attention)
+    TextView titleAttention;
     @BindView(R.id.web)
     CustomActionWebView webview;
     @BindView(R.id.tv_type)
@@ -81,6 +85,8 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     TextView tvTime;
     @BindView(R.id.rv_comment)
     RecyclerView rvComment;
+    @BindView(R.id.rv_recommend)
+    RecyclerView rvRecommend;
     @BindView(R.id.et_comment)
     EditText etComment;
     @BindView(R.id.iv_like)
@@ -97,8 +103,16 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     LinearLayout rlUser;
     @BindView(R.id.nestedScroll)
     NestedScrollView nestedScroll;
-    private List<CommentBean> commentBeans = new ArrayList<>();
+    @BindView(R.id.new_iv_like)
+    ImageView newIvLike;
+    @BindView(R.id.new_tv_like_count)
+    TextView newTvLikeCount;
+    @BindView(R.id.tv_comment_count)
+    TextView tvCommentCount;
+    private List<CommentBean.CommentListBean> commentBeans = new ArrayList<>();
+    private List<RecommendBean> recommendBeanList=new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
+    private BaseQuickAdapter recommendAdapter;
     private HomeDetailBean homeDetailBean;
     private int page = 1;
     private int type;
@@ -108,6 +122,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     private ShareDialog shareDialog;
     private ShareImgDialog shareImgDialog;
     private String ydStr = "翻译内容无效";
+    private UnLikeDialog unLikeDialog;
 
 
     @Override
@@ -120,9 +135,19 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         super.initView();
         type = getIntent().getIntExtra("type", 0);
         id = getIntent().getIntExtra("id", 0);
-        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
+        recommendAdapter =new BaseQuickAdapter<RecommendBean,BaseViewHolder>(R.layout.item_recommend,recommendBeanList) {
             @Override
-            protected void convert(BaseViewHolder helper, CommentBean item) {
+            protected void convert(BaseViewHolder helper, RecommendBean item) {
+                helper.setText(R.id.tv_content,item.getTitle());
+                GlideUtil.loadImg(HomeDetailActivity.this,helper.getView(R.id.iv_video_cover),item.getCover_arr().get(0));
+            }
+
+        };
+        rvRecommend.setLayoutManager(new LinearLayoutManager(this));
+        rvRecommend.setAdapter(recommendAdapter);
+        commentAdapter = new BaseQuickAdapter<CommentBean.CommentListBean, BaseViewHolder>(R.layout.item_comment, commentBeans) {
+            @Override
+            protected void convert(BaseViewHolder helper, CommentBean.CommentListBean item) {
                 GlideUtil.loadCircleImgForHead(HomeDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
                 helper.setText(R.id.tv_comment, item.getContent());
@@ -185,10 +210,15 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     @Override
     protected void initListener() {
         super.initListener();
+
+        recommendAdapter.setOnItemClickListener((adapter, view, position) -> {
+            HomeDetailActivity.startHomeDetailActivity(HomeDetailActivity.this,recommendBeanList.get(position).getType(),recommendBeanList.get(position).getId());
+            finish();
+        });
         nestedScroll.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
 
             if (scrollY > oldScrollY) {
-                if (scrollY-oldScrollY>50){
+                if (scrollY - oldScrollY > 50) {
                     rlUser.setVisibility(View.VISIBLE);
                 }
             }
@@ -197,7 +227,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
             }
 
             if (scrollY == 0) {
-               rlUser.setVisibility(View.GONE);
+                rlUser.setVisibility(View.GONE);
             }
 
             if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
@@ -296,23 +326,31 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         return false;
     }
 
-    @OnClick({R.id.rl_finish, R.id.rl_more, R.id.ll_moreLike, R.id.tv_wechat, R.id.tv_attention})
+    @OnClick({R.id.rl_finish, R.id.rl_iv, R.id.new_ll_like, R.id.rl_more, R.id.new_ll_share, R.id.new_ll_unlike, R.id.ll_moreLike, R.id.tv_wechat, R.id.tv_attention, R.id.title_attention})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.title_attention:
             case R.id.tv_attention:
                 if (homeDetailBean.getIs_fow() != 2) {
                     presenter.attention(homeDetailBean.getUid());
                 }
-
                 break;
             case R.id.rl_finish:
                 finish();
                 break;
+            case R.id.rl_iv:
+                FriendDetailActivity.startUserDetailActivity(this, homeDetailBean.getUid());
+                break;
+            case R.id.new_ll_unlike:
+                showUnlike();
+                break;
+            case R.id.new_ll_share:
             case R.id.rl_more:
                 if (isLogin()) {
                     showDialog();
                 }
                 break;
+            case R.id.new_ll_like:
             case R.id.ll_moreLike:
                 if (isLogin()) {
                     SendCommentModel sendCommentModel = new SendCommentModel(homeDetailBean.getId() + "", type);
@@ -423,6 +461,40 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         });
     }
 
+
+    public void showUnlike(){
+        if (unLikeDialog==null){
+            unLikeDialog = new UnLikeDialog(this,R.style.selectPicDialogstyle);
+        }
+
+        unLikeDialog.show();
+        unLikeDialog.setItemClickListener(new UnLikeDialog.ItemClickListener() {
+            @Override
+            public void success(int type) {
+                if (type==1){
+                    HttpMethods.getInstance().pullBlack(homeDetailBean.getUid()).subscribeWith(new BaseSubscriber<Object>(){
+                        @Override
+                        public void onNext(Object o) {
+                            super.onNext(o);
+                            EventBus.getDefault().postSticky(new EventModel<>(EventModel.REFRESH));
+                            finish();
+                        }
+                    });
+
+                }else  if (type==2){
+                    HttpMethods.getInstance().unlike(String.valueOf(homeDetailBean.getId())).subscribeWith(new BaseSubscriber<Object>(){
+                        @Override
+                        public void onNext(Object o) {
+                            super.onNext(o);
+                            EventBus.getDefault().postSticky(new EventModel<>(EventModel.REFRESH));
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     @Override
     public void getHomeDetailFinish(HomeDetailBean homeDetailBean) {
         this.homeDetailBean = homeDetailBean;
@@ -436,15 +508,19 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
         ivSex.setImageDrawable(homeDetailBean.getSex() ? getResources().getDrawable(R.drawable.ic_man) : getResources().getDrawable(R.drawable.ic_woman));
         if (homeDetailBean.getIs_fow() == 2) {
             tvAttention.setVisibility(View.GONE);
+            titleAttention.setVisibility(View.GONE);
         } else {
             tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
+            titleAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
         }
         tvType.setText(homeDetailBean.getPlate_name());
         tvTime.setText(homeDetailBean.getTimeText());
         webview.loadDataWithBaseURL(null, Utils.getHtmlData(homeDetailBean.getContent()), "text/html", "uft-8", null);
         tvLikeCount.setText(homeDetailBean.getLike_count() + "");
+        newTvLikeCount.setText(homeDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
-
+        newIvLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_gray_like));
+        presenter.recommend(homeDetailBean.getPlate_id(),"1", String.valueOf(homeDetailBean.getId()));
     }
 
 
@@ -455,14 +531,15 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     }
 
     @Override
-    public void getOneCommentFinsh(List<CommentBean> list) {
+    public void getOneCommentFinsh(CommentBean list) {
+        tvCommentCount.setText("("+list.getCount_num()+")");
         if (isRefresh) {
             commentBeans.clear();
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishRefreshing();
         } else {
-            commentBeans.addAll(list);
+            commentBeans.addAll(list.getComment_list());
             commentAdapter.setNewData(commentBeans);
             swipeRefresh.finishLoadmore();
         }
@@ -471,6 +548,13 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
     @Override
     public void addCollectFinish() {
         ToastUtil.makeShortText(this, "收藏成功");
+    }
+
+    @Override
+    public void recommendFinish(List<RecommendBean> beans) {
+        recommendBeanList.clear();
+        recommendBeanList.addAll(beans);
+        recommendAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -492,6 +576,8 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
             homeDetailBean.setLike_count(homeDetailBean.getLike_count() + 1);
         }
         EventBus.getDefault().postSticky(new EventModel<>(EventModel.ARTICLELIKE));
+        newTvLikeCount.setText(homeDetailBean.getLike_count() + "");
+        newIvLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_gray_like));
         tvLikeCount.setText(homeDetailBean.getLike_count() + "");
         ivLike.setImageDrawable(homeDetailBean.getIs_like() ? getResources().getDrawable(R.drawable.ic_like_hand) : getResources().getDrawable(R.drawable.ic_unlike_black));
     }
@@ -526,7 +612,7 @@ public class HomeDetailActivity extends BaseActivity<HomeDetailContract.HomeDeta
             homeDetailBean.setIs_fow(1);
         }
         tvAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
-
+        titleAttention.setText(homeDetailBean.getIs_fow() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
     }
 
     @Override

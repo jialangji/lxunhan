@@ -32,6 +32,7 @@ public class HeUserBean {
     private int is_media;
     private int is_fol;
     private int likeCount;
+    private String age;
     private int folCount;
     private int beFolCount;
     private String uqid;
@@ -44,11 +45,20 @@ public class HeUserBean {
         this.uqid = uqid;
     }
 
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
     /**
      * signal : 171569501143
      * id : 1
      * media_into : 没啥能说的。
      */
+
 
     private String signal;
     private int id;

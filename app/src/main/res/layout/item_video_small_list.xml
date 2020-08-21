@@ -17,6 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_94">
         </ImageView>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"
+            />
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +43,7 @@
             android:layout_marginStart="@dimen/dp_6"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/sp_11"
             android:textColor="@color/color_303133"
             />
     </LinearLayout>

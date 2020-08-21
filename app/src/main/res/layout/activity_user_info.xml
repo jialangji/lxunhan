@@ -273,16 +273,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_05"
                 android:background="@color/color_ec"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/sp_16"
-                android:layout_marginTop="@dimen/dp_20"
-                android:textColor="@color/color_161824"
-                android:text="@string/personalized_signature"/>
+            <RelativeLayout
+                android:id="@+id/rl_info"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_16"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/color_161824"
+                    android:text="@string/personalized_signature"/>
+
+                <TextView
+                    android:id="@+id/tv_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_16"
+                    android:textColor="@color/color_78"
+                    android:layout_centerVertical="true"
+                    android:text="未填写"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_05"
+                android:background="@color/color_ec"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/dp_13"
+                android:visibility="gone"
                 android:background="@drawable/shape_radiu_edit"
                 android:layout_height="@dimen/dp_100">
                 <EditText

@@ -105,22 +105,22 @@ public class NotificationActivity extends BaseActivity<NotificationContact.Notif
         });
         notificationAdapter.setOnItemClickListener((adapter, view, position) -> {
             switch (notificationBeans.get(position).getGenre()) {
-                case 1:
-                    HomeDetailActivity.startHomeDetailActivity(NotificationActivity.this, 1, notificationBeans.get(position).getAid());
+                case "1":
+                    HomeDetailActivity.startHomeDetailActivity(NotificationActivity.this, 1, Integer.parseInt(notificationBeans.get(position).getAid()));
                     break;
-                case 2:
+                case "2":
                     VideoDetailActivity.startVideoDetailActivity(NotificationActivity.this, String.valueOf(notificationBeans.get(position).getAid()));
                     break;
-                case 3:
-                    HomeAskDetailActivity.startHomeAskDetailActivity(NotificationActivity.this, 3, notificationBeans.get(position).getAid());
+                case "3":
+                    HomeAskDetailActivity.startHomeAskDetailActivity(NotificationActivity.this, 3, Integer.parseInt(notificationBeans.get(position).getAid()));
                     break;
-                case 4:
-                    HomeQuziDetailActivity.startHomeQuizDetailActivity(NotificationActivity.this, notificationBeans.get(position).getAid());
+                case "4":
+                    HomeQuziDetailActivity.startHomeQuizDetailActivity(NotificationActivity.this, Integer.parseInt(notificationBeans.get(position).getAid()));
                     break;
-                case 5:
-                    SmallVideoActivity.startSmallVideoActivity(NotificationActivity.this, notificationBeans.get(position).getAid());
+                case "5":
+                    SmallVideoActivity.startSmallVideoActivity(NotificationActivity.this, Integer.parseInt(notificationBeans.get(position).getAid()));
                     break;
-                case 6:
+                case "6":
                     PyqDetailActivity.startPyqDetailActivity(NotificationActivity.this, String.valueOf(notificationBeans.get(position).getAid()));
                     break;
             }
@@ -167,17 +167,17 @@ public class NotificationActivity extends BaseActivity<NotificationContact.Notif
 
     @Override
     public void getNotificationFinish(NotationBean notationBean) {
-        if (notationBean.getTz_count() == 0 && TextUtils.isEmpty(notationBean.getTz()) && TextUtils.isEmpty(notationBean.getTz_timeText())) {
+        if (TextUtils.isEmpty(notationBean.getTz_count())&& TextUtils.isEmpty(notationBean.getTz_content()) && TextUtils.isEmpty(notationBean.getTz_timeText())) {
             llSystem.setVisibility(View.GONE);
             swipeRefresh.finishRefreshing();
             return;
         }
-        tvContent.setText(notationBean.getTz());
-        if (notationBean.getTz_count() == 0) {
+        tvContent.setText(notationBean.getTz_content());
+        if (TextUtils.isEmpty(notationBean.getTz_count())) {
             tvMessageCount.setVisibility(View.GONE);
         } else {
             tvMessageCount.setVisibility(View.VISIBLE);
-            tvMessageCount.setText(notationBean.getTz_count() + "");
+            tvMessageCount.setText(notationBean.getTz_count());
         }
         tvTime.setText(notationBean.getTz_timeText());
         if (isRefresh) {

@@ -1,7 +1,6 @@
 package com.ay.lxunhan.ui.public_ac.fragment;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ay.lxunhan.R;
@@ -25,9 +24,10 @@ public class UserDataFragment extends BaseFragment<HeUserInfoContract.HeUserInfo
     TextView tvAddress;
     @BindView(R.id.tv_info)
     TextView tvInfo;
-    @BindView(R.id.iv_qrcode)
-    ImageView ivQrcode;
-
+    @BindView(R.id.tv_sex)
+    TextView tvSex;
+    @BindView(R.id.tv_age)
+    TextView tvAge;
 
     public static UserDataFragment newInstance(String userid) {
         Bundle args = new Bundle();
@@ -37,9 +37,10 @@ public class UserDataFragment extends BaseFragment<HeUserInfoContract.HeUserInfo
         return fragment;
     }
 
+
     @Override
-    protected void initData() {
-        super.initData();
+    public void onResume() {
+        super.onResume();
         String uzid=getArguments().getString("id");
         presenter.getHeUserInfoData(uzid);
     }
@@ -74,6 +75,13 @@ public class UserDataFragment extends BaseFragment<HeUserInfoContract.HeUserInfo
         tvAppId.setText(bean.getSignal());
         tvAddress.setText(bean.getCity());
         tvInfo.setText(bean.getMedia_into());
+        tvSex.setText(bean.getSex()?"男":"女");
+        tvAge.setText(bean.getAge());
+    }
+
+    @Override
+    public void pullBlackFinish() {
+
     }
 
     @Override

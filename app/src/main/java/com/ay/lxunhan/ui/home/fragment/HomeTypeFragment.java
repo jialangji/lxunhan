@@ -79,7 +79,9 @@ public class HomeTypeFragment extends BaseFragment<HomeContract.HomeView, HomePr
         switch (model.getMessageType()) {
             case EventModel.ARTICLELIKE:
             case EventModel.SENDCOMMENT:
+            case EventModel.REFRESH:
                 isRefresh=true;
+                page=1;
                 presenter.getHomeListArticle(page, typeId);
                 break;
         }

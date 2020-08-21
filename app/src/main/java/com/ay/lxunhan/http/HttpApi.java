@@ -17,6 +17,7 @@ import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.HotSearchBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LiveBean;
@@ -32,6 +33,7 @@ import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
 import com.ay.lxunhan.bean.RechargeBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
@@ -69,6 +71,18 @@ public interface HttpApi {
      */
     @POST(UrlConfig.REGISTER)
     Flowable<HttpResult<LoginBean>> register(@Body RequestBody body);
+
+    /**
+     * 拉黑
+     */
+    @GET(UrlConfig.PULL_BLACK)
+    Flowable<HttpResult<Object>> pullBlack(@Query("uqid") String uqid,@Query("bid") String bid);
+
+    /**
+     * 拉黑
+     */
+    @GET(UrlConfig.UNLIKE_TEXT)
+    Flowable<HttpResult<Object>> unlike(@Query("uqid") String uqid,@Query("aid") String aid);
 
     /**
      * 登录
@@ -159,7 +173,7 @@ public interface HttpApi {
      * 一级评论
      */
     @GET(UrlConfig.ONE_COMMENT)
-    Flowable<HttpResult<List<CommentBean>>> getOneComment(@Query("uqid") String uqid,@Query("aid") String aid,
+    Flowable<HttpResult<CommentBean>> getOneComment(@Query("uqid") String uqid,@Query("aid") String aid,
                                                           @Query("type") int type,@Query("page") int page,@Query("limit") int limit);
 
     /**
@@ -437,6 +451,12 @@ public interface HttpApi {
     Flowable<HttpResult<List<TaskBean>>> lbTaskList(@Query("uqid") String uqid);
 
 
+    /**
+     * 乐币任务列表
+     */
+    @GET(UrlConfig.LB_DAY_TASK_LIST)
+    Flowable<HttpResult<List<TaskBean>>> lbDayTaskList(@Query("uqid") String uqid);
+
     /***
      * 乐币兑换
      */
@@ -461,7 +481,7 @@ public interface HttpApi {
      * 朋友圈评论
      */
     @GET(UrlConfig.PYQ_COMMENT)
-    Flowable<HttpResult<List<PyqCommentBean>>> pyqComment(@Query("uqid") String uqid,@Query("aid") String aid
+    Flowable<HttpResult<PyqCommentBean>> pyqComment(@Query("uqid") String uqid,@Query("aid") String aid
             ,@Query("page") int page);
 
     /**
@@ -493,7 +513,7 @@ public interface HttpApi {
      * 收藏
      */
     @GET(UrlConfig.COLLECT)
-    Flowable<HttpResult<List<UserMediaListBean>>> collect(@Query("uqid") String uqid,@Query("page") int page);
+    Flowable<HttpResult<List<UserMediaListBean>>> collect(@Query("uqid") String uqid,@Query("status") int status,@Query("page") int page);
 
     /**
      * 签到信息
@@ -644,6 +664,58 @@ public interface HttpApi {
      */
     @POST(UrlConfig.FANYI)
     Flowable<HttpResult<FanyiBean>> fanyi(@Query("q") String q);
+
+    /**
+     * 乐币任务完成
+     */
+    @GET(UrlConfig.LB_TASK_COMPLETE)
+    Flowable<HttpResult<Object>> lbTaskComplete(@Query("uqid") String uqid,@Query("tid") String tid);
+
+    /**
+     * 乐币任务完成
+     */
+    @GET(UrlConfig.LB_DAY_TASK_COMPLETE)
+    Flowable<HttpResult<Object>> lbDayTaskComplete(@Query("uqid") String uqid,@Query("tid") String tid);
+
+    /**
+     * 热门搜索
+     */
+    @GET(UrlConfig.SEARCH_HOT)
+    Flowable<HttpResult<List<HotSearchBean>>> hotSearch();
+
+    /**
+     * 清空历史
+     */
+    @GET(UrlConfig.DELETE_HISTORY)
+    Flowable<HttpResult<Object>> deleteHistory(@Query("uqid") String uqid);
+
+    /**
+     * 搜索
+     */
+    @GET(UrlConfig.SEARCH)
+    Flowable<HttpResult<List<UserMediaListBean>>> search(@Query("uqid") String uqid,@Query("page") int page,@Query("type") int type,@Query("title") String title);
+
+    /**
+     * 清空收藏
+     */
+    @GET(UrlConfig.DELETE_COLLECT)
+    Flowable<HttpResult<Object>> deleteCollect(@Query("uqid") String uqid,@Query("aid") String aid,@Query("type") String type);
+
+
+
+    @GET(UrlConfig.CONFIG_INFO)
+    Flowable<HttpResult<String>> getConfigShow(@Query("uqid") String uqid,@Query("key") String key);
+
+
+    /**
+     * 支付宝支付
+     */
+    @POST(UrlConfig.ALIPAY)
+    Flowable<HttpResult<String>> alipay(@Query("uqid") String uqid,@Query("id") String id,@Query("pay_type") String pay_type);
+
+    @GET(UrlConfig.RECOMMEND)
+    Flowable<HttpResult<List<RecommendBean>>> recommend(@Query("plate_id") String plate_id,@Query("type") String type,@Query("aid") String aid);
+
 }
 
 

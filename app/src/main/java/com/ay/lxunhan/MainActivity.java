@@ -22,7 +22,6 @@ import com.ay.lxunhan.contract.MainContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.MainPresenter;
 import com.ay.lxunhan.ui.home.fragment.HomeFrgament2;
-import com.ay.lxunhan.ui.login.BootPageActivity;
 import com.ay.lxunhan.ui.message.MessageFragment2;
 import com.ay.lxunhan.ui.my.MyFragment;
 import com.ay.lxunhan.ui.video.fragment.VideoFragment;
@@ -127,19 +126,6 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        showAppointFragment(intent.getIntExtra("pos", 0));
-    }
-
-    public void showAppointFragment(int position) {
-        currentPosition = position;
-        setTabSelected(currentPosition);
-        showFragment(currentPosition);
-
-    }
-
-    @Override
     protected void initData() {
         super.initData();
         tabs[0].performClick();
@@ -174,6 +160,12 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+    }
+
     private void showFragment(int position) {
         if (position != prePosition) {
             FragmentTransaction trx = getSupportFragmentManager()
@@ -189,7 +181,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
                 trx.add(R.id.layout_content, fragments[position], APP_ID + position);
             }
             //trx.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
-            trx.show(fragments[position]).commit();
+            trx.show(fragments[position]).commitAllowingStateLoss();
 
             prePosition = position;
         } else {
@@ -302,11 +294,27 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
         EventModel eventModel1 = (EventModel) eventModel;
         switch (eventModel1.getMessageType()) {
             case EventModel.LOGIN_OUT:
-                BootPageActivity.startBootPageActivity(this);
-                if (UserInfo.getInstance().isLogin()){
+                currentPosition = 0;
+                setTabSelected(currentPosition);
+                showFragment(currentPosition);
+                if (UserInfo.getInstance().isLogin()) {
                     presenter.getUserInfo();
                 }
-
+                break;
+            case EventModel.OPEN_LIVE:
+                currentPosition = 1;
+                setTabSelected(currentPosition);
+                showFragment(currentPosition);
+                break;
+            case EventModel.OPEN_Video:
+                currentPosition = 1;
+                setTabSelected(currentPosition);
+                showFragment(currentPosition);
+                break;
+            case EventModel.OPEN_PYQ:
+                currentPosition = 2;
+                setTabSelected(currentPosition);
+                showFragment(currentPosition);
                 break;
         }
     }
@@ -333,7 +341,6 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     @Override
     protected void onPause() {
         super.onPause();
-        JzvdStd.goOnPlayOnPause();
         sensorManager.unregisterListener(jzAutoFullscreenListener);
     }
 
@@ -341,7 +348,6 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
     @Override
     protected void onResume() {
         super.onResume();
-        JzvdStd.goOnPlayOnResume();
         //播放器重力感应
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -355,6 +361,7 @@ public class MainActivity extends BaseActivity<MainContract.MainView, MainPresen
 
     public static void startMainActivity(Context context, int currentPosition) {
         Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("pox", currentPosition);
         context.startActivity(intent);
     }

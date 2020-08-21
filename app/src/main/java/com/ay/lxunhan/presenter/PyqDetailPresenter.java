@@ -8,8 +8,6 @@ import com.ay.lxunhan.contract.PyqDetailContract;
 import com.ay.lxunhan.http.HttpMethods;
 import com.ay.lxunhan.observer.BaseSubscriber;
 
-import java.util.List;
-
 /**
  * @author ${jlj}
  * @package com.ay.lxunhan.presenter
@@ -93,9 +91,9 @@ public class PyqDetailPresenter extends BasePresenter<PyqDetailContract.PyqDetai
 
     @Override
     public void getComment(String id, int page) {
-        addDisposable(HttpMethods.getInstance().pyqComment(id, page).subscribeWith(new BaseSubscriber<List<PyqCommentBean>>(){
+        addDisposable(HttpMethods.getInstance().pyqComment(id, page).subscribeWith(new BaseSubscriber<PyqCommentBean>(){
             @Override
-            public void onNext(List<PyqCommentBean> o) {
+            public void onNext(PyqCommentBean o) {
                 super.onNext(o);
                 getView().getCommentFinish(o);
             }

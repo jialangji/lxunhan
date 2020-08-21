@@ -32,6 +32,11 @@ public class UrlConfig {
     public static final String USER_INFO = "api/users/info";
 
     /**
+     * 拉黑
+     */
+    public static final String PULL_BLACK="api/homes/pull_black";
+
+    /**
      * 地区列表
      */
     public static final String ADDRESS = "api/users/address_list";
@@ -125,6 +130,11 @@ public class UrlConfig {
      * 点赞
      */
     public static final String ADDLIKE="api/homes/like_add";
+
+    /**
+     * 不喜欢该文章
+     */
+    public static final String UNLIKE_TEXT="api/homes/no_la";
 
     /**
      * 评论点赞
@@ -275,6 +285,11 @@ public class UrlConfig {
      * 乐币任务
      */
     public static final String LB_TASK_LIST="api/mine/my_gold_task";
+
+    /**
+     * 乐币任务
+     */
+    public static final String LB_DAY_TASK_LIST="api/mine/my_sign_task";
 
     /**
      * 乐币列表
@@ -445,5 +460,51 @@ public class UrlConfig {
      * 翻译
      */
     public static final String FANYI="api/you_dao/texts";
+
+    /**
+     * 乐币任务完成
+     */
+    public static final String LB_TASK_COMPLETE="api/mine/my_sign_complete";
+
+    /**
+     * 乐币任务完成
+     */
+    public static final String LB_DAY_TASK_COMPLETE="api/mine/my_gold_complete";
+
+    /**
+     * 热门搜索
+     */
+    public static final String SEARCH_HOT="api/mine/hot_list";
+
+    /**
+     * 清空历史
+     */
+    public static final String DELETE_HISTORY="api/mine/my_history_del";
+
+    /**
+     * 删除收藏
+     */
+    public static final String DELETE_COLLECT="api/mine/my_collection_del";
+
+    /**
+     * 搜索
+     */
+    public static final String SEARCH="api/mine/hot_search_list";
+
+    /**
+     * 支付宝支付
+     */
+    public static final String ALIPAY="api/users/ali_pay_app_rech";
+
+    /**
+     * 获取配置信息
+     */
+    public static final String CONFIG_INFO="api/users/config_show";
+
+    /**
+     * 底部推荐
+     */
+    public static final String RECOMMEND="api/homes/promote";
+
 
 }

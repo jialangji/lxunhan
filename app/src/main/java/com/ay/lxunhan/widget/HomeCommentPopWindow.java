@@ -37,7 +37,7 @@ import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 public class HomeCommentPopWindow extends PopupWindow {
 
     private Activity mContext;
-    private List<CommentBean> showCommentBean=new ArrayList<>();
+    private List<CommentBean.CommentListBean> showCommentBean=new ArrayList<>();
     private BaseQuickAdapter commentAdapter;
     private LinearLayout linearLayout;
     private EditText mCommentEdit;
@@ -81,9 +81,9 @@ public class HomeCommentPopWindow extends PopupWindow {
     }
 
     public void initData() {
-        commentAdapter = new BaseQuickAdapter<CommentBean, BaseViewHolder>(R.layout.item_comment, showCommentBean) {
+        commentAdapter = new BaseQuickAdapter<CommentBean.CommentListBean, BaseViewHolder>(R.layout.item_comment, showCommentBean) {
             @Override
-            protected void convert(BaseViewHolder helper, CommentBean item) {
+            protected void convert(BaseViewHolder helper, CommentBean.CommentListBean item) {
                 GlideUtil.loadCircleImgForHead(mContext, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
                 helper.setText(R.id.tv_comment, item.getContent());
@@ -167,7 +167,7 @@ public class HomeCommentPopWindow extends PopupWindow {
         linearLayout.setOnClickListener(v -> hidesoft());
     }
 
-    public void updateData(List<CommentBean> commentBean,int page,boolean isRefrsh) {
+    public void updateData(List<CommentBean.CommentListBean> commentBean,int page,boolean isRefrsh) {
         this.page=page;
         if (isRefrsh){
             showCommentBean.clear();

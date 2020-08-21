@@ -126,6 +126,7 @@
     <string name="is_binding_phone">已绑定手机号</string>
     <string name="message_setting">消息设置</string>
     <string name="privacy_agreement">隐私协议</string>
+    <string name="about_ours">关于我们</string>
     <string name="clear_cache">清除缓存</string>
     <string name="video_load">视频加载</string>
     <string name="about_app">关于韩乐讯</string>
@@ -203,6 +204,7 @@
     <string name="media">自媒体人</string>
     <string name="null_text">不能发送空内容</string>
     <string name="history_search">历史搜索</string>
+    <string name="lahei">拉黑</string>
     <string name="account_black">您的账号已被官方拉黑，请联系官方</string>
     <string name="img_share_to">图片分享至</string>
     <string name="save_img">保存图片</string>
@@ -237,4 +239,13 @@
     <string name="gift">礼物</string>
     <string name="hot_new">热门新闻</string>
     <string name="get_like">获赞</string>
+    <string name="sousuo">搜索</string>
+    <string name="hot_search">热门搜索</string>
+    <string name="enter_invite_code">填写邀请码（选填）</string>
+    <string name="clear_over">清空</string>
+    <string name="alipay">支付宝支付</string>
+    <string name="login_look">登录后可查看您的关注</string>
+    <string name="now_login">立即登录</string>
+    <string name="unlike">不喜欢</string>
+    <string name="all_comment">全部评论</string>
 </resources>

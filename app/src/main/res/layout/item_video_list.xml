@@ -35,7 +35,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/dp_6"
             android:textColor="@color/color_303133"
-            android:textSize="@dimen/sp_14" />
+            android:textSize="@dimen/sp_11" />
 
         <TextView
             android:id="@+id/tv_attention"
@@ -45,7 +45,7 @@
             android:layout_gravity="center_vertical"
             android:text="@string/add_attention"
             android:textColor="@color/color_fc5a8e"
-            android:textSize="@dimen/sp_14" />
+            android:textSize="@dimen/sp_11" />
 
         <View
             android:layout_width="0dp"

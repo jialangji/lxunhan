@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_303133"
                 android:text="张三"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/sp_12"
                 />
             <ImageView
                 android:id="@+id/iv_sex"

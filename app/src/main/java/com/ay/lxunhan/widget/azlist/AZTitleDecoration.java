@@ -49,7 +49,7 @@ public class AZTitleDecoration extends RecyclerView.ItemDecoration {
 			if (titleAttachView(child, parent)) {
 				if(i>1){//处理隐藏当前letterss上边一个item的底边线
 					View childLast = parent.getChildAt(i-1);
-					childLast.findViewById(R.id.line_country).setVisibility(View.INVISIBLE);
+//					childLast.findViewById(R.id.line_country).setVisibility(View.INVISIBLE);
 				}
 				drawTitleItem(c, parent, child, adapter.getSortLetters(position));
 			}else{//显示当前item底边线

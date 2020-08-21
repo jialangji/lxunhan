@@ -59,6 +59,7 @@ public class PublicAdapterUtil {
                 super.convert(helper, item);
                 helper.setGone(R.id.rl_user, isAttention);
                 GlideUtil.loadCircleImgForHead(context, helper.getView(R.id.iv_header), item.getAvatar());
+                helper.setText(R.id.title_name, item.getNickname());
                 helper.setText(R.id.tv_name, item.getNickname());
                 helper.setText(R.id.tv_signature, item.getInto());
                 helper.setImageResource(R.id.iv_sex, item.getSex() ? R.drawable.ic_man : R.drawable.ic_woman);
@@ -75,7 +76,7 @@ public class PublicAdapterUtil {
 //                helper.setImageResource(R.id.iv_comment, R.drawable.ic_comment_normal);
 //                helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
 //                helper.setText(R.id.tv_like_count, item.getLike_count() + "");
-                helper.setText(R.id.iv_time, item.getComment_count() + "评论");
+                helper.setText(R.id.tv_comment, item.getComment_count() + "评论   ");
                 helper.setText(R.id.tv_time, item.getTimeText());
                 helper.addOnClickListener(R.id.iv_header);
                 helper.addOnClickListener(R.id.ll_linear);
@@ -212,7 +213,7 @@ public class PublicAdapterUtil {
                         //设置全屏播放
                         JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
                         JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
-                        GlideUtil.loadRoundTop(context, jzvdStd.thumbImageView, item.getCover());
+                        GlideUtil.loadImg(context, jzvdStd.thumbImageView, item.getCover());
                         jzvdStd.setUp(item.getVideo(), item.getTitle(), JzvdStd.SCREEN_WINDOW_NORMAL);
                         helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
                         helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
@@ -228,204 +229,14 @@ public class PublicAdapterUtil {
                         }
                         break;
                     case 5:
-                        GlideUtil.loadRoundTop(context, helper.getView(R.id.iv_video_cover), item.getCover());
+                        helper.setText(R.id.tv_title,item.getDesc());
+                        GlideUtil.loadImg(context, helper.getView(R.id.iv_video_cover), item.getCover());
                         break;
                 }
             }
         };
     }
-
-    public static BaseQuickAdapter getCollectOrHistoryAdapter(List<UserMediaListBean> datas, Context context) {
-        return new MultipleItemQuickAdapter<UserMediaListBean>(datas) {
-            private BaseQuickAdapter imgAdapter;
-            private BaseQuickAdapter baseQuickAdapter;
-
-            @Override
-            protected void addItemTypes() {
-                super.addItemTypes();
-                addItemType(0, R.layout.item_home_list);
-                addItemType(1, R.layout.item_home_list2);
-                addItemType(2, R.layout.item_video_list);
-                addItemType(3, R.layout.item_home_list_ask);
-                addItemType(4, R.layout.item_home_list_quiz);
-                addItemType(5, R.layout.item_video_small_list);
-                addItemType(6, R.layout.item_home_list3);
-            }
-
-            @Override
-            protected void convert(BaseViewHolder helper, UserMediaListBean item) {
-                super.convert(helper, item);
-                GlideUtil.loadCircleImgForHead(context, helper.getView(R.id.iv_header), item.getAvatar());
-                helper.setText(R.id.tv_name, item.getNickname());
-                if (item.getItemType() != 5) {
-                    if (item.getItemType() != 2) {
-                        helper.setText(R.id.tv_time, item.getTimeText());
-                        helper.setText(R.id.tv_signature, item.getInto());
-                        helper.setImageResource(R.id.iv_sex, item.getSex() ? R.drawable.ic_man : R.drawable.ic_woman);
-
-                    }
-                    if (item.getIs_fol() == 2) {
-                        helper.setGone(R.id.tv_attention, false);
-                    } else {
-                        helper.setGone(R.id.tv_attention, true);
-                        helper.setText(R.id.tv_attention, item.getIs_fol() != 2 && item.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
-                    }
-                    helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
-                    helper.setImageResource(R.id.iv_comment, R.drawable.ic_comment_normal);
-                    helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
-                    helper.setText(R.id.tv_like_count, item.getLike_count() + "");
-                }
-                helper.addOnClickListener(R.id.iv_header);
-                helper.addOnClickListener(R.id.ll_linear);
-
-                switch (item.getItemType()) {
-                    case 0:
-                        helper.setGone(R.id.rl_user, false);
-                        helper.setText(R.id.tv_content, item.getTitle());
-                        helper.setText(R.id.tv_type, item.getPlate_name());
-                        helper.addOnClickListener(R.id.tv_attention);
-                        helper.addOnClickListener(R.id.ll_like);
-                        break;
-                    case 1:
-                        helper.setGone(R.id.rl_user, false);
-                        helper.setText(R.id.tv_content, item.getTitle());
-                        GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_comment_img), item.getCover().get(0));
-                        helper.setText(R.id.tv_type, item.getPlate_name());
-                        helper.addOnClickListener(R.id.tv_attention);
-                        helper.addOnClickListener(R.id.ll_like);
-                        break;
-                    case 6:
-                        helper.setGone(R.id.rl_user, false);
-                        helper.setText(R.id.tv_content, item.getTitle());
-                        helper.setText(R.id.tv_type, item.getPlate_name());
-                        RecyclerView rvImg = helper.getView(R.id.rv_img);
-                        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getCover()) {
-                            @Override
-                            protected void convert(BaseViewHolder helper, String itemchild) {
-                                GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild);
-                            }
-                        };
-                        rvImg.addItemDecoration(new GridDividerDecoration(context, 10, GridLayoutManager.VERTICAL));
-                        rvImg.setLayoutManager(new GridLayoutManager(context, 3));
-                        rvImg.setAdapter(imgAdapter);
-                        helper.addOnClickListener(R.id.tv_attention);
-                        helper.addOnClickListener(R.id.ll_like);
-                        break;
-                    case 3:
-                        helper.setGone(R.id.rl_user, false);
-                        TextView tvTagAsk = helper.getView(R.id.tv_content);
-                        tvTagAsk.setText(setSpan(context, item.getBounty_gold(), item.getTitle()));
-                        helper.addOnClickListener(R.id.tv_attention);
-                        helper.addOnClickListener(R.id.ll_like);
-                        break;
-                    case 4:
-                        helper.setGone(R.id.rl_user, false);
-                        helper.addOnClickListener(R.id.tv_attention);
-                        helper.addOnClickListener(R.id.ll_like);
-                        TagTextView tvTagquiz = helper.getView(R.id.tv_content);
-                        helper.setText(R.id.tv_quiz_title, item.getDesc());
-                        tvTagquiz.setContentAndTag(R.layout.item_lable_quiz, item.getTitle(), "投票", R.color.color_49b114);
-                        RecyclerView rvQuiz = helper.getView(R.id.rv_quiz);
-                        helper.setText(R.id.tv_quiz, item.getIs_pate() ? StringUtil.getString(R.string.quiz_to) : StringUtil.getString(R.string.quiz));
-                        baseQuickAdapter = new BaseQuickAdapter<UserMediaListBean.OptionListBean, BaseViewHolder>(R.layout.item_quiz, item.getOption_list()) {
-                            @Override
-                            protected void convert(BaseViewHolder helperChild, UserMediaListBean.OptionListBean itemChild) {
-                                TextView tvSelect = helperChild.getView(R.id.tv_select);
-                                tvSelect.setText(String.format("%d.%s", (helperChild.getAdapterPosition() + 1), itemChild.getContent()));
-                                ProgressBar progressBar = helperChild.getView(R.id.progressBarSmall);
-                                RelativeLayout relativeLayout = helperChild.getView(R.id.rl_select);
-                                if (item.getIs_pate()) {
-                                    progressBar.setVisibility(View.VISIBLE);
-                                    helperChild.setText(R.id.tv_quiz_num, Utils.num(Long.parseLong(itemChild.getCount())));
-                                    if (itemChild.getIs_selected()) {
-                                        tvSelect.setTextColor(context.getResources().getColor(R.color.color_fc5a8e));
-                                        helperChild.setTextColor(R.id.tv_select, context.getResources().getColor(R.color.color_fc5a8e));
-                                        relativeLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_radius_pink_line10));
-                                        if (itemChild.getBfb() == 100) {
-                                            progressBar.setProgressDrawable(context.getResources().getDrawable(R.drawable.progress_bg_pink));
-                                        } else {
-                                            progressBar.setProgressDrawable(context.getResources().getDrawable(R.drawable.progress_bg_pink_half));
-                                        }
-                                    } else {
-                                        tvSelect.setTextColor(context.getResources().getColor(R.color.color_303133));
-                                        helperChild.setTextColor(R.id.tv_select, context.getResources().getColor(R.color.color_303133));
-                                        relativeLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_grayb2_line));
-                                        if (itemChild.getBfb() == 100) {
-                                            progressBar.setProgressDrawable(context.getResources().getDrawable(R.drawable.progress_bg_gray));
-                                        } else {
-                                            progressBar.setProgressDrawable(context.getResources().getDrawable(R.drawable.progress_bg_gray_half));
-                                        }
-                                    }
-                                    int progress = itemChild.getBfb();
-                                    progressBar.setMax(100);
-                                    progressBar.setProgress(progress);
-                                } else {
-                                    progressBar.setVisibility(View.GONE);
-                                    if (itemChild.isUserIsSelect()) {
-                                        tvSelect.setTextColor(context.getResources().getColor(R.color.white));
-                                        relativeLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_radius_pink_10));
-                                    } else {
-                                        tvSelect.setTextColor(context.getResources().getColor(R.color.color_303133));
-                                        relativeLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_grayb2_line));
-                                    }
-                                }
-                                helperChild.addOnClickListener(R.id.rl_select);
-                            }
-                        };
-                        baseQuickAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-                            switch (view.getId()) {
-                                case R.id.rl_select:
-                                    if (!item.getIs_pate()) {
-                                        for (int i = 0; i < item.getOption_list().size(); i++) {
-                                            if (i == position) {
-                                                item.getOption_list().get(position).setUserIsSelect(true);
-                                            } else {
-                                                item.getOption_list().get(position).setUserIsSelect(false);
-                                            }
-                                        }
-                                    }
-                                    baseQuickAdapter.notifyDataSetChanged();
-                                    break;
-                            }
-
-                        });
-                        rvQuiz.setLayoutManager(new LinearLayoutManager(context));
-                        rvQuiz.setAdapter(baseQuickAdapter);
-                        helper.addOnClickListener(R.id.tv_quiz);
-                        break;
-                    case 2:
-                        JzvdStd jzvdStd = helper.getView(R.id.jzvdStd);
-                        jzvdStd.titleTextView.setTextColor(context.getResources().getColor(R.color.white));
-                        jzvdStd.titleTextView.setTextSize(DisplayUtil.px2dip(context, 46));
-                        jzvdStd.backButton.setVisibility(View.GONE);//返回按钮
-                        jzvdStd.batteryTimeLayout.setVisibility(View.GONE);//时间和电量
-                        JzvdStd.SAVE_PROGRESS = false;
-                        JzvdStd.setVideoImageDisplayType(JzvdStd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_PARENT);
-                        //设置全屏播放
-                        JzvdStd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
-                        JzvdStd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向
-                        GlideUtil.loadRoundTop(context, jzvdStd.thumbImageView, item.getCover().get(0));
-                        jzvdStd.setUp(item.getVideo(), item.getTitle(), JzvdStd.SCREEN_WINDOW_NORMAL);
-                        helper.setImageResource(R.id.iv_like, item.getIs_like() ? R.drawable.ic_like_hand : R.drawable.ic_unlike_hand);
-                        helper.setText(R.id.tv_comment_count, item.getComment_count() + "");
-                        helper.setText(R.id.tv_like_count, item.getLike_count() + "");
-                        helper.addOnClickListener(R.id.tv_attention);
-                        if (item.getIs_fol() == 2) {
-                            helper.setGone(R.id.tv_attention, false);
-                        } else {
-                            helper.setGone(R.id.tv_attention, true);
-                            helper.setTextColor(R.id.tv_attention, context.getResources().getColor(item.getIs_fol() != 2 && item.getIs_fol() == 1 ? R.color.color_b2 : R.color.color_fc5a8e));
-                            helper.setText(R.id.tv_attention, item.getIs_fol() != 2 && item.getIs_fol() == 1 ? StringUtil.getString(R.string.attention_to) : StringUtil.getString(R.string.add_attention));
-                        }
-                        break;
-                    case 5:
-                        GlideUtil.loadRoundTop(context, helper.getView(R.id.iv_video_cover), item.getCover().get(0));
-                        break;
-                }
-            }
-        };
-    }
-
+    
     public static BaseQuickAdapter getPyqAdpater(List<PyqBean> pyqBeans, Context context) {
         return new MultipleItemQuickAdapter<PyqBean>(pyqBeans) {
 
@@ -567,7 +378,7 @@ public class PublicAdapterUtil {
                         helper.setText(R.id.tv_like_count, item.getLike_count() + "");
                         break;
                     case 5:
-                        GlideUtil.loadRoundTop(context, helper.getView(R.id.iv_cover), item.getCover().get(0));
+                        GlideUtil.loadImg(context, helper.getView(R.id.iv_cover), item.getCover().get(0));
                         helper.addOnClickListener(R.id.ll_linear);
                         break;
                     case 0:
@@ -681,6 +492,187 @@ public class PublicAdapterUtil {
                         rvQuiz.setLayoutManager(new LinearLayoutManager(context));
                         rvQuiz.setAdapter(baseQuickAdapter);
                         helper.addOnClickListener(R.id.tv_quiz);
+                        break;
+                }
+            }
+        };
+    }
+
+    public static BaseQuickAdapter getCollectOrHistoryAdapter2(List<UserMediaListBean> datas, Context context,boolean isHistory) {
+        return new MultipleItemQuickAdapter<UserMediaListBean>(datas) {
+            private BaseQuickAdapter imgAdapter;
+
+            @Override
+            protected void addItemTypes() {
+                super.addItemTypes();
+                addItemType(0, R.layout.item_home_list_history);
+                addItemType(1, R.layout.item_home_list2_history);
+                addItemType(2, R.layout.item_video_list_history);
+                addItemType(3, R.layout.item_home_list_ask_history);
+                addItemType(4, R.layout.item_home_list_quiz_history);
+                addItemType(5, R.layout.item_video_list_history);
+                addItemType(6, R.layout.item_home_list3_history);
+            }
+
+            @Override
+            protected void convert(BaseViewHolder helper, UserMediaListBean item) {
+                super.convert(helper, item);
+                helper.setGone(R.id.tv_del,isHistory);
+                helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                helper.setText(R.id.tv_time, item.getTimeText());
+                helper.addOnClickListener(R.id.ll_linear);
+                helper.addOnClickListener(R.id.tv_del);
+                switch (item.getItemType()) {
+                    case 0:
+                        helper.setText(R.id.tv_content, item.getTitle());
+                        break;
+                    case 1:
+                        helper.setText(R.id.tv_content, item.getTitle());
+                        GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_comment_img), item.getCover().get(0));
+                        break;
+                    case 6:
+                        helper.setText(R.id.tv_content, item.getTitle());
+                        RecyclerView rvImg = helper.getView(R.id.rv_img);
+                        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getCover()) {
+                            @Override
+                            protected void convert(BaseViewHolder helper, String itemchild) {
+                                GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild);
+                            }
+                        };
+                        rvImg.addItemDecoration(new GridDividerDecoration(context, 10, GridLayoutManager.VERTICAL));
+                        rvImg.setLayoutManager(new GridLayoutManager(context, 3));
+                        rvImg.setAdapter(imgAdapter);
+                        break;
+                    case 3:
+                        TextView tvTagAsk = helper.getView(R.id.tv_content);
+                        tvTagAsk.setText(setSpan(context, item.getBounty_gold(), item.getTitle()));
+                        break;
+                    case 4:
+                        TagTextView tvTagquiz = helper.getView(R.id.tv_content);
+                        tvTagquiz.setContentAndTag(R.layout.item_lable_quiz, item.getTitle(), "投票", R.color.color_49b114);
+                        break;
+                    case 2:
+                    case 5:
+                        helper.setText(R.id.tv_content, item.getTitle());
+                        GlideUtil.loadImg(context, helper.getView(R.id.iv_video_cover), item.getCover().get(0));
+                        break;
+                }
+            }
+        };
+    }
+
+    public static BaseQuickAdapter getSearchAdapter(List<UserMediaListBean> datas, Context context,boolean isHistory) {
+        return new MultipleItemQuickAdapter<UserMediaListBean>(datas) {
+            private BaseQuickAdapter imgAdapter;
+
+            @Override
+            protected void addItemTypes() {
+                super.addItemTypes();
+                addItemType(0, R.layout.item_home_list_history);
+                addItemType(1, R.layout.item_home_list2_history);
+                addItemType(2, R.layout.item_video_list_history);
+                addItemType(3, R.layout.item_home_list_ask_history);
+                addItemType(4, R.layout.item_home_list_quiz_history);
+                addItemType(5, R.layout.item_video_list_history);
+                addItemType(6, R.layout.item_home_list3_history);
+                addItemType(7, R.layout.item_search_people);
+            }
+
+            @Override
+            protected void convert(BaseViewHolder helper, UserMediaListBean item) {
+                super.convert(helper, item);
+                String[] arr;
+                switch (item.getItemType()) {
+                    case 0:
+                        helper.setGone(R.id.tv_del,isHistory);
+                        helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                        helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                        helper.setText(R.id.tv_time, item.getTimeText());
+                        helper.addOnClickListener(R.id.ll_linear);
+                        arr=item.getSearchContent().split("");
+                        helper.setText(R.id.tv_content,  Utils.matcherSearchContent(item.getTitle(),arr));
+                        break;
+                    case 1:
+                        helper.setGone(R.id.tv_del,isHistory);
+                        helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                        helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                        helper.setText(R.id.tv_time, item.getTimeText());
+                        helper.addOnClickListener(R.id.ll_linear);
+
+                        arr=item.getSearchContent().split("");
+                        helper.setText(R.id.tv_content,  Utils.matcherSearchContent(item.getTitle(),arr));
+                        GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_comment_img), item.getCover().get(0));
+                        break;
+                    case 6:
+                        helper.setGone(R.id.tv_del,isHistory);
+                        helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                        helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                        helper.setText(R.id.tv_time, item.getTimeText());
+                        helper.addOnClickListener(R.id.ll_linear);
+                        arr=item.getSearchContent().split("");
+                        helper.setText(R.id.tv_content,  Utils.matcherSearchContent(item.getTitle(),arr));
+                        RecyclerView rvImg = helper.getView(R.id.rv_img);
+                        imgAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_img, item.getCover()) {
+                            @Override
+                            protected void convert(BaseViewHolder helper, String itemchild) {
+                                GlideUtil.loadRoundImg(context, helper.getView(R.id.iv_img), itemchild);
+                            }
+                        };
+                        rvImg.addItemDecoration(new GridDividerDecoration(context, 10, GridLayoutManager.VERTICAL));
+                        rvImg.setLayoutManager(new GridLayoutManager(context, 3));
+                        rvImg.setAdapter(imgAdapter);
+                        break;
+                    case 3:
+                        helper.setGone(R.id.tv_del,isHistory);
+                        helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                        helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                        helper.setText(R.id.tv_time, item.getTimeText());
+                        helper.addOnClickListener(R.id.ll_linear);
+
+                        arr=item.getSearchContent().split("");
+                        TextView tvTagAsk = helper.getView(R.id.tv_content);
+                        tvTagAsk.setText(setSpan(context, item.getBounty_gold(), Utils.matcherSearchContent(item.getTitle(),arr)));
+                        break;
+                    case 4:
+                        helper.setGone(R.id.tv_del,isHistory);
+                        helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                        helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                        helper.setText(R.id.tv_time, item.getTimeText());
+                        helper.addOnClickListener(R.id.ll_linear);
+
+                        arr=item.getSearchContent().split("");
+                        TagTextView tvTagquiz = helper.getView(R.id.tv_content);
+                        tvTagquiz.setContentAndTag(R.layout.item_lable_quiz, Utils.matcherSearchContent(item.getTitle(),arr), "投票", R.color.color_49b114);
+                        break;
+                    case 2:
+                    case 5:
+                        helper.setGone(R.id.tv_del,isHistory);
+                        helper.setText(R.id.tv_name, item.getNickname()+"  ");
+                        helper.setText(R.id.tv_comment,item.getComment_count()+"评论  ");
+                        helper.setText(R.id.tv_time, item.getTimeText());
+                        helper.addOnClickListener(R.id.ll_linear);
+                        arr=item.getSearchContent().split("");
+                        helper.setText(R.id.tv_content, Utils.matcherSearchContent(item.getTitle(),arr));
+                        GlideUtil.loadImg(context, helper.getView(R.id.iv_video_cover), item.getCover().get(0));
+                        break;
+                    case 7:
+                        GlideUtil.loadCircleImgForHead(context,helper.getView(R.id.iv_header),item.getMedia_avatar());
+                        arr=item.getSearchContent().split("");
+                        helper.setText(R.id.tv_name, Utils.matcherSearchContent(item.getMedia_nickname(),arr));
+                        helper.setImageResource(R.id.iv_sex,item.getSex()?R.drawable.ic_man:R.drawable.ic_woman);
+                        helper.setText(R.id.tv_fans,"粉丝"+item.getFan());
+                        TextView tvAttention =helper.getView(R.id.tv_attention);
+                        if (item.getIs_fol()==0){
+                            tvAttention.setText(StringUtil.getString(R.string.add_attention));
+                            tvAttention.setTextColor(context.getResources().getColor(R.color.color_fc5a8e));
+                            tvAttention.setBackground(context.getResources().getDrawable(R.drawable.shape_line));
+                        }else {
+                            tvAttention.setText("主页");
+                            tvAttention.setTextColor(context.getResources().getColor(R.color.white));
+                            tvAttention.setBackground(context.getResources().getDrawable(R.drawable.shape_unline));
+                        }
+                        helper.addOnClickListener(R.id.tv_attention);
                         break;
                 }
             }

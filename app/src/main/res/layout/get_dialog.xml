@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/other_view"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_115"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@drawable/shape_black_bg_10"
+        android:layout_height="@dimen/dp_115">
+
+        <ImageView
+            android:layout_marginTop="@dimen/dp_14"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="@dimen/dp_40"
+            android:src="@drawable/ic_coin"
+            android:layout_height="@dimen/dp_40" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/sp_12"
+            android:text="领取成功"
+            android:textColor="@color/color_ec"/>
+        <TextView
+            android:id="@+id/tv_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_ff8b02"
+            android:textSize="@dimen/sp_14"
+            android:layout_marginTop="@dimen/dp_2"
+            android:text="5乐讯币"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

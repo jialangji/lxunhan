@@ -7,7 +7,7 @@ public class Contacts {
     public static final int NETWORK_INTERCEPTOR_TYPE_LOG = 1;
     public static final int NETWORK_INTERCEPTOR_TYPE_HEADER = 2;
     public static final int NETWORK_INTERCEPTOR_TYPE_PUBLIC_PARAMS = 3;
-
+    public final static String JPUSHSTATUS = "jpushstatus";
     public static String DIR_NAME = "HLXImage";
 
     public static final int QQLOGIN=1;

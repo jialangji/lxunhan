@@ -81,9 +81,11 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
     LinearLayout llMore;
     @BindView(R.id.tv_wechat)
     TextView tvWechat;
+    @BindView(R.id.tv_comment_count)
+    TextView tvCommentCount;
     private PyqDetailBean pyqDetailBean;
     private List<PyqDetailBean.LikeListBean> likeBeans = new ArrayList<>();
-    private List<PyqCommentBean> pyqCommentBeans = new ArrayList<>();
+    private List<PyqCommentBean.CommentListBean> pyqCommentBeans = new ArrayList<>();
     private BaseQuickAdapter imgAdapter;
     private List<String> imgList = new ArrayList<>();
     private String Id;
@@ -127,9 +129,9 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         rvHeader.setLayoutManager(new GridLayoutManager(this, 7));
         rvHeader.setAdapter(headerAdapter);
 
-        commentAdapter = new BaseQuickAdapter<PyqCommentBean, BaseViewHolder>(R.layout.item_pyq_comment, pyqCommentBeans) {
+        commentAdapter = new BaseQuickAdapter<PyqCommentBean.CommentListBean, BaseViewHolder>(R.layout.item_pyq_comment, pyqCommentBeans) {
             @Override
-            protected void convert(BaseViewHolder helper, PyqCommentBean item) {
+            protected void convert(BaseViewHolder helper, PyqCommentBean.CommentListBean item) {
                 GlideUtil.loadCircleImgForHead(PyqDetailActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getC_nickname());
                 helper.setText(R.id.tv_time, item.getTimeText());
@@ -319,8 +321,8 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
     }
 
     @Override
-    public void getCommentFinish(List<PyqCommentBean> beans) {
-        if (pyqDetailBean.getCircle_show().getLike_count() == 0 && (beans == null || beans.size() == 0)) {
+    public void getCommentFinish(PyqCommentBean beans) {
+        if (pyqDetailBean.getCircle_show().getLike_count() == 0 && (beans == null || beans.getComment_list().size() == 0)) {
             llMore.setVisibility(View.GONE);
         } else {
             llMore.setVisibility(View.VISIBLE);
@@ -330,9 +332,10 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         } else {
             rlLike.setVisibility(View.VISIBLE);
         }
-        if (beans.size() == 0) {
+        if (beans.getComment_list().size() == 0) {
             rvComment.setVisibility(View.GONE);
         } else {
+            tvCommentCount.setText("("+beans.getCom_list_count()+")");
             rvComment.setVisibility(View.VISIBLE);
         }
         if (isRefresh) {
@@ -341,7 +344,7 @@ public class PyqDetailActivity extends BaseActivity<PyqDetailContract.PyqDetailV
         } else {
             swipeRefresh.finishLoadmore();
         }
-        pyqCommentBeans.addAll(beans);
+        pyqCommentBeans.addAll(beans.getComment_list());
         commentAdapter.notifyDataSetChanged();
     }
 

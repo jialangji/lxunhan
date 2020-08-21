@@ -14,12 +14,17 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.contract.LbContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.LbPresenter;
-import com.ay.lxunhan.ui.video.activity.LiveActivity;
+import com.ay.lxunhan.ui.message.activity.AddFriendActivity;
+import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
 import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
+import com.ay.lxunhan.widget.GetDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>implements LbContract.LbView {
+public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter> implements LbContract.LbView {
 
 
     @BindView(R.id.rv_img)
@@ -42,6 +47,8 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
     private List<TaskBean> taskBeanList = new ArrayList<>();
     private BaseQuickAdapter adapter;
     private BaseQuickAdapter taskAdapter;
+    private GetDialog getDialog;
+    private int mPosition;
 
     @Override
     public LbPresenter initPresenter() {
@@ -72,38 +79,82 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImg.setLayoutManager(linearLayoutManager);
         rvImg.setAdapter(adapter);
-        taskAdapter = new BaseQuickAdapter<TaskBean, BaseViewHolder>(R.layout.item_task, taskBeanList) {
+        taskAdapter = new BaseQuickAdapter<TaskBean, BaseViewHolder>(R.layout.item_task_all, taskBeanList) {
             @Override
             protected void convert(BaseViewHolder helper, TaskBean item) {
-                GlideUtil.loadImg(LCoinActivity.this,helper.getView(R.id.iv_type_img),item.getIcon());
-                helper.setText(R.id.tv_type_title,item.getName());
-                helper.setText(R.id.tv_type_lb,item.getGold()+"乐讯币");
-                ProgressBar progressBar=helper.getView(R.id.progressBarSmall);
+                GlideUtil.loadImg(LCoinActivity.this, helper.getView(R.id.iv_type_img), item.getIcon());
+                helper.setText(R.id.tv_type_title, item.getName());
+                helper.setText(R.id.tv_type_lb, "+" + item.getGold() + "乐讯币");
+                ProgressBar progressBar = helper.getView(R.id.progressBarSmall);
                 progressBar.setMax(item.getNumber());
                 progressBar.setProgress(item.getTaskCount());
-                helper.setText(R.id.tv_success_count,item.getTaskCount()+"");
-                helper.setText(R.id.tv_all_count,"/"+item.getNumber());
+                TextView tvGet = helper.getView(R.id.tv_get);
+                if (item.getIs_complete() == 0) {
+                    tvGet.setText("未完成");
+                    tvGet.setBackground(getResources().getDrawable(R.drawable.shape_radiu_ff9813));
+                } else if (item.getIs_complete() == 1) {
+                    tvGet.setText("领取");
+                    tvGet.setBackground(getResources().getDrawable(R.drawable.shape_radiu_ff9813));
+                } else if (item.getIs_complete() == 2) {
+                    tvGet.setText("已领取");
+                    tvGet.setBackground(getResources().getDrawable(R.drawable.shape_gray_bg_15));
+                }
             }
         };
         rvTask.setLayoutManager(new LinearLayoutManager(this));
         rvTask.setAdapter(taskAdapter);
+
     }
+
+    public void showDialog() {
+        if (getDialog == null) {
+            getDialog = new GetDialog(this, R.style.selectPicDialogstyle,false,String.valueOf(taskBeanList.get(mPosition).getGold()));
+        }
+        getDialog.show();
+        getDialog.setOnDismissListener(dialog -> getDialog.dismiss());
+    }
+
 
     @Override
     protected void initListener() {
         super.initListener();
         adapter.setOnItemClickListener((adapter, view, position) -> {
-            if (position == 0 ) {
+            if (position == 0) {
                 SingInActivity.startSingInActivity(this);
-            }else if (position==1){
-                rvTask.scrollToPosition(taskBeanList.size()/2);
-            }else{
-                ToastUtil.makeShortText(LCoinActivity.this,"待开发");
+            } else if (position == 1) {
+                rvTask.scrollToPosition(taskBeanList.size() - 1);
+            } else {
+                ToastUtil.makeShortText(LCoinActivity.this, "待开发");
             }
         });
         taskAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (taskBeanList.get(position).getTaskFlg()){
-                MainActivity.startMainActivity(LCoinActivity.this,0);
+            if (taskBeanList.get(position).getIs_complete() == 0) {
+                switch (taskBeanList.get(position).getId()) {
+                    case 1:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
+                        MainActivity.startMainActivity(LCoinActivity.this);
+                        break;
+                    case 2:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
+                        MainActivity.startMainActivity(LCoinActivity.this);
+                        break;
+                    case 3:
+                        IssueActivity.startIssueActivity(this);
+                        break;
+                    case 4:
+                        AddFriendActivity.startAddFriendActivity(this);
+                        break;
+                    case 5:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.OPEN_PYQ));
+                        MainActivity.startMainActivity(LCoinActivity.this);
+                        break;
+                    case 6:
+                        InviteFriendActivity.startInviteFriendActivity(this);
+                        break;
+                }
+            } else if (taskBeanList.get(position).getIs_complete() == 1) {
+                mPosition = position;
+                presenter.lbComplete(String.valueOf(taskBeanList.get(position).getId()));
             }
         });
     }
@@ -141,10 +192,12 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
                 LCoinDetailActivity.startLCoinDetailActivity(this);
                 break;
             case R.id.iv_shop:
-                ToastUtil.makeShortText(this,"待开发");
+                ToastUtil.makeShortText(this, "待开发");
                 break;
             case R.id.iv_anchor:
-                LiveActivity.startLiveActivity(this);
+                EventBus.getDefault().postSticky(new EventModel<>(EventModel.OPEN_LIVE));
+                MainActivity.startMainActivity(LCoinActivity.this);
+                finish();
                 break;
         }
     }
@@ -161,6 +214,12 @@ public class LCoinActivity extends BaseActivity<LbContract.LbView, LbPresenter>i
         taskBeanList.addAll(list);
         taskAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void lbCompleteFinish() {
+        showDialog();
+        presenter.getLbTask();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.ay.lxunhan;
 
-import java.math.BigDecimal;
-
 /**
  * @author ${jlj}
  * @package com.ay.lxunhan
@@ -9,15 +7,11 @@ import java.math.BigDecimal;
  */
 public class Text {
     public static void main(String[] arg){
-        double a=20.0;
-        double b=15;
-        System.out.println(subtract(a,b));
-
+        String str="剑术师一还不色对比";
+        String[] arr=str.split("");
+        System.out.println(str);
+        System.out.println(arr.length+"");
     }
 
-    public static String subtract(double a,double b){
-        double d =a-b;
-        BigDecimal bigDecimal=new BigDecimal(d);
-        return String.valueOf(bigDecimal.setScale(0, BigDecimal.ROUND_UP));
-    }
+
 }

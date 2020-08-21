@@ -156,7 +156,7 @@ public class AddFriendActivity extends BaseActivity<AddFriendContract.AddFriendV
                 finish();
                 break;
             case R.id.rl_search:
-                SearchActivity.startSearchActivity(this, Contacts.HISTORY_ADD_FRIEND);
+                SearchActivity.startSearchActivity(this,Contacts.HISTORY_ADD_FRIEND);
                 break;
             case R.id.tv_attention_all:
                 if (noPeople){

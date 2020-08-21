@@ -102,6 +102,9 @@ public class ExChangeActivity extends BaseActivity<LbExchangeContract.LbExchange
         presenter.getShow();
         etCount.setText("");
         ToastUtil.makeShortText(this,"兑换成功");
+        WalletActivity.startWalletActivity(this);
+        finish();
+
     }
 
     @Override

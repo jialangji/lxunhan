@@ -23,7 +23,7 @@ public class UserInfo {
     private boolean isWxLogin;
     private String userName;
     private boolean isNight;
-
+    private boolean JPushStatus = false;
 
     private UserInfo(Context context) {
         userSp = context.getSharedPreferences(Contacts.USERINFO, Context.MODE_PRIVATE);
@@ -37,6 +37,18 @@ public class UserInfo {
     public void setNight(boolean night) {
         isNight = night;
         editor.putBoolean(Contacts.ISNIGHT, night);
+        editor.commit();
+    }
+
+
+    public boolean isJPushStatus() {
+        return JPushStatus;
+    }
+
+
+    public void setJPushStatus(boolean JPushStatus) {
+        this.JPushStatus = JPushStatus;
+        editor.putBoolean(Contacts.JPUSHSTATUS, JPushStatus);
         editor.commit();
     }
 
@@ -182,6 +194,8 @@ public class UserInfo {
         editor.commit();
         //设置语言配置
         getAccess();
+        JGuangUtil jGuangUtil = new JGuangUtil();
+        jGuangUtil.deleteJPushAlias();
     }
 
 

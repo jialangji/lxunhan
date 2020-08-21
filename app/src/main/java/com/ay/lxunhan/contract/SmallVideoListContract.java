@@ -37,7 +37,7 @@ public interface SmallVideoListContract {
 
         void getSmallVideoFinish(List<VideoBean> list);
 
-        void getOneCommentFinsh(List<CommentBean> commentBeans);
+        void getOneCommentFinsh(CommentBean commentBeans);
 
         void addCollectFinish();
 

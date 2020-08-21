@@ -93,7 +93,7 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 jzvideo.startVideo();
                 GlideUtil.loadCircleImgForHead(SmallVideoActivity.this, helper.getView(R.id.iv_header), item.getAvatar());
                 helper.setText(R.id.tv_name, item.getNickname());
-                helper.setText(R.id.tv_title, item.getTitle());
+                helper.setText(R.id.tv_title, item.getDesc());
                 if (item.getIs_fol() == 2) {
                     helper.setGone(R.id.tv_attention, false);
                 } else {
@@ -120,7 +120,9 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
             @Override
             public void onInitComplete(View view) {
                 playVideo(0, view);
-                presenter.getSmallWatch(videoBeanList.get(0).getId());
+                if (UserInfo.getInstance().isLogin()){
+                    presenter.getSmallWatch(videoBeanList.get(0).getId());
+                }
 
             }
 
@@ -129,7 +131,10 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
                 playVideo(position, view);
                 commentPage = 1;
                 commentIsRefresh = true;
-                presenter.getSmallWatch(videoBeanList.get(position).getId());
+                if (UserInfo.getInstance().isLogin()){
+                    presenter.getSmallWatch(videoBeanList.get(position).getId());
+                }
+
 
             }
 
@@ -391,11 +396,11 @@ public class SmallVideoActivity extends BaseActivity<SmallVideoListContract.Smal
     }
 
     @Override
-    public void getOneCommentFinsh(List<CommentBean> commentBeans) {
+    public void getOneCommentFinsh(CommentBean commentBeans) {
         if (commentIsRefresh) {
             popWindow.showAtLocation(this.findViewById(R.id.view_title), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         }
-        popWindow.updateData(commentBeans, commentPage, commentIsRefresh);
+        popWindow.updateData(commentBeans.getComment_list(), commentPage, commentIsRefresh);
         popWindow.setCount(String.valueOf(videoBeanList.get(mPosition).getComment_count()));
 
     }

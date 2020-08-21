@@ -39,8 +39,8 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
     EditText etAccount;
     @BindView(R.id.ll_account)
     LinearLayout llAccount;
-    @BindView(R.id.tv_account_info)
-    TextView tvAccountInfo;
+    @BindView(R.id.tv_account_type)
+    TextView tvAccountType;
     private String balance;
     private int withdrawType = 0;
 
@@ -81,11 +81,6 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
     }
 
     @Override
-    public boolean isKeyboardEnable() {
-        return true;
-    }
-
-    @Override
     protected void initData() {
         super.initData();
         presenter.getUserInfo();
@@ -108,7 +103,7 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
             case R.id.ll_alipay:
                 if (!checkAlipay.isChecked()) {
                     llAccount.setVisibility(View.VISIBLE);
-                    tvAccountInfo.setText(StringUtil.getString(R.string.alipay_account));
+                    tvAccountType.setText(StringUtil.getString(R.string.alipay_account));
                     withdrawType = 2;
                     checkAlipay.setChecked(true);
                     checkWx.setChecked(false);
@@ -117,7 +112,7 @@ public class WithDrawActivity extends BaseActivity<WithdrawContract.WithdrawView
             case R.id.ll_wx:
                 if (!checkWx.isChecked()) {
                     llAccount.setVisibility(View.VISIBLE);
-                    tvAccountInfo.setText(StringUtil.getString(R.string.wx_account));
+                    tvAccountType.setText(StringUtil.getString(R.string.wx_account));
                     withdrawType = 1;
                     checkWx.setChecked(true);
                     checkAlipay.setChecked(false);

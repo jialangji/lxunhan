@@ -280,7 +280,7 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
     // 弹出选择图片弹窗
     public void showTakePhotoDialog() {
         if (selectImageDialog == null) {
-            selectImageDialog = new SelectImageDialog(this, R.style.selectPicDialogstyle);
+            selectImageDialog = new SelectImageDialog(this, R.style.selectPicDialogstyle,StringUtil.getString(R.string.photo),StringUtil.getString(R.string.gallery));
         }
         selectImageDialog.show();
         selectImageDialog.setItemClickListener(new SelectImageDialog.ItemClickListener() {
@@ -417,7 +417,10 @@ public class CreateLiveActivity extends BaseActivity<CreateLiveContract.CreateLi
     public void getLiveDetailFinish(LiveDetailBean bean) {
         GlideUtil.loadRoundImg(this,ivHeader,bean.getCover());
         typeId= String.valueOf(bean.getLtype());
-        tvSelect.setText(bean.getLtypenm());
+        if(bean.getLtypenm()!=null){
+            tvSelect.setText(bean.getLtypenm());
+        }
+
         etTitle.setText(bean.getLname());
     }
     public static final String QUALITY_HD = "HD";

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class ShareImgDialog extends Dialog implements View.OnClickListener {
     private LinearLayout layoutWebview;
 
     private ItemClickListener itemClickListener;
+    private NestedScrollView scrollView;
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
@@ -51,6 +53,7 @@ public class ShareImgDialog extends Dialog implements View.OnClickListener {
         Objects.requireNonNull(getWindow()).setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         LinearLayout otherView = findViewById(R.id.other_view);
+        scrollView = findViewById(R.id.mScroll);
         layoutWebview = findViewById(R.id.layout_webview);
         TextView tvShareAlbum = findViewById(R.id.tv_share_album);
         TextView tvShareQQ = findViewById(R.id.tv_share_qq);
@@ -78,7 +81,7 @@ public class ShareImgDialog extends Dialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Bitmap bitmap = SaveBitmap.viewShot(layoutWebview);
+        Bitmap bitmap = SaveBitmap.viewShot(scrollView);
         if (bitmap == null) {
             ToastUtil.makeShortText(context, "当前内容无法生成图片");
             dismiss();

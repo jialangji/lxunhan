@@ -42,6 +42,7 @@ public class HomeQuizFragment extends BaseFragment<HomeContract.HomeView, HomePr
     private int page = 1;
     private boolean isRefresh;
     private int mPosition;
+
     public static HomeQuizFragment newInstance() {
         Bundle args = new Bundle();
         HomeQuizFragment fragment = new HomeQuizFragment();
@@ -52,9 +53,7 @@ public class HomeQuizFragment extends BaseFragment<HomeContract.HomeView, HomePr
     @Override
     protected void initData() {
         super.initData();
-
-            presenter.getHomeListQuiz(page);
-
+        presenter.getHomeListQuiz(page);
     }
 
     @Override
@@ -64,6 +63,7 @@ public class HomeQuizFragment extends BaseFragment<HomeContract.HomeView, HomePr
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvList.setAdapter(homeAdapter);
     }
+
     @Override
     public boolean isUserEvent() {
         return true;
@@ -76,7 +76,9 @@ public class HomeQuizFragment extends BaseFragment<HomeContract.HomeView, HomePr
         switch (model.getMessageType()) {
             case EventModel.ARTICLELIKE:
             case EventModel.SENDCOMMENT:
-                isRefresh=true;
+            case EventModel.REFRESH:
+                isRefresh = true;
+                page = 1;
                 presenter.getHomeListQuiz(page);
                 break;
 
@@ -102,7 +104,7 @@ public class HomeQuizFragment extends BaseFragment<HomeContract.HomeView, HomePr
                 super.onLoadMore(refreshLayout);
                 if (page * Contacts.LIMIT == homeList.size()) {
                     isRefresh = false;
-                    page = page+1;
+                    page = page + 1;
                     presenter.getHomeListQuiz(page);
                 } else {
                     swipeRefresh.finishLoadmore();

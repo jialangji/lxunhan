@@ -1,39 +1,34 @@
 package com.ay.lxunhan.ui.my.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.adapter.PublicAdapterUtil;
 import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.UserMediaListBean;
-import com.ay.lxunhan.bean.model.SendCommentModel;
 import com.ay.lxunhan.contract.COrHContract;
 import com.ay.lxunhan.presenter.CorHpRresenter;
 import com.ay.lxunhan.ui.home.activity.HomeAskDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeDetailActivity;
 import com.ay.lxunhan.ui.home.activity.HomeQuziDetailActivity;
-import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
 import com.ay.lxunhan.ui.video.activity.SmallVideoActivity;
 import com.ay.lxunhan.ui.video.activity.VideoDetailActivity;
 import com.ay.lxunhan.utils.Contacts;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
-import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.jzvd.Jzvd;
-import cn.jzvd.JzvdStd;
 
 public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRresenter> implements COrHContract.CorHView {
 
@@ -45,9 +40,6 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
     private BaseQuickAdapter historyAdapter;
     private int page = 1;
     private boolean isRefresh = true;
-    private SensorManager sensorManager;
-    private Jzvd.JZAutoFullscreenListener jzAutoFullscreenListener;
-    private int mPosition;
 
     @Override
     public CorHpRresenter initPresenter() {
@@ -63,25 +55,15 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
     protected void initView() {
         super.initView();
         //设置全屏播放
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        jzAutoFullscreenListener = new Jzvd.JZAutoFullscreenListener();
-        Jzvd.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;  //横向
-        Jzvd.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;  //纵向\
-        historyAdapter = PublicAdapterUtil.getCollectOrHistoryAdapter(historyList, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        rvHistory.addItemDecoration(new GridSpacingItemDecoration(2, 10, false));
-        rvHistory.setLayoutManager(gridLayoutManager);
+        historyAdapter = PublicAdapterUtil.getCollectOrHistoryAdapter2(historyList, this,false);
+        rvHistory.setLayoutManager(new LinearLayoutManager(this));
         rvHistory.setAdapter(historyAdapter);
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int i) {
-                if (historyList.get(i).getItemType() == 5) {
-                    return 1;
-                } else {
-                    return 2;
-                }
-            }
-        });
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        presenter.history(page);
     }
 
     @Override
@@ -131,51 +113,10 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
                             break;
                     }
                     break;
-                case R.id.ll_like:
-                    mPosition = position;
-                    SendCommentModel sendCommentModel = new SendCommentModel(historyList.get(position).getId() + "", historyList.get(position).getType());
-                    presenter.addLike(sendCommentModel);
-                    break;
-                case R.id.iv_header:
-                    FriendDetailActivity.startUserDetailActivity(HistoryActivity.this, historyList.get(position).getUid());
-                    break;
-                case R.id.tv_attention:
-                    mPosition = position;
-                    presenter.attention(historyList.get(mPosition).getUid());
-                    break;
-                case R.id.tv_quiz://投票
-                    if (!historyList.get(position).getIs_pate()) {
-                        mPosition = position;
-                        int oid = -1;
-                        for (UserMediaListBean.OptionListBean optionListBean : historyList.get(position).getOption_list()) {
-                            if (optionListBean.isUserIsSelect()) {
-                                oid = optionListBean.getId();
-                            }
-                        }
-                        SendCommentModel quizModel = new SendCommentModel(historyList.get(position).getId(), oid);
-                        presenter.quiz(quizModel);
-                    }
-                    break;
             }
         });
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(jzAutoFullscreenListener);
-        Jzvd.releaseAllVideos();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //播放器重力感应
-        presenter.history(1);
-        Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(jzAutoFullscreenListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        JzvdStd.goOnPlayOnResume();
-    }
 
     @Override
     protected int getBarColor() {
@@ -187,9 +128,27 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
         return false;
     }
 
-    @OnClick(R.id.rl_finish)
-    public void onViewClicked() {
-        finish();
+    @OnClick({R.id.rl_finish,R.id.tv_clear})
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.rl_finish:
+                finish();
+                break;
+            case R.id.tv_clear:
+                showMConfirmDialog("提示", "确定清空记录吗?", (dialog, which) -> dialog.cancel(), (dialog, which) -> presenter.clearHistory());
+                break;
+        }
+    }
+
+    public void showMConfirmDialog(String title, String message, DialogInterface.OnClickListener okEvent, DialogInterface.OnClickListener cancelEvent){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.cancel,
+                okEvent);
+        builder.setNegativeButton(R.string.sure,
+                cancelEvent);
+        builder.show();
     }
 
     public static void startHistoryActivity(Context context) {
@@ -211,29 +170,19 @@ public class HistoryActivity extends BaseActivity<COrHContract.CorHView, CorHpRr
 
     @Override
     public void attentionFinish() {
-        if (historyList.get(mPosition).getIs_fol() == 1) {
-            historyList.get(mPosition).setIs_fol(0);
-        } else {
-            historyList.get(mPosition).setIs_fol(1);
-        }
-        historyAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void quziFinish() {
-        presenter.history(1);
     }
 
     @Override
     public void addLikeFinish() {
-        if (historyList.get(mPosition).getIs_like()) {
-            historyList.get(mPosition).setIs_like(0);
-            historyList.get(mPosition).setLike_count(historyList.get(mPosition).getLike_count() - 1);
-        } else {
-            historyList.get(mPosition).setIs_like(1);
-            historyList.get(mPosition).setLike_count(historyList.get(mPosition).getLike_count() + 1);
-        }
-        historyAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void clearFinish() {
+        presenter.history(1);
     }
 
     @Override

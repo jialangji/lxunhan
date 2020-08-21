@@ -12,8 +12,10 @@ import java.util.List;
  */
 public interface COrHContract {
     interface COrHPresenter{
-        void collect(int page);
+        void collect(int status,int page);
         void history(int page);
+        void clearHistory();
+        void deleteCollect(String aid,String type);
         void attention(String uid);
         void quiz(SendCommentModel model);
         void addLike(SendCommentModel model);
@@ -23,6 +25,7 @@ public interface COrHContract {
         void attentionFinish();
         void quziFinish();
         void addLikeFinish();
+        void clearFinish();
         void showProgress();
         void hideProgress();
     }

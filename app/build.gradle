@@ -9,13 +9,18 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        multiDexEnabled=true
+        multiDexEnabled = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //选择要添加的对应cpu类型的.so库。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "5f78711ec8ebad7a7a42457a", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
         multiDexEnabled true
     }
     repositories {
@@ -133,5 +138,9 @@ dependencies {
     implementation files('libs/YoudaoCnDictOffline.jar')
     implementation files('libs/YoudaoTranslateOnline_v2.0.0.jar')
     implementation files('libs/YoudaoTranslateOffline.jar')
-    implementation (name: 'alipaySdk-15.7.7-20200702160044', ext: 'aar')
+    implementation(name: 'alipaySdk-15.7.7-20200702160044', ext: 'aar')
+    implementation 'cn.jiguang.sdk:jpush:3.3.1'  // 此处以JPush 3.3.1 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.0.1'  // 此处以JCore 2.0.1 版本为例。
+
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 }

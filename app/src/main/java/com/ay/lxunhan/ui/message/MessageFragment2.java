@@ -3,20 +3,23 @@ package com.ay.lxunhan.ui.message;
 import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.base.BasePresenter;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.ui.message.activity.AddFriendActivity;
 import com.ay.lxunhan.ui.message.activity.FriendActivity;
 import com.ay.lxunhan.ui.public_ac.activity.IssueActivity;
 import com.ay.lxunhan.utils.PermissionsUtils;
 import com.ay.lxunhan.widget.NoScrollViewPager;
+import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,7 @@ import butterknife.OnClick;
 public class MessageFragment2 extends BaseFragment {
 
     @BindView(R.id.tl_label_video)
-    TabLayout tlLabel;
+    SlidingTabLayout tlLabel;
     @BindView(R.id.view_page_message)
     NoScrollViewPager viewPage;
     @BindView(R.id.rl_add_friend)
@@ -75,7 +78,7 @@ public class MessageFragment2 extends BaseFragment {
         vpAdapter = new FragmentPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if (position==0) {
+                if (position == 0) {
                     return MessageListFragment.newInstance();
                 } else {
                     return PyqFragment.newInstance();
@@ -95,22 +98,21 @@ public class MessageFragment2 extends BaseFragment {
         };
         viewPage.setAdapter(vpAdapter);
         viewPage.setNoScroll(true);
-        tlLabel.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
-        tlLabel.setupWithViewPager(viewPage);
-        tlLabel.setTabMode(TabLayout.MODE_FIXED);
+        tlLabel.setViewPager(viewPage);
     }
 
     @Override
     protected void initListener() {
         super.initListener();
-        tlLabel.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tlLabel.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText().equals("消息")){
+            public void onTabSelect(int position) {
+                TextView tvTitle = tlLabel.getTitleView(position);
+                if (tvTitle.getText().equals("消息")) {
                     rlAddFriend.setVisibility(View.VISIBLE);
                     rlFriendList.setVisibility(View.VISIBLE);
                     rlEdit.setVisibility(View.GONE);
-                }else {
+                } else {
                     rlAddFriend.setVisibility(View.GONE);
                     rlFriendList.setVisibility(View.GONE);
                     rlEdit.setVisibility(View.VISIBLE);
@@ -118,14 +120,27 @@ public class MessageFragment2 extends BaseFragment {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onTabReselect(int position) {
 
             }
         });
+    }
+
+    @Override
+    public boolean isUserEvent() {
+        return true;
+    }
+
+    @Override
+    protected void getStickyEvent(Object eventModel) {
+        super.getStickyEvent(eventModel);
+        EventModel eventModel1 = (EventModel) eventModel;
+        switch (eventModel1.getMessageType()) {
+
+            case EventModel.OPEN_PYQ:
+                viewPage.setCurrentItem(1);
+                break;
+        }
     }
 
     @Override
@@ -138,7 +153,7 @@ public class MessageFragment2 extends BaseFragment {
         return false;
     }
 
-    @OnClick({R.id.rl_add_friend, R.id.rl_friend_list,R.id.rl_edit})
+    @OnClick({R.id.rl_add_friend, R.id.rl_friend_list, R.id.rl_edit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_add_friend:

@@ -10,10 +10,12 @@ import com.ay.lxunhan.bean.WxOrderBean;
 public interface PayContract {
     interface PayPresenter{
         void recharge(String id);
+        void rechargeAlipay(String id);
+
     }
     interface PayView{
         void rechargeFinish(WxOrderBean wxOrderBean);
-
+        void rechargeAlipayFinish(String orderBean);
         void showProgress();
         void hideProgress();
     }

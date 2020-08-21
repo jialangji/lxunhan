@@ -17,13 +17,16 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.contract.SingContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.SingPresenter;
 import com.ay.lxunhan.utils.StringUtil;
-import com.ay.lxunhan.utils.ToastUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
+import com.ay.lxunhan.widget.GetDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +53,8 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
     private BaseQuickAdapter adapter;
     private BaseQuickAdapter taskAdapter;
     private SingBean singBean;
+    private GetDialog getDialog;
+    private int mPosition;
 
     @Override
     public SingPresenter initPresenter() {
@@ -64,6 +69,7 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
     @Override
     protected void initView() {
         super.initView();
+
         adapter=new BaseQuickAdapter<SingBean.SignsBean,BaseViewHolder>(R.layout.item_sing,signsBeans) {
             @Override
             protected void convert(BaseViewHolder helper, SingBean.SignsBean item) {
@@ -83,12 +89,20 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
                 helper.setText(R.id.tv_type_lb,item.getGold()+"乐讯币");
                 ProgressBar progressBar=helper.getView(R.id.progressBarSmall);
                 progressBar.setMax(item.getNumber());
-                progressBar.setProgress(item.getTaskCount());
-                helper.setText(R.id.tv_success_count,item.getTaskCount()+"");
+                progressBar.setProgress(item.getNum());
+                helper.setText(R.id.tv_success_count,item.getNum()+"");
                 helper.setText(R.id.tv_all_count,"/"+item.getNumber());
                 TextView tvGet=helper.getView(R.id.tv_get);
-                tvGet.setText(StringUtil.getString(item.getTaskFlg()?R.string.get:R.string.to_get));
-                tvGet.setBackground(getResources().getDrawable(item.getTaskFlg()?R.drawable.shape_gray_bg_15:R.drawable.shape_radiu_ff9813));
+                if(item.getIs_complete()==0||item.getIs_complete()==4){
+                    tvGet.setText("未完成");
+                    tvGet.setBackground(getResources().getDrawable(R.drawable.shape_radiu_ff9813));
+                }else if (item.getIs_complete()==1||item.getIs_complete()==3){
+                    tvGet.setText("领取");
+                    tvGet.setBackground(getResources().getDrawable(R.drawable.shape_radiu_ff9813));
+                }else if(item.getIs_complete()==2){
+                    tvGet.setText("已领取");
+                    tvGet.setBackground(getResources().getDrawable(R.drawable.shape_gray_bg_15));
+                }
             }
         };
         rvTask.setLayoutManager(new LinearLayoutManager(this));
@@ -102,12 +116,41 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
         presenter.getLbTask();
     }
 
+    public void showDialog(boolean isSing,String coin){
+        getDialog = new GetDialog(this, R.style.selectPicDialogstyle,isSing,coin);
+        getDialog.show();
+    }
+
     @Override
     protected void initListener() {
         super.initListener();
         taskAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (taskBeanList.get(position).getTaskFlg()){
-                MainActivity.startMainActivity(SingInActivity.this,0);
+            if (taskBeanList.get(position).getIs_complete()==0||taskBeanList.get(position).getIs_complete()==4){
+                switch (taskBeanList.get(position).getId()){
+                    case 1:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
+                        MainActivity.startMainActivity(SingInActivity.this);
+                        break;
+                    case 2:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.OPEN_Video));
+                        MainActivity.startMainActivity(SingInActivity.this);
+                        break;
+                    case 3:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.OPEN_LIVE));
+                        MainActivity.startMainActivity(SingInActivity.this);
+                        break;
+                    case 4:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.OPEN_Video));
+                        MainActivity.startMainActivity(SingInActivity.this);
+                        break;
+                    case 5:
+                        EventBus.getDefault().postSticky(new EventModel<>(EventModel.LOGIN_OUT));
+                        MainActivity.startMainActivity(SingInActivity.this);
+                        break;
+                }
+            }else if (taskBeanList.get(position).getIs_complete()==1||taskBeanList.get(position).getIs_complete()==3){
+                mPosition=position;
+                presenter.lbComplete(String.valueOf(taskBeanList.get(position).getId()));
             }
         });
     }
@@ -158,14 +201,22 @@ public class SingInActivity extends BaseActivity<SingContract.SingView, SingPres
 
     @Override
     public void userInfo(String str) {
-        ToastUtil.makeShortText(this,str);
+        showDialog(true,str);
         presenter.singInfo();
     }
 
     @Override
     public void getLbTask(List<TaskBean> list) {
         taskBeanList.clear();
+
         taskBeanList.addAll(list);
         taskAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void lbCompleteFinish() {
+        showDialog(false,String.valueOf(taskBeanList.get(mPosition).getGold()));
+        presenter.getLbTask();
+        presenter.singInfo();
     }
 }

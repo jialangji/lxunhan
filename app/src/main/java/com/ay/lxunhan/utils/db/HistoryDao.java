@@ -44,22 +44,21 @@ public class HistoryDao {
      *
      * @param name
      */
-    public void addHistory(String content,String type) {
+    public void addHistory(String content) {
         db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("userId", UserInfo.getInstance().getUserId());
-        values.put("type",type);
         values.put("content",content);
         db.insert("history", null, values);
         db.close();
-        deleteTen(type);
+        deleteTen();
     }
 
     /**
      * 固定十条
      */
-    public void deleteTen(String type){
-        List<String> list=selectHistoryId(type);
+    public void deleteTen(){
+        List<String> list=selectHistoryId();
         if (list.size()== 11){
             deleteReport(list.get(0));
         }
@@ -68,33 +67,40 @@ public class HistoryDao {
     /**
      * 更新俩个数据之间的顺序
      */
-    public void updateOrder(String content,String type){
+    public void updateOrder(String content){
         //判断内容是否存在
-        if (isExist(content,type)){//如果存在，删除数据库内原有内容，并从新添加
-            deleteReport(getContentId(content, type));
-            addHistory(content, type);
+        if (isExist(content)){//如果存在，删除数据库内原有内容，并从新添加
+            deleteReport(getContentId(content));
+            addHistory(content);
         }else { //如果不存在，则直接添加
-            addHistory(content, type);
+            addHistory(content);
         }
     }
 
-    public boolean isExist(String content,String type){
+    public boolean isExist(String content){
         db = helper.getWritableDatabase();
-        Cursor cursor = db.query("history",null,"userId = ? and type=? and content=?",new String[]{UserInfo.getInstance().getUserId(),type,content},null,null,null);
+        Cursor cursor = db.query("history",null,"userId = ?  and content=?",new String[]{UserInfo.getInstance().getUserId(),content},null,null,null);
         while (cursor.moveToNext()) {
             return true;
         }
         return false;
     }
 
-    public String getContentId(String content,String type){
+    public String getContentId(String content){
         String id = null;
         db = helper.getWritableDatabase();
-        Cursor cursor = db.query("history",null,"userId = ? and type=? and content=?",new String[]{UserInfo.getInstance().getUserId(),type,content},null,null,null);
+        Cursor cursor = db.query("history",null,"userId = ?  and content=?",new String[]{UserInfo.getInstance().getUserId(),content},null,null,null);
         while (cursor.moveToNext()) {
             id = cursor.getString(cursor.getColumnIndex("id"));
         }
         return id;
+    }
+
+
+    public void deleteAll(){
+        db = helper.getWritableDatabase();
+        db.delete("history", null,null);
+        db.close();
     }
 
 
@@ -110,10 +116,10 @@ public class HistoryDao {
     /**
      * 查询历史记录id
      */
-    public List<String> selectHistoryId(String type) {
+    public List<String> selectHistoryId() {
         List<String> list = new ArrayList<>();
         db = helper.getWritableDatabase();
-        Cursor cursor = db.query("history",null,"userId = ? and type=?",new String[]{UserInfo.getInstance().getUserId(),type},null,null,null);
+        Cursor cursor = db.query("history",null,"userId = ?",new String[]{UserInfo.getInstance().getUserId()},null,null,null);
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex("id"));
             list.add(name);
@@ -124,10 +130,10 @@ public class HistoryDao {
     /**
      * 查询历史搜索表
      */
-    public List<String> selectHistory(String type) {
+    public List<String> selectHistory() {
         List<String> list = new ArrayList<>();
         db = helper.getWritableDatabase();
-        Cursor cursor = db.query("history",null,"userId = ? and type=?",new String[]{UserInfo.getInstance().getUserId(),type},null,null,null);
+        Cursor cursor = db.query("history",null,"userId = ? ",new String[]{UserInfo.getInstance().getUserId()},null,null,null);
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex("content"));
             list.add(name);

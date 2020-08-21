@@ -11,7 +11,7 @@ public class HttpResult<T> {
     }
 
     public void setMessage(String message) {
-        this.msg = message;
+        this.message = message;
     }
 
     public int getCode() {
@@ -22,13 +22,6 @@ public class HttpResult<T> {
         this.error = code;
     }
 
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 
     public T getData() {
         return data;

@@ -18,6 +18,7 @@ import com.ay.lxunhan.contract.RegisterContract;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.RegisterPresenter;
 import com.ay.lxunhan.utils.AppManager;
+import com.ay.lxunhan.utils.JGuangUtil;
 import com.ay.lxunhan.utils.RxHelper;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
@@ -156,6 +157,8 @@ public class RegisterActivity extends BaseActivity<RegisterContract.RegisterView
                 new RequestCallback<LoginInfo>() {
                     @Override
                     public void onSuccess(LoginInfo param) {
+                        JGuangUtil jGuangUtil = new JGuangUtil();
+                        jGuangUtil.setJPushAlias(loginBean.getUqid());
                         UserInfo.getInstance().setUserId(loginBean.getUqid());
                         UserInfo.getInstance().setWyyAccount(param.getAccount());
                         UserInfo.getInstance().setWyyToken(param.getToken());

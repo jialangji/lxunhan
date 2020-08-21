@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -37,6 +36,7 @@ import com.ay.lxunhan.utils.Utils;
 import com.ay.lxunhan.utils.datepicker.DateTimePickerListener;
 import com.ay.lxunhan.utils.datepicker.DateTimePickerUtil;
 import com.ay.lxunhan.utils.glide.GlideUtil;
+import com.ay.lxunhan.widget.InfoInputDialog;
 import com.ay.lxunhan.widget.InputDialog;
 import com.ay.lxunhan.widget.SelectImageDialog;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
@@ -82,10 +82,10 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     TextView tvAge;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-    @BindView(R.id.et_content)
-    EditText etContent;
     @BindView(R.id.tv_num)
     TextView tvNum;
+    @BindView(R.id.tv_info)
+    TextView tvInfo;
     private String province_id;
     private String city_id;
     private int sex_id;
@@ -97,6 +97,8 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     private SelectImageDialog selectImageDialog;
     private InputDialog inputDialog;
     private InputDialog.InputDialogBuilder builder;
+    private InputDialog inputDialog2;
+    private InputDialog.InputDialogBuilder builder2;
     private com.ay.lxunhan.utils.datepicker.OptionsPickerView pvBirthday;
 
     @Override
@@ -133,7 +135,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     }
 
     @OnClick({R.id.rl_finish, R.id.rl_header, R.id.rl_qrcode, R.id.tv_submit
-    ,R.id.rl_address,R.id.rl_sex,R.id.rl_name,R.id.rl_age})
+    ,R.id.rl_address,R.id.rl_sex,R.id.rl_name,R.id.rl_age,R.id.rl_info})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_finish:
@@ -146,6 +148,9 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
                 if (countryBeans.size()>0){
                     showPickerView();
                 }
+                break;
+            case R.id.rl_info:
+                showInputDialog2();
                 break;
             case R.id.rl_age:
                 pvBirthday.show();
@@ -173,9 +178,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
                 MyQrcodeActivity.startMyQrcodeActivity(this);
                 break;
             case R.id.tv_submit://提交个人信息
-                if (!TextUtils.isEmpty(StringUtil.getFromEdit(etContent))){
-                    intro=StringUtil.getFromEdit(etContent);
-                }
+
                 CompleteInfoModel completeInfoModel=new CompleteInfoModel(name,date,String.valueOf(sex_id),city_id,intro,province_id);
                 presenter.completeInfo(completeInfoModel);
                 break;
@@ -208,7 +211,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
         tvAppId.setText(userInfoBean.getSignal());
         tvAge.setText(userInfoBean.getAge());
         tvAddress.setText(userInfoBean.getAddress());
-        etContent.setText(userInfoBean.getAutograph());
+        tvInfo.setText(userInfoBean.getAutograph());
     }
 
     @Override
@@ -269,7 +272,7 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
     // 弹出选择图片弹窗
     public void showTakePhotoDialog() {
         if (selectImageDialog == null) {
-            selectImageDialog = new SelectImageDialog(this, R.style.selectPicDialogstyle);
+            selectImageDialog = new SelectImageDialog(this, R.style.selectPicDialogstyle,StringUtil.getString(R.string.photo),StringUtil.getString(R.string.gallery));
         }
         selectImageDialog.show();
         selectImageDialog.setItemClickListener(new SelectImageDialog.ItemClickListener() {
@@ -297,6 +300,17 @@ public class  UserInfoActivity extends BaseActivity<UserInfoContract.UserInfoVie
             @Override
             public void cancel() {
 
+            }
+        });
+    }
+
+    private void showInputDialog2(){
+        InfoInputDialog infoInputDialog=new InfoInputDialog(this,R.style.PublicDialog);
+        infoInputDialog.show();
+        infoInputDialog.setItemClickListener(info -> {
+            if (!TextUtils.isEmpty(info)){
+                intro=info;
+                tvInfo.setText(intro);
             }
         });
     }

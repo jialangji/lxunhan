@@ -26,6 +26,7 @@ public class HomeDetailBean {
     private String plate_name;
     private String content;
     private String created_at;
+    private String plate_id;
     private int bounty_gold;
     private int is_solve;
     private String timeText;
@@ -38,6 +39,14 @@ public class HomeDetailBean {
     private int sex;
     private String share_url;
     private String piiic_url;
+
+    public String getPlate_id() {
+        return plate_id;
+    }
+
+    public void setPlate_id(String plate_id) {
+        this.plate_id = plate_id;
+    }
 
     public String getShare_url() {
         return share_url;

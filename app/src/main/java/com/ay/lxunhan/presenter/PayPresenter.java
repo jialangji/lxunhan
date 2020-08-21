@@ -35,4 +35,23 @@ public class PayPresenter extends BasePresenter<PayContract.PayView>implements P
         }));
 
     }
+
+    @Override
+    public void rechargeAlipay(String id) {
+        getView().showProgress();
+        addDisposable(HttpMethods.getInstance().alipay(id).subscribeWith(new BaseSubscriber<String>(){
+            @Override
+            public void onNext(String o) {
+                super.onNext(o);
+                getView().hideProgress();
+                getView().rechargeAlipayFinish(o);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                super.onError(t);
+                getView().hideProgress();
+            }
+        }));
+    }
 }

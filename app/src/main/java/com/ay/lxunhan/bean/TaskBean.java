@@ -3,6 +3,7 @@ package com.ay.lxunhan.bean;
 public class TaskBean {
 
 
+
     /**
      * id : 1
      * name : 关注话题
@@ -14,6 +15,7 @@ public class TaskBean {
      * taskFlg : 0
      */
 
+
     private int id;
     private String name;
     private String icon;
@@ -22,6 +24,19 @@ public class TaskBean {
     private String features_desc;
     private int taskCount;
     private int taskFlg;
+    /**
+     * icon : null
+     * is_complete : 2
+     */
+
+    private int is_complete;
+    /**
+     * lnum : 0
+     * num : 5
+     */
+
+    private int lnum;
+    private int num;
 
     public int getId() {
         return id;
@@ -85,5 +100,29 @@ public class TaskBean {
 
     public void setTaskFlg(int taskFlg) {
         this.taskFlg = taskFlg;
+    }
+
+    public int getIs_complete() {
+        return is_complete;
+    }
+
+    public void setIs_complete(int is_complete) {
+        this.is_complete = is_complete;
+    }
+
+    public int getLnum() {
+        return lnum;
+    }
+
+    public void setLnum(int lnum) {
+        this.lnum = lnum;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
     }
 }

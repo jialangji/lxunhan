@@ -58,4 +58,15 @@ public class HeUserInfoPresenter extends BasePresenter<HeUserInfoContract.HeUser
         }));
 
     }
+
+    @Override
+    public void pullBlack(String bid) {
+        addDisposable(HttpMethods.getInstance().pullBlack(bid).subscribeWith(new BaseSubscriber<Object>(){
+            @Override
+            public void onNext(Object o) {
+                super.onNext(o);
+                getView().pullBlackFinish();
+            }
+        }));
+    }
 }

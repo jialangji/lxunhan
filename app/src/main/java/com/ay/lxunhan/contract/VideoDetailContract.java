@@ -1,6 +1,7 @@
 package com.ay.lxunhan.contract;
 
 import com.ay.lxunhan.bean.CommentBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.VideoDetailBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
 
@@ -27,19 +28,21 @@ public interface VideoDetailContract {
         void share(int type, String aid);
 
         void addCollect(String aid,int type);
+        void recommend(String plateid,String type,String aid);
+
     }
 
     interface VideoDetailView {
         void getVideoDetailFinish(VideoDetailBean videoDetailBean);
 
-        void getOneCommentFinsh(List<CommentBean> commentBeans);
+        void getOneCommentFinsh(CommentBean commentBeans);
 
         void sendCommentFinish();
 
         void addLikeFinish();
 
         void addCollect();
-
+        void recommendFinish(List<RecommendBean> beans);
         void commentLikeFinish();
 
         void attentionFinish();

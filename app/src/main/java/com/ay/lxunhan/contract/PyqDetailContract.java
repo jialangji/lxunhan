@@ -1,11 +1,8 @@
 package com.ay.lxunhan.contract;
 
-import com.ay.lxunhan.bean.CommentBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
 import com.ay.lxunhan.bean.model.SendCommentModel;
-
-import java.util.List;
 
 /**
  * @author ${jlj}
@@ -26,7 +23,7 @@ public interface PyqDetailContract {
         void sendCommentFinish();
         void addLikeFinish();
         void sendTwoCommentFinish();
-        void getCommentFinish(List<PyqCommentBean> beans);
+        void getCommentFinish(PyqCommentBean beans);
         void showProgress();
         void hideProgress();
     }

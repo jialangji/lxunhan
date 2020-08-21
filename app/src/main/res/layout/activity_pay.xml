@@ -117,45 +117,6 @@
             android:textSize="@dimen/sp_16"
             android:textColor="@color/color_303133"
             android:text="@string/pay_type"/>
-
-        <LinearLayout
-            android:id="@+id/ll_alipay"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/dp_20"
-            android:visibility="gone"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="@dimen/dp_26"
-                android:layout_height="@dimen/dp_26"
-                android:src="@drawable/ic_alipay"/>
-            <TextView
-                android:id="@+id/tv_account_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dp_10"
-                android:textColor="@color/color_b2"
-                android:textSize="@dimen/sp_12"
-                android:text="@string/withdraw_to_alipay"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-            <CheckBox
-                android:id="@+id/check_alipay"
-                android:button="@drawable/selector_check_two"
-                android:enabled="false"
-                android:clickable="false"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@color/color_ec"/>
         <LinearLayout
             android:id="@+id/ll_wx"
             android:layout_width="match_parent"
@@ -186,6 +147,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/color_ec"/>
+        <LinearLayout
+            android:id="@+id/ll_alipay"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_20"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="@dimen/dp_26"
+                android:layout_height="@dimen/dp_26"
+                android:src="@drawable/ic_alipay"/>
+            <TextView
+                android:id="@+id/tv_account_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:textColor="@color/color_b2"
+                android:textSize="@dimen/sp_12"
+                android:text="@string/alipay"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+            <CheckBox
+                android:id="@+id/check_alipay"
+                android:button="@drawable/selector_check_two"
+                android:enabled="false"
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
 
     </LinearLayout>
 </LinearLayout>

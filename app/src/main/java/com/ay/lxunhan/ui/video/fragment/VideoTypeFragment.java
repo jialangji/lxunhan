@@ -10,6 +10,7 @@ import com.ay.lxunhan.adapter.PublicAdapterUtil;
 import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.VideoBean;
 import com.ay.lxunhan.contract.VideoTypeContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.VideoTypePresenter;
 import com.ay.lxunhan.ui.public_ac.activity.ComplaintActivity;
 import com.ay.lxunhan.ui.public_ac.activity.FriendDetailActivity;
@@ -285,6 +286,26 @@ public class VideoTypeFragment extends BaseFragment<VideoTypeContract.VideoTypeV
             JzvdStd.goOnPlayOnPause();
         } else {
             JzvdStd.goOnPlayOnResume();
+        }
+    }
+
+    @Override
+    public boolean isUserEvent() {
+        return true;
+    }
+
+    @Override
+    protected void getStickyEvent(Object eventModel) {
+        super.getStickyEvent(eventModel);
+        EventModel model = (EventModel) eventModel;
+        switch (model.getMessageType()) {
+            case EventModel.ARTICLELIKE:
+            case EventModel.SENDCOMMENT:
+            case EventModel.REFRESH:
+                isRefresh = true;
+                page = 1;
+                presenter.getVideoType(id, page);
+                break;
         }
     }
 }

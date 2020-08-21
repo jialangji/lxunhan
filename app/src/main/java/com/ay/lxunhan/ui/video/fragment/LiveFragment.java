@@ -8,10 +8,12 @@ import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.BaseFragment;
 import com.ay.lxunhan.bean.LiveListBean;
 import com.ay.lxunhan.contract.LiveListContract;
+import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.LiveListPresenter;
 import com.ay.lxunhan.ui.live.CreateLiveActivity;
 import com.ay.lxunhan.ui.live.LiveRoomActivity;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.UserInfo;
 import com.ay.lxunhan.utils.glide.GlideUtil;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -24,7 +26,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * @author ${jlj}
@@ -37,7 +38,6 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
     RecyclerView rvVideo;
     @BindView(R.id.swipe_refresh)
     TwinklingRefreshLayout swipeRefresh;
-    Unbinder unbinder;
     private String id;
     private List<LiveListBean> liveListBeans = new ArrayList<>();
     private int page = 1;
@@ -56,14 +56,20 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
     protected void initData() {
         super.initData();
         id = getArguments().getString("id");
-        presenter.getLiveList(id, page);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserInfo.getInstance().isLogin()){
+            presenter.getLiveList(id, page);
+        }
     }
 
     @Override
     protected void initView() {
         super.initView();
         liveAdapter = new BaseQuickAdapter<LiveListBean, BaseViewHolder>(R.layout.item_live, liveListBeans) {
-
             @Override
             protected void convert(BaseViewHolder helper, LiveListBean item) {
                 GlideUtil.loadRoundImg(getActivity(), helper.getView(R.id.iv_cover), item.getCover());
@@ -83,6 +89,9 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 super.onRefresh(refreshLayout);
+                if (!UserInfo.getInstance().isLogin()){
+                    return;
+                }
                 page = 1;
                 isRefresh = true;
                 presenter.getLiveList(id, page);
@@ -91,6 +100,9 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
             @Override
             public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
                 super.onLoadMore(refreshLayout);
+                if (!UserInfo.getInstance().isLogin()){
+                    return;
+                }
                 if (page * Contacts.LIMIT == liveListBeans.size()) {
                     page = page + 1;
                     isRefresh = false;
@@ -135,6 +147,26 @@ public class LiveFragment extends BaseFragment<LiveListContract.LiveListView, Li
         liveAdapter.notifyDataSetChanged();
 
     }
+    @Override
+    public boolean isUserEvent() {
+        return true;
+    }
+
+    @Override
+    protected void getStickyEvent(Object eventModel) {
+        super.getStickyEvent(eventModel);
+        EventModel model = (EventModel) eventModel;
+        switch (model.getMessageType()) {
+            case EventModel.ARTICLELIKE:
+            case EventModel.SENDCOMMENT:
+            case EventModel.REFRESH:
+                isRefresh = true;
+                page = 1;
+                presenter.getLiveList(id, page);
+                break;
+        }
+    }
+
 
     @OnClick(R.id.iv_open_live)
     public void onViewClicked() {

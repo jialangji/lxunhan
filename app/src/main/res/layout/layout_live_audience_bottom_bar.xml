@@ -201,7 +201,7 @@
         android:id="@+id/gift_animation_view"
         layout="@layout/gift_layout"
         android:layout_width="@dimen/dp_330"
-        android:layout_height="@dimen/dp_34"
+        android:layout_height="@dimen/dp_45"
         android:layout_marginBottom="200dp"
         android:layout_centerVertical="true"/>
 
@@ -209,7 +209,7 @@
         android:id="@+id/gift_animation_view_up"
         layout="@layout/gift_layout"
         android:layout_width="@dimen/dp_330"
-        android:layout_height="@dimen/dp_38"
+        android:layout_height="@dimen/dp_45"
         android:layout_marginBottom="200dp"
         android:layout_centerVertical="true"/>
 

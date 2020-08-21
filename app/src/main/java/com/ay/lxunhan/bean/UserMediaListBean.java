@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class UserMediaListBean implements MultiItemEntity {
 
+
     /**
      * id : 2
      * uid : 1
@@ -37,6 +38,7 @@ public class UserMediaListBean implements MultiItemEntity {
      * video : article/QmaFA8yOIXr8owNLqJ7itWkJlPm4C6GbPIc2Uf3N.mp4
      */
 
+    private String searchContent;
     private int id;
     private int cover_type;
     private String uid;
@@ -61,6 +63,42 @@ public class UserMediaListBean implements MultiItemEntity {
     private List<String> cover;
     private List<OptionListBean> option_list;
 
+    private String media_nickname;
+    private String media_avatar;
+    private String fan;
+
+    public String getMedia_nickname() {
+        return media_nickname;
+    }
+
+    public void setMedia_nickname(String media_nickname) {
+        this.media_nickname = media_nickname;
+    }
+
+    public String getMedia_avatar() {
+        return media_avatar;
+    }
+
+    public String getSearchContent() {
+        return searchContent;
+    }
+
+    public void setSearchContent(String searchContent) {
+        this.searchContent = searchContent;
+    }
+
+    public void setMedia_avatar(String media_avatar) {
+        this.media_avatar = media_avatar;
+    }
+
+    public String getFan() {
+        return fan;
+    }
+
+    public void setFan(String fan) {
+        this.fan = fan;
+    }
+
     public int getCover_type() {
         return cover_type;
     }
@@ -77,6 +115,8 @@ public class UserMediaListBean implements MultiItemEntity {
             return type;
         }
     }
+
+
 
     public int getId() {
         return id;

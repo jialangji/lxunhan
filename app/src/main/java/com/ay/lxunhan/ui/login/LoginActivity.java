@@ -18,11 +18,15 @@ import com.ay.lxunhan.base.BaseActivity;
 import com.ay.lxunhan.bean.LoginBean;
 import com.ay.lxunhan.bean.model.PublicModel;
 import com.ay.lxunhan.contract.LoginContract;
+import com.ay.lxunhan.http.HttpMethods;
+import com.ay.lxunhan.observer.BaseSubscriber;
 import com.ay.lxunhan.observer.EventModel;
 import com.ay.lxunhan.presenter.LoginPresenter;
 import com.ay.lxunhan.ui.public_ac.activity.BindPhoneActivity;
+import com.ay.lxunhan.ui.public_ac.activity.WebH5Activity;
 import com.ay.lxunhan.utils.AppManager;
 import com.ay.lxunhan.utils.Contacts;
+import com.ay.lxunhan.utils.JGuangUtil;
 import com.ay.lxunhan.utils.RxHelper;
 import com.ay.lxunhan.utils.StringUtil;
 import com.ay.lxunhan.utils.ToastUtil;
@@ -135,9 +139,21 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
         context.startActivity(intent);
     }
 
-    @OnClick({R.id.tv_change_login, R.id.tv_code, R.id.tv_login, R.id.tv_forget_psw, R.id.tv_register, R.id.iv_qq, R.id.iv_wx, R.id.iv_wb})
+    @OnClick({R.id.rl_finish,R.id.tv_arg,R.id.tv_change_login, R.id.tv_code, R.id.tv_login, R.id.tv_forget_psw, R.id.tv_register, R.id.iv_qq, R.id.iv_wx, R.id.iv_wb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_arg:
+                HttpMethods.getInstance().getConfigShow("privacy").subscribeWith(new BaseSubscriber<String>(){
+                    @Override
+                    public void onNext(String o) {
+                        super.onNext(o);
+                        WebH5Activity.startWebActivity(LoginActivity.this,o, StringUtil.getString(R.string.privacy_agreement));
+                    }
+                });
+                break;
+            case R.id.rl_finish:
+                finish();
+                break;
             case R.id.tv_change_login:
                 if (!isCode) {
                     llCode.setVisibility(View.VISIBLE);
@@ -239,6 +255,8 @@ public class LoginActivity extends BaseActivity<LoginContract.LoginView, LoginPr
                 new RequestCallback<LoginInfo>() {
                     @Override
                     public void onSuccess(LoginInfo param) {
+                        JGuangUtil jGuangUtil = new JGuangUtil();
+                        jGuangUtil.setJPushAlias(loginBean.getUqid());
                         UserInfo.getInstance().setUserId(loginBean.getUqid());
                         UserInfo.getInstance().setWyyAccount(param.getAccount());
                         UserInfo.getInstance().setWyyToken(param.getToken());

@@ -18,6 +18,7 @@ import com.ay.lxunhan.bean.GiftBean;
 import com.ay.lxunhan.bean.HeUserBean;
 import com.ay.lxunhan.bean.HomeDetailBean;
 import com.ay.lxunhan.bean.HomeQuizDetailBean;
+import com.ay.lxunhan.bean.HotSearchBean;
 import com.ay.lxunhan.bean.InviteBean;
 import com.ay.lxunhan.bean.LbBean;
 import com.ay.lxunhan.bean.LiveBean;
@@ -33,6 +34,7 @@ import com.ay.lxunhan.bean.PyqBean;
 import com.ay.lxunhan.bean.PyqCommentBean;
 import com.ay.lxunhan.bean.PyqDetailBean;
 import com.ay.lxunhan.bean.RechargeBean;
+import com.ay.lxunhan.bean.RecommendBean;
 import com.ay.lxunhan.bean.SingBean;
 import com.ay.lxunhan.bean.TaskBean;
 import com.ay.lxunhan.bean.TwoCommentBean;
@@ -150,6 +152,24 @@ public class HttpMethods {
     }
 
     /**
+     * 拉黑
+     */
+    public Flowable<Object> pullBlack(String bid){
+        Flowable<HttpResult<Object>> flowable=httpService.pullBlack(UserInfo.getInstance().getUserId(),bid);
+        return compositeThread(flowable);
+     }
+
+    /**
+     * 拉黑
+     */
+    public Flowable<Object> unlike(String aid){
+        Flowable<HttpResult<Object>> flowable=httpService.unlike(UserInfo.getInstance().getUserId(),aid);
+        return compositeThread(flowable);
+    }
+
+
+
+    /**
      * 登录
      */
     public Flowable<LoginBean> login(PublicModel publicModel){
@@ -263,8 +283,8 @@ public class HttpMethods {
     /**
      * 一级评论
      */
-    public Flowable<List<CommentBean>> getOneComment(String aid,int type,int page){
-        Flowable<HttpResult<List<CommentBean>>> flowable=httpService.getOneComment(UserInfo.getInstance().getUserId(),aid,type,page,Contacts.LIMIT);
+    public Flowable<CommentBean> getOneComment(String aid,int type,int page){
+        Flowable<HttpResult<CommentBean>> flowable=httpService.getOneComment(UserInfo.getInstance().getUserId(),aid,type,page,Contacts.LIMIT);
         return compositeThread(flowable);
     }
 
@@ -593,6 +613,14 @@ public class HttpMethods {
     }
 
     /**
+     * 乐币任务
+     */
+    public Flowable<List<TaskBean>> lbDayTask(){
+        Flowable<HttpResult<List<TaskBean>>> flowable=httpService.lbDayTaskList(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+    /**
      *乐币兑换
      */
     public Flowable<Object> lbExchange(LbModel lbModel){
@@ -636,8 +664,8 @@ public class HttpMethods {
     /**
      * 朋友圈评论
      */
-    public Flowable<List<PyqCommentBean>> pyqComment(String id,int page){
-        Flowable<HttpResult<List<PyqCommentBean>>> flowable=httpService.pyqComment(UserInfo.getInstance().getUserId(),id,page);
+    public Flowable<PyqCommentBean> pyqComment(String id,int page){
+        Flowable<HttpResult<PyqCommentBean>> flowable=httpService.pyqComment(UserInfo.getInstance().getUserId(),id,page);
         return compositeThread(flowable);
     }
 
@@ -676,8 +704,8 @@ public class HttpMethods {
     /**
      * 收藏
      */
-    public Flowable<List<UserMediaListBean>> collect(int page){
-        Flowable<HttpResult<List<UserMediaListBean>>> flowable=httpService.collect(UserInfo.getInstance().getUserId(),page);
+    public Flowable<List<UserMediaListBean>> collect(int status,int page){
+        Flowable<HttpResult<List<UserMediaListBean>>> flowable=httpService.collect(UserInfo.getInstance().getUserId(),status,page);
         return compositeThread(flowable);
     }
 
@@ -866,6 +894,61 @@ public class HttpMethods {
      */
     public Flowable<FanyiBean> fanyi(String str){
         Flowable<HttpResult<FanyiBean>> flowable=httpService.fanyi(str);
+        return compositeThread(flowable);
+    }
+
+    public Flowable<Object> lbTaskComplete(String tid){
+        Flowable<HttpResult<Object>> flowable=httpService.lbTaskComplete(UserInfo.getInstance().getUserId(),tid);
+        return compositeThread(flowable);
+    }
+
+
+
+    public Flowable<Object> lbDayTaskComplete(String tid){
+        Flowable<HttpResult<Object>> flowable=httpService.lbDayTaskComplete(UserInfo.getInstance().getUserId(),tid);
+        return compositeThread(flowable);
+    }
+
+
+    public Flowable<List<HotSearchBean>> hotSearch(){
+        Flowable<HttpResult<List<HotSearchBean>>> flowable=httpService.hotSearch();
+        return compositeThread(flowable);
+    }
+
+    public Flowable<Object> clearHistory(){
+        Flowable<HttpResult<Object>> flowable=httpService.deleteHistory(UserInfo.getInstance().getUserId());
+        return compositeThread(flowable);
+    }
+
+
+    public Flowable<Object> deleteCollect(String aid,String type){
+        Flowable<HttpResult<Object>> flowable=httpService.deleteCollect(UserInfo.getInstance().getUserId(),aid,type);
+        return compositeThread(flowable);
+    }
+
+
+    public Flowable<List<UserMediaListBean>> search(int page,int type,String title){
+        Flowable<HttpResult<List<UserMediaListBean>>> flowable=httpService.search(UserInfo.getInstance().getUserId(),page,type,title);
+        return compositeThread(flowable);
+    }
+
+    /**
+     * 支付宝支付
+     */
+    public Flowable<String> alipay(String id){
+        Flowable<HttpResult<String>> flowable=httpService.alipay(UserInfo.getInstance().getUserId(),id,"APP");
+        return compositeThread(flowable);
+    }
+
+    public Flowable<List<RecommendBean>> recommend(String plateId,String type,String aid){
+        Flowable<HttpResult<List<RecommendBean>>> flowable=httpService.recommend(plateId, type, aid);
+        return compositeThread(flowable);
+    }
+
+
+
+    public Flowable<String> getConfigShow(String key){
+        Flowable<HttpResult<String>> flowable=httpService.getConfigShow(UserInfo.getInstance().getUserId(),key);
         return compositeThread(flowable);
     }
 

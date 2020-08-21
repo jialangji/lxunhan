@@ -103,7 +103,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
         super.initView();
         type = getIntent().getStringExtra(Contacts.HISTORY);
         initTextEdit();
-        historyList = HistoryDao.getInstance().selectHistory(type);
+        historyList = HistoryDao.getInstance().selectHistory();
         histroyAdpater = new FlowLayoutAdapter<String>(historyList) {
             @Override
             public void bindDataToView(ViewHolder viewHolder, int i, String s) {
@@ -115,12 +115,12 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
                 content=s;
                 setRefresh(content);
                 etSearch.setText(content);
-                HistoryDao.getInstance().updateOrder(content,type);
+                HistoryDao.getInstance().updateOrder(content);
             }
 
             @Override
             public int getItemLayoutID(int i, String s) {
-                return R.layout.item_histroy;
+                return R.layout.item_old_histroy;
             }
         };
         flHistory.setAdapter(histroyAdpater);
@@ -152,7 +152,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
     }
 
     private void refreshHistory(){
-        historyList = HistoryDao.getInstance().selectHistory(type);
+        historyList = HistoryDao.getInstance().selectHistory();
         histroyAdpater.clear();
         histroyAdpater.addAll(historyList);
         histroyAdpater.notifyDataSetChanged();
@@ -382,7 +382,7 @@ public class SearchActivity extends BaseActivity<SearchContract.SearchView, Sear
                 String searchName = etSearch.getText().toString().trim();
                 if (!TextUtils.isEmpty(searchName)) {
                     content=searchName;
-                    HistoryDao.getInstance().updateOrder(content,type);
+                    HistoryDao.getInstance().updateOrder(content);
                     setRefresh(content);
                     return true;
                 }

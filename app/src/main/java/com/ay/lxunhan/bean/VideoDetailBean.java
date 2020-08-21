@@ -30,7 +30,7 @@ public class VideoDetailBean {
     private int id;
     private int type;
     private String uid;
-    private int plate_id;
+    private String plate_id;
     private String title;
     private String video;
     private String content;
@@ -97,11 +97,11 @@ public class VideoDetailBean {
         this.uid = uid;
     }
 
-    public int getPlate_id() {
+    public String getPlate_id() {
         return plate_id;
     }
 
-    public void setPlate_id(int plate_id) {
+    public void setPlate_id(String plate_id) {
         this.plate_id = plate_id;
     }
 

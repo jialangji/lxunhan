@@ -8,12 +8,16 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.widget.EditText;
 
+import com.ay.lxunhan.R;
 import com.ay.lxunhan.base.AppContext;
 import com.ay.lxunhan.wyyim.emoji.EmojiManager;
 
@@ -30,6 +34,40 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class Utils {
+
+    public static String matcherSearchContent(String text, String[] keyword1) {
+        String[] keyword = new String[keyword1.length];
+        System.arraycopy(keyword1, 0, keyword, 0, keyword1.length);
+        SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+        CharacterStyle span;
+        String wordReg;
+        for (int i = 0; i < keyword.length; i++) {
+            String key = "";
+            //  处理通配符问题
+            if (keyword[i].contains("*") || keyword[i].contains("(") || keyword[i].contains(")")) {
+                char[] chars = keyword[i].toCharArray();
+                for (int k = 0; k < chars.length; k++) {
+                    if (chars[k] == '*' || chars[k] == '(' || chars[k] == ')') {
+                        key = key + "\\" + String.valueOf(chars[k]);
+                    } else {
+                        key = key + String.valueOf(chars[k]);
+                    }
+                }
+                keyword[i] = key;
+            }
+
+            wordReg = "(?i)" + keyword[i];   //忽略字母大小写
+            Pattern pattern = Pattern.compile(wordReg);
+            Matcher matcher = pattern.matcher(text);
+            while (matcher.find()) {
+                span = new ForegroundColorSpan(AppContext.instance.getResources().getColor(R.color.color_fc5a8e));
+                spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_MARK_MARK);
+            }
+        }
+
+        return spannable.toString();
+    }
+
     private static final float SMALL_SCALE = 0.45F;
     public static void replaceEmoticons(Context context, Editable editable, int start, int count) {
         if (count <= 0 || editable.length() < start + count)
